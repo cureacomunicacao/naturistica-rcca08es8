@@ -1,8 +1,26 @@
 import { ScrollReveal } from '@/components/ScrollReveal'
+import { useSettings } from '@/hooks/use-settings'
+import pb from '@/lib/pocketbase/client'
+import { SEO } from '@/components/SEO'
 
 export default function Sobre() {
+  const { settings } = useSettings()
+
+  const mainImage = settings.about_main_image?.image
+    ? pb.files.getURL(settings.about_main_image, settings.about_main_image.image)
+    : 'https://img.usecurling.com/p/600/800?q=doctor%20plants&color=green'
+
+  const imgAlt = settings.about_main_image?.image_alt || 'Dra Beatriz e Dr Felipe'
+
   return (
     <div className="container max-w-5xl py-12 md:py-20">
+      <SEO
+        title={settings.about_seo_title?.value || 'Nossa História | Naturistica'}
+        description={
+          settings.about_seo_description?.value ||
+          'Conheça a história da Naturistica e nossos fundadores.'
+        }
+      />
       <ScrollReveal className="space-y-8 text-center mb-20">
         <h1 className="text-4xl md:text-6xl font-bold text-balance">Nossa História</h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto font-serif">
@@ -17,8 +35,9 @@ export default function Sobre() {
           className="order-2 md:order-1 relative h-[500px] rounded-3xl overflow-hidden"
         >
           <img
-            src="https://img.usecurling.com/p/600/800?q=doctor%20plants&color=green"
-            alt="Dra Beatriz e Dr Felipe"
+            src={mainImage}
+            alt={imgAlt}
+            title={settings.about_main_image?.value || ''}
             className="absolute inset-0 w-full h-full object-cover"
           />
         </ScrollReveal>

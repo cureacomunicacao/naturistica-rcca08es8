@@ -9,6 +9,9 @@ import {
 } from '@/components/ui/carousel'
 import { ScrollReveal } from '@/components/ScrollReveal'
 import { ArrowRight, Brain, Heart, Moon, Sparkles, Sprout, Wind } from 'lucide-react'
+import { useSettings } from '@/hooks/use-settings'
+import pb from '@/lib/pocketbase/client'
+import { SEO } from '@/components/SEO'
 
 const treatments = [
   { icon: Wind, label: 'Ansiedade' },
@@ -50,8 +53,23 @@ const testimonialsBeatriz = [
 ]
 
 export default function Index() {
+  const { settings } = useSettings()
+
+  const heroImage = settings.home_hero_image?.image
+    ? pb.files.getURL(settings.home_hero_image, settings.home_hero_image.image)
+    : 'https://img.usecurling.com/p/800/1000?q=nature%20meditation&color=green'
+
+  const heroAlt = settings.home_hero_image?.image_alt || 'Natureza e serenidade'
+
   return (
     <div className="flex flex-col gap-24 md:gap-32">
+      <SEO
+        title={settings.home_seo_title?.value || 'Saúde & Consciência | Naturistica'}
+        description={
+          settings.home_seo_description?.value ||
+          'Naturistica: onde a ciência encontra a ancestralidade para saúde e consciência.'
+        }
+      />
       {/* Hero Section */}
       <section className="container pt-12 md:pt-20">
         <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -84,8 +102,9 @@ export default function Index() {
             className="relative h-[500px] md:h-[600px] rounded-3xl overflow-hidden"
           >
             <img
-              src="https://img.usecurling.com/p/800/1000?q=nature%20meditation&color=green"
-              alt="Natureza e serenidade"
+              src={heroImage}
+              alt={heroAlt}
+              title={settings.home_hero_image?.value || ''}
               className="absolute inset-0 w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-primary/10 mix-blend-multiply" />

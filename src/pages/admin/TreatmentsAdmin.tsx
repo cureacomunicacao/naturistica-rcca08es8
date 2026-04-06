@@ -28,6 +28,7 @@ export default function TreatmentsAdmin() {
     content: '',
     seo_title: '',
     seo_description: '',
+    image_alt: '',
   })
   const [file, setFile] = useState<File | null>(null)
 
@@ -48,6 +49,7 @@ export default function TreatmentsAdmin() {
       content: t.content,
       seo_title: t.seo_title || '',
       seo_description: t.seo_description || '',
+      image_alt: t.image_alt || '',
     })
     setFile(null)
     setOpen(true)
@@ -55,7 +57,14 @@ export default function TreatmentsAdmin() {
 
   const handleCreate = () => {
     setEditingId(null)
-    setFormData({ title: '', slug: '', content: '', seo_title: '', seo_description: '' })
+    setFormData({
+      title: '',
+      slug: '',
+      content: '',
+      seo_title: '',
+      seo_description: '',
+      image_alt: '',
+    })
     setFile(null)
     setOpen(true)
   }
@@ -145,6 +154,14 @@ export default function TreatmentsAdmin() {
                 type="file"
                 accept="image/*"
                 onChange={(e) => setFile(e.target.files?.[0] || null)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Alt Text da Imagem</Label>
+              <Input
+                value={formData.image_alt}
+                onChange={(e) => setFormData({ ...formData, image_alt: e.target.value })}
+                placeholder="Descrição para acessibilidade e SEO"
               />
             </div>
             <div className="space-y-2">

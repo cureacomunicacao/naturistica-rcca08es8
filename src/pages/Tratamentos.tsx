@@ -5,9 +5,11 @@ import { ScrollReveal } from '@/components/ScrollReveal'
 import { Card, CardContent } from '@/components/ui/card'
 import { ArrowRight, Leaf } from 'lucide-react'
 import { SEO } from '@/components/SEO'
+import { useSettings } from '@/hooks/use-settings'
 
 export default function Tratamentos() {
   const [treatments, setTreatments] = useState<any[]>([])
+  const { settings } = useSettings()
 
   useEffect(() => {
     pb.collection('treatments').getFullList({ sort: 'title' }).then(setTreatments)
@@ -16,16 +18,43 @@ export default function Tratamentos() {
   return (
     <div className="container py-12 md:py-20">
       <SEO
-        title="Tratamentos | Naturistica"
-        description="Conheça nossos tratamentos integrativos para ansiedade, insônia, burnout e mais."
+        title={settings.treatments_seo_title?.value || 'Tratamentos | Naturistica'}
+        description={
+          settings.treatments_seo_description?.value ||
+          'Conheça nossos tratamentos integrativos para ansiedade, insônia, burnout e mais.'
+        }
       />
 
-      <ScrollReveal className="text-center mb-16 space-y-6">
-        <h1 className="text-4xl md:text-5xl font-bold text-foreground">Tratamentos Integrativos</h1>
-        <p className="text-xl text-primary font-serif italic max-w-2xl mx-auto">
-          "Tratamos a causa, não apenas os sintomas."
-        </p>
-      </ScrollReveal>
+      {settings.treatments_banner_image?.image && (
+        <ScrollReveal className="mb-12 rounded-3xl overflow-hidden h-[300px] relative">
+          <img
+            src={pb.files.getURL(
+              settings.treatments_banner_image,
+              settings.treatments_banner_image.image,
+            )}
+            alt={settings.treatments_banner_image.image_alt || 'Banner de Tratamentos'}
+            title={settings.treatments_banner_image.value || ''}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white p-6 text-center">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Tratamentos Integrativos</h1>
+            <p className="text-xl font-serif italic max-w-2xl mx-auto opacity-90">
+              "Tratamos a causa, não apenas os sintomas."
+            </p>
+          </div>
+        </ScrollReveal>
+      )}
+
+      {!settings.treatments_banner_image?.image && (
+        <ScrollReveal className="text-center mb-16 space-y-6">
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground">
+            Tratamentos Integrativos
+          </h1>
+          <p className="text-xl text-primary font-serif italic max-w-2xl mx-auto">
+            "Tratamos a causa, não apenas os sintomas."
+          </p>
+        </ScrollReveal>
+      )}
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {treatments.map((t, i) => (
@@ -36,7 +65,7 @@ export default function Tratamentos() {
                   {t.image ? (
                     <img
                       src={pb.files.getURL(t, t.image)}
-                      alt={t.title}
+                      alt={t.image_alt || t.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   ) : (

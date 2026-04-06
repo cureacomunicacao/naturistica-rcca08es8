@@ -20,6 +20,7 @@ import LeadsAdmin from './pages/admin/LeadsAdmin'
 import BlogAdmin from './pages/admin/BlogAdmin'
 import BlogPostForm from './pages/admin/BlogPostForm'
 import SiteSettingsAdmin from './pages/admin/SiteSettingsAdmin'
+import MediaSettingsAdmin from './pages/admin/MediaSettingsAdmin'
 import ContentInsightsAdmin from './pages/admin/ContentInsightsAdmin'
 import { SettingsProvider } from './hooks/use-settings'
 
@@ -49,6 +50,7 @@ const App = () => (
               <Route path="blogs/new" element={<BlogPostForm />} />
               <Route path="blogs/:id" element={<BlogPostForm />} />
               <Route path="settings" element={<SiteSettingsAdmin />} />
+              <Route path="settings/media" element={<MediaSettingsAdmin />} />
               <Route path="insights" element={<ContentInsightsAdmin />} />
             </Route>
 

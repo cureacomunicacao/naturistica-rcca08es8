@@ -39,7 +39,7 @@ export default function TratamentoDetalhe() {
       <section className="relative h-[40vh] min-h-[400px] flex items-center justify-center overflow-hidden bg-primary/90">
         <img
           src={imageUrl}
-          alt={treatment.title}
+          alt={treatment.image_alt || treatment.title}
           className="absolute inset-0 w-full h-full object-cover opacity-30 mix-blend-overlay"
         />
         <div className="absolute top-8 left-8 z-20">
