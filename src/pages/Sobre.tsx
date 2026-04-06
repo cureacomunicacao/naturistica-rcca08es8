@@ -6,20 +6,30 @@ import { SEO } from '@/components/SEO'
 export default function Sobre() {
   const { settings } = useSettings()
 
-  const mainImage = settings.about_main?.image
-    ? pb.files.getURL(settings.about_main, settings.about_main.image)
-    : 'https://img.usecurling.com/p/600/800?q=doctor%20plants&color=green'
+  const getImageUrl = (record: any, fallback: string) => {
+    if (record?.image && record?.id) {
+      return `${import.meta.env.VITE_POCKETBASE_URL}/api/files/site_settings/${record.id}/${record.image}`
+    }
+    return fallback
+  }
+
+  const mainImage = getImageUrl(
+    settings.about_main,
+    'https://img.usecurling.com/p/600/800?q=doctor%20plants&color=green',
+  )
   const imgAlt = settings.about_main?.image_alt || 'Dra Beatriz e Dr Felipe'
 
   const felipeRecord = settings.about_doctor_felipe_image || settings.about_felipe_image
-  const felipeImgUrl = felipeRecord?.image
-    ? pb.files.getURL(felipeRecord, felipeRecord.image)
-    : 'https://img.usecurling.com/ppl/large?gender=male&seed=felipe'
+  const felipeImgUrl = getImageUrl(
+    felipeRecord,
+    'https://img.usecurling.com/ppl/large?gender=male&seed=felipe',
+  )
 
-  const beatrizRecord = settings.about_doctor_beatriz_image
-  const beatrizImgUrl = beatrizRecord?.image
-    ? pb.files.getURL(beatrizRecord, beatrizRecord.image)
-    : 'https://img.usecurling.com/ppl/large?gender=female&seed=beatriz'
+  const beatrizRecord = settings.about_doctor_beatriz_image || settings.about_beatriz_image
+  const beatrizImgUrl = getImageUrl(
+    beatrizRecord,
+    'https://img.usecurling.com/ppl/large?gender=female&seed=beatriz',
+  )
 
   return (
     <div className="container max-w-5xl py-12 md:py-20">

@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react'
 import pb from '@/lib/pocketbase/client'
+import { useRealtime } from '@/hooks/use-realtime'
 
 export type SiteSettings = Record<string, any>
 
@@ -34,6 +35,10 @@ export const SettingsProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     refresh()
   }, [])
+
+  useRealtime('site_settings', () => {
+    refresh()
+  })
 
   return (
     <SettingsContext.Provider value={{ settings, loading, refresh }}>
