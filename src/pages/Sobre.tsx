@@ -9,8 +9,17 @@ export default function Sobre() {
   const mainImage = settings.about_main?.image
     ? pb.files.getURL(settings.about_main, settings.about_main.image)
     : 'https://img.usecurling.com/p/600/800?q=doctor%20plants&color=green'
-
   const imgAlt = settings.about_main?.image_alt || 'Dra Beatriz e Dr Felipe'
+
+  const felipeRecord = settings.about_doctor_felipe_image || settings.about_felipe_image
+  const felipeImgUrl = felipeRecord?.image
+    ? pb.files.getURL(felipeRecord, felipeRecord.image)
+    : 'https://img.usecurling.com/ppl/large?gender=male&seed=felipe'
+
+  const beatrizRecord = settings.about_doctor_beatriz_image
+  const beatrizImgUrl = beatrizRecord?.image
+    ? pb.files.getURL(beatrizRecord, beatrizRecord.image)
+    : 'https://img.usecurling.com/ppl/large?gender=female&seed=beatriz'
 
   return (
     <div className="container max-w-5xl py-12 md:py-20">
@@ -37,7 +46,6 @@ export default function Sobre() {
           <img
             src={mainImage}
             alt={imgAlt}
-            title={settings.about_main?.value || ''}
             className="absolute inset-0 w-full h-full object-cover"
           />
         </ScrollReveal>
@@ -46,44 +54,21 @@ export default function Sobre() {
           className="order-1 md:order-2 space-y-6 text-lg text-muted-foreground"
         >
           <h2 className="text-3xl font-bold text-foreground mb-4">A Jornada Naturistica</h2>
-          {settings.about_content?.value ? (
-            <div className="whitespace-pre-wrap">{settings.about_content.value}</div>
-          ) : (
-            <>
-              <p>
-                Nossa história começou nos corredores da Universidade Estadual de Londrina (UEL),
-                onde a paixão pela medicina se encontrou com o desejo de ir além do tratamento de
-                sintomas. Percebemos cedo que a medicina ocidental, embora brilhante em crises
-                agudas, muitas vezes falhava em oferecer cura real para condições crônicas e
-                sofrimentos da alma.
-              </p>
-              <p>
-                A Naturistica nasceu da necessidade de unir o rigor científico da nossa formação com
-                a sabedoria ancestral. Vimos pacientes peregrinarem por diversos especialistas sem
-                encontrar alívio para ansiedade, insônia e dores crônicas.
-              </p>
-            </>
-          )}
+          <div className="whitespace-pre-wrap">
+            {settings.about_content?.value ||
+              'Nossa história começou nos corredores da Universidade Estadual de Londrina (UEL), onde a paixão pela medicina se encontrou com o desejo de ir além do tratamento de sintomas.\n\nA Naturistica nasceu da necessidade de unir o rigor científico da nossa formação com a sabedoria ancestral.'}
+          </div>
         </ScrollReveal>
       </div>
 
-      <div className="mb-24">
+      <div className="mb-12">
         <ScrollReveal className="bg-white p-8 md:p-12 rounded-3xl border border-border/50 flex flex-col md:flex-row gap-12 items-center">
           <div className="w-full md:w-1/3 aspect-square rounded-2xl overflow-hidden relative">
-            {(() => {
-              const record = settings.about_felipe_image || settings.about_felipe
-              const imgUrl = record?.image
-                ? `${import.meta.env.VITE_POCKETBASE_URL}/api/files/${record.collectionId}/${record.id}/${record.image}`
-                : 'https://img.usecurling.com/ppl/large?gender=male&seed=felipe'
-
-              return (
-                <img
-                  src={imgUrl}
-                  alt={record?.image_alt || 'Dr. Felipe Zamboni'}
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-              )
-            })()}
+            <img
+              src={felipeImgUrl}
+              alt={felipeRecord?.image_alt || 'Dr. Felipe Zamboni'}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
           </div>
           <div className="w-full md:w-2/3 space-y-6">
             <h3 className="text-3xl font-bold text-primary">
@@ -97,21 +82,29 @@ export default function Sobre() {
         </ScrollReveal>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-16 mb-24">
-        <ScrollReveal className="space-y-6 bg-white p-8 md:p-12 rounded-3xl border border-border/50">
-          <h3 className="text-2xl font-bold text-primary">Dra. Beatriz Mulari</h3>
-          <p className="text-muted-foreground leading-relaxed">
-            Com foco em saúde feminina, Ayurveda e medicina canabinoide, a Dra. Beatriz traz uma
-            perspectiva holística onde nutrição, rotina e tratamentos naturais se encontram. Sua
-            abordagem gentil e baseada em evidências científicas modernas proporciona um ambiente
-            seguro para transformações profundas de estilo de vida.
-          </p>
+      <div className="mb-24">
+        <ScrollReveal className="bg-white p-8 md:p-12 rounded-3xl border border-border/50 flex flex-col md:flex-row-reverse gap-12 items-center">
+          <div className="w-full md:w-1/3 aspect-square rounded-2xl overflow-hidden relative">
+            <img
+              src={beatrizImgUrl}
+              alt={beatrizRecord?.image_alt || 'Dra. Beatriz Mulari'}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          </div>
+          <div className="w-full md:w-2/3 space-y-6">
+            <h3 className="text-3xl font-bold text-primary">
+              {settings.about_beatriz_title?.value || 'Dra. Beatriz Mulari'}
+            </h3>
+            <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+              {settings.about_beatriz_content?.value ||
+                'Com foco em saúde feminina, Ayurveda e medicina canabinoide, a Dra. Beatriz traz uma perspectiva holística onde nutrição, rotina e tratamentos naturais se encontram. Sua abordagem gentil e baseada em evidências científicas modernas proporciona um ambiente seguro para transformações profundas de estilo de vida.'}
+            </div>
+          </div>
         </ScrollReveal>
+      </div>
 
-        <ScrollReveal
-          delay={100}
-          className="space-y-6 bg-primary/5 p-8 md:p-12 rounded-3xl flex flex-col justify-center"
-        >
+      <div className="mb-24">
+        <ScrollReveal className="space-y-6 bg-primary/5 p-8 md:p-12 rounded-3xl text-center max-w-4xl mx-auto">
           <h2 className="text-3xl font-bold font-serif">Nossa Filosofia</h2>
           <p className="text-lg text-muted-foreground">
             Trabalhamos com Cannabis Medicinal, Psicoterapia, Ayurveda e Enteógenos não como

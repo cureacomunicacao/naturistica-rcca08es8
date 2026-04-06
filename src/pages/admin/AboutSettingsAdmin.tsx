@@ -13,18 +13,7 @@ export default function AboutSettingsAdmin() {
   const [initialLoading, setInitialLoading] = useState(true)
   const { toast } = useToast()
 
-  const [mainRecord, setMainRecord] = useState<any>(null)
-  const [contentRecord, setContentRecord] = useState<any>(null)
-  const [seoTitleRecord, setSeoTitleRecord] = useState<any>(null)
-  const [seoDescRecord, setSeoDescRecord] = useState<any>(null)
-
-  const [felipeTitleRecord, setFelipeTitleRecord] = useState<any>(null)
-  const [felipeContentRecord, setFelipeContentRecord] = useState<any>(null)
-  const [felipeImageRecord, setFelipeImageRecord] = useState<any>(null)
-
-  const [waLabelRecord, setWaLabelRecord] = useState<any>(null)
-  const [waUrlRecord, setWaUrlRecord] = useState<any>(null)
-
+  const [settings, setSettings] = useState<Record<string, any>>({})
   const [formData, setFormData] = useState({
     image_alt: '',
     content: '',
@@ -33,11 +22,13 @@ export default function AboutSettingsAdmin() {
     felipe_title: '',
     felipe_content: '',
     felipe_image_alt: '',
+    beatriz_title: '',
+    beatriz_content: '',
+    beatriz_image_alt: '',
     wa_label: '',
     wa_url: '',
   })
-  const [file, setFile] = useState<File | null>(null)
-  const [felipeFile, setFelipeFile] = useState<File | null>(null)
+  const [files, setFiles] = useState<Record<string, File | null>>({})
 
   useEffect(() => {
     fetchSettings()
@@ -45,142 +36,145 @@ export default function AboutSettingsAdmin() {
 
   const fetchSettings = async () => {
     try {
-      const records = await pb.collection('site_settings').getFullList()
-      const main = records.find((r) => r.key === 'about_main')
-      const content = records.find((r) => r.key === 'about_content')
-      const seoTitle = records.find((r) => r.key === 'about_seo_title')
-      const seoDesc = records.find((r) => r.key === 'about_seo_description')
-
-      const felipeTitle = records.find((r) => r.key === 'about_felipe_title')
-      const felipeContent = records.find((r) => r.key === 'about_felipe_content')
-      const felipeImage = records.find((r) => r.key === 'about_felipe_image')
-
-      const waLabel = records.find((r) => r.key === 'about_whatsapp_label')
-      const waUrl = records.find((r) => r.key === 'about_whatsapp_url')
-
-      setMainRecord(main)
-      setContentRecord(content)
-      setSeoTitleRecord(seoTitle)
-      setSeoDescRecord(seoDesc)
-
-      setFelipeTitleRecord(felipeTitle)
-      setFelipeContentRecord(felipeContent)
-      setFelipeImageRecord(felipeImage)
-
-      setWaLabelRecord(waLabel)
-      setWaUrlRecord(waUrl)
-
+      const list = await pb.collection('site_settings').getFullList()
+      const map = list.reduce((acc, curr) => ({ ...acc, [curr.key]: curr }), {})
+      setSettings(map)
       setFormData({
-        image_alt: main?.image_alt || '',
-        content: content?.value || '',
-        seo_title: seoTitle?.value || '',
-        seo_description: seoDesc?.value || '',
-        felipe_title: felipeTitle?.value || '',
-        felipe_content: felipeContent?.value || '',
-        felipe_image_alt: felipeImage?.image_alt || '',
-        wa_label: waLabel?.value || '',
-        wa_url: waUrl?.value || '',
+        image_alt: map.about_main?.image_alt || '',
+        content: map.about_content?.value || '',
+        seo_title: map.about_seo_title?.value || '',
+        seo_description: map.about_seo_description?.value || '',
+        felipe_title: map.about_felipe_title?.value || '',
+        felipe_content: map.about_felipe_content?.value || '',
+        felipe_image_alt:
+          (map.about_doctor_felipe_image || map.about_felipe_image)?.image_alt || '',
+        beatriz_title: map.about_beatriz_title?.value || '',
+        beatriz_content: map.about_beatriz_content?.value || '',
+        beatriz_image_alt: map.about_doctor_beatriz_image?.image_alt || '',
+        wa_label: map.about_whatsapp_label?.value || '',
+        wa_url: map.about_whatsapp_url?.value || '',
       })
     } catch (err) {
-      toast({
-        title: 'Erro',
-        description: 'Falha ao carregar configurações',
-        variant: 'destructive',
-      })
+      toast({ title: 'Erro', description: 'Falha ao carregar', variant: 'destructive' })
     } finally {
       setInitialLoading(false)
     }
   }
 
+  const saveSetting = async (key: string, data: any) => {
+    const record =
+      settings[key] || (key === 'about_doctor_felipe_image' ? settings['about_felipe_image'] : null)
+    if (record) return pb.collection('site_settings').update(record.id, data)
+    return pb.collection('site_settings').create(data instanceof FormData ? data : { key, ...data })
+  }
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-
     try {
       const mainData = new FormData()
       mainData.append('key', 'about_main')
       mainData.append('image_alt', formData.image_alt)
-      if (file) mainData.append('image', file)
+      if (files.main) mainData.append('image', files.main)
+      await saveSetting('about_main', mainData)
 
-      if (mainRecord) {
-        await pb.collection('site_settings').update(mainRecord.id, mainData)
-      } else {
-        await pb.collection('site_settings').create(mainData)
-      }
+      const felipeData = new FormData()
+      felipeData.append('key', 'about_doctor_felipe_image')
+      felipeData.append('image_alt', formData.felipe_image_alt)
+      if (files.felipe) felipeData.append('image', files.felipe)
+      await saveSetting('about_doctor_felipe_image', felipeData)
 
-      const contentData = { key: 'about_content', value: formData.content }
-      if (contentRecord) {
-        await pb.collection('site_settings').update(contentRecord.id, contentData)
-      } else {
-        await pb.collection('site_settings').create(contentData)
-      }
+      const beatrizData = new FormData()
+      beatrizData.append('key', 'about_doctor_beatriz_image')
+      beatrizData.append('image_alt', formData.beatriz_image_alt)
+      if (files.beatriz) beatrizData.append('image', files.beatriz)
+      await saveSetting('about_doctor_beatriz_image', beatrizData)
 
-      const seoTitleData = { key: 'about_seo_title', value: formData.seo_title }
-      if (seoTitleRecord) {
-        await pb.collection('site_settings').update(seoTitleRecord.id, seoTitleData)
-      } else {
-        await pb.collection('site_settings').create(seoTitleData)
-      }
-
-      const seoDescData = { key: 'about_seo_description', value: formData.seo_description }
-      if (seoDescRecord) {
-        await pb.collection('site_settings').update(seoDescRecord.id, seoDescData)
-      } else {
-        await pb.collection('site_settings').create(seoDescData)
-      }
-
-      const felipeTitleData = { key: 'about_felipe_title', value: formData.felipe_title }
-      if (felipeTitleRecord) {
-        await pb.collection('site_settings').update(felipeTitleRecord.id, felipeTitleData)
-      } else {
-        await pb.collection('site_settings').create(felipeTitleData)
-      }
-
-      const felipeContentData = { key: 'about_felipe_content', value: formData.felipe_content }
-      if (felipeContentRecord) {
-        await pb.collection('site_settings').update(felipeContentRecord.id, felipeContentData)
-      } else {
-        await pb.collection('site_settings').create(felipeContentData)
-      }
-
-      const felipeImageData = new FormData()
-      felipeImageData.append('key', 'about_felipe_image')
-      felipeImageData.append('image_alt', formData.felipe_image_alt)
-      if (felipeFile) felipeImageData.append('image', felipeFile)
-
-      if (felipeImageRecord) {
-        await pb.collection('site_settings').update(felipeImageRecord.id, felipeImageData)
-      } else {
-        await pb.collection('site_settings').create(felipeImageData)
-      }
-
-      const waLabelData = { key: 'about_whatsapp_label', value: formData.wa_label }
-      if (waLabelRecord) {
-        await pb.collection('site_settings').update(waLabelRecord.id, waLabelData)
-      } else {
-        await pb.collection('site_settings').create(waLabelData)
-      }
-
-      const waUrlData = { key: 'about_whatsapp_url', value: formData.wa_url }
-      if (waUrlRecord) {
-        await pb.collection('site_settings').update(waUrlRecord.id, waUrlData)
-      } else {
-        await pb.collection('site_settings').create(waUrlData)
-      }
-
-      toast({ title: 'Sucesso', description: 'Configurações da Página Sobre salvas.' })
-      fetchSettings()
-      setFile(null)
-      setFelipeFile(null)
-    } catch (err: any) {
-      toast({
-        title: 'Erro',
-        description: err.message || 'Falha ao salvar',
-        variant: 'destructive',
+      await saveSetting('about_content', { key: 'about_content', value: formData.content })
+      await saveSetting('about_seo_title', { key: 'about_seo_title', value: formData.seo_title })
+      await saveSetting('about_seo_description', {
+        key: 'about_seo_description',
+        value: formData.seo_description,
       })
+      await saveSetting('about_felipe_title', {
+        key: 'about_felipe_title',
+        value: formData.felipe_title,
+      })
+      await saveSetting('about_felipe_content', {
+        key: 'about_felipe_content',
+        value: formData.felipe_content,
+      })
+      await saveSetting('about_beatriz_title', {
+        key: 'about_beatriz_title',
+        value: formData.beatriz_title,
+      })
+      await saveSetting('about_beatriz_content', {
+        key: 'about_beatriz_content',
+        value: formData.beatriz_content,
+      })
+      await saveSetting('about_whatsapp_label', {
+        key: 'about_whatsapp_label',
+        value: formData.wa_label,
+      })
+      await saveSetting('about_whatsapp_url', { key: 'about_whatsapp_url', value: formData.wa_url })
+
+      toast({ title: 'Sucesso', description: 'Configurações salvas.' })
+      fetchSettings()
+      setFiles({})
+    } catch (err: any) {
+      toast({ title: 'Erro', description: err.message, variant: 'destructive' })
     } finally {
       setLoading(false)
     }
+  }
+
+  const renderImageUpload = (key: string, fileKey: string, altKey: keyof typeof formData) => {
+    const record =
+      settings[key] || (key === 'about_doctor_felipe_image' ? settings['about_felipe_image'] : null)
+    const file = files[fileKey]
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center gap-6">
+          {record?.image && !file ? (
+            <div className="relative h-40 w-40 rounded-xl overflow-hidden border">
+              <img
+                src={pb.files.getURL(record, record.image)}
+                alt="Preview"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            </div>
+          ) : file ? (
+            <div className="relative h-40 w-40 rounded-xl overflow-hidden border">
+              <img
+                src={URL.createObjectURL(file)}
+                alt="Preview"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            </div>
+          ) : (
+            <div className="h-40 w-40 bg-muted rounded-xl border flex flex-col items-center justify-center text-muted-foreground">
+              <ImageIcon className="w-8 h-8 mb-2 opacity-50" />
+              <span className="text-sm">Nenhuma imagem</span>
+            </div>
+          )}
+          <div className="flex-1 space-y-2">
+            <Label>Nova Imagem</Label>
+            <Input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setFiles((p) => ({ ...p, [fileKey]: e.target.files?.[0] || null }))}
+            />
+          </div>
+        </div>
+        <div className="space-y-2">
+          <Label>Texto Alternativo (SEO)</Label>
+          <Input
+            value={formData[altKey]}
+            onChange={(e) => setFormData({ ...formData, [altKey]: e.target.value })}
+          />
+        </div>
+      </div>
+    )
   }
 
   if (initialLoading) return <div className="p-8">Carregando...</div>
@@ -190,231 +184,103 @@ export default function AboutSettingsAdmin() {
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-foreground">Página Sobre</h1>
         <p className="text-muted-foreground mt-2">
-          Gerencie o conteúdo, imagem e metadados de SEO da página "Nossa História".
+          Gerencie o conteúdo e imagens da página "Nossa História".
         </p>
       </div>
-
       <form onSubmit={handleSave} className="space-y-6">
         <Card>
           <CardHeader>
             <CardTitle>Imagem Principal</CardTitle>
-            <CardDescription>A imagem de destaque ao lado do texto de introdução.</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-4">
-              <Label>Imagem Atual</Label>
-              <div className="flex items-center gap-6">
-                {mainRecord?.image && !file ? (
-                  <div className="relative h-40 w-40 rounded-xl overflow-hidden border">
-                    <img
-                      src={pb.files.getURL(mainRecord, mainRecord.image)}
-                      alt="Preview"
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                  </div>
-                ) : file ? (
-                  <div className="relative h-40 w-40 rounded-xl overflow-hidden border">
-                    <img
-                      src={URL.createObjectURL(file)}
-                      alt="New Preview"
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                  </div>
-                ) : (
-                  <div className="h-40 w-40 bg-muted rounded-xl border flex flex-col items-center justify-center text-muted-foreground">
-                    <ImageIcon className="w-8 h-8 mb-2 opacity-50" />
-                    <span className="text-sm">Nenhuma imagem</span>
-                  </div>
-                )}
-                <div className="flex-1 space-y-2">
-                  <Label>Nova Imagem</Label>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setFile(e.target.files?.[0] || null)}
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Recomendado: Formato retrato, JPG ou WebP.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label>Título da Imagem (Alt Text)</Label>
-              <Input
-                value={formData.image_alt}
-                onChange={(e) => setFormData({ ...formData, image_alt: e.target.value })}
-                placeholder="Ex: Dra Beatriz e Dr Felipe"
-              />
-              <p className="text-xs text-muted-foreground">Importante para acessibilidade e SEO.</p>
-            </div>
-          </CardContent>
+          <CardContent>{renderImageUpload('about_main', 'main', 'image_alt')}</CardContent>
         </Card>
-
         <Card>
           <CardHeader>
-            <CardTitle>Conteúdo</CardTitle>
-            <CardDescription>O texto principal de "A Jornada Naturistica".</CardDescription>
+            <CardTitle>História</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2">
-              <Label>Texto da História</Label>
-              <Textarea
-                value={formData.content}
-                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                placeholder="Nossa história começou..."
-                className="h-64"
-              />
-              <p className="text-xs text-muted-foreground">
-                Você pode usar quebras de linha para separar os parágrafos.
-              </p>
-            </div>
+            <Textarea
+              value={formData.content}
+              onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+              className="h-64"
+            />
           </CardContent>
         </Card>
-
         <Card>
           <CardHeader>
-            <CardTitle>Dr. Felipe Zamboni</CardTitle>
-            <CardDescription>Seção dedicada à apresentação do Dr. Felipe.</CardDescription>
+            <CardTitle>Foto do Dr. Felipe</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="space-y-4">
-              <Label>Foto do Perfil</Label>
-              <div className="flex items-center gap-6">
-                {felipeImageRecord?.image && !felipeFile ? (
-                  <div className="relative h-40 w-40 rounded-xl overflow-hidden border">
-                    <img
-                      src={pb.files.getURL(felipeImageRecord, felipeImageRecord.image)}
-                      alt="Preview"
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                  </div>
-                ) : felipeFile ? (
-                  <div className="relative h-40 w-40 rounded-xl overflow-hidden border">
-                    <img
-                      src={URL.createObjectURL(felipeFile)}
-                      alt="New Preview"
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
-                  </div>
-                ) : (
-                  <div className="h-40 w-40 bg-muted rounded-xl border flex flex-col items-center justify-center text-muted-foreground">
-                    <ImageIcon className="w-8 h-8 mb-2 opacity-50" />
-                    <span className="text-sm">Nenhuma imagem</span>
-                  </div>
-                )}
-                <div className="flex-1 space-y-2">
-                  <Label>Nova Imagem</Label>
-                  <Input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setFelipeFile(e.target.files?.[0] || null)}
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    Recomendado: Formato quadrado ou retrato, JPG ou WebP.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label>Texto Alternativo da Imagem (SEO)</Label>
-              <Input
-                value={formData.felipe_image_alt}
-                onChange={(e) => setFormData({ ...formData, felipe_image_alt: e.target.value })}
-                placeholder="Ex: Foto do Dr. Felipe Zamboni sorrindo"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label>Título</Label>
-              <Input
-                value={formData.felipe_title}
-                onChange={(e) => setFormData({ ...formData, felipe_title: e.target.value })}
-                placeholder="Ex: Dr. Felipe Zamboni"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label>Descrição</Label>
-              <Textarea
-                value={formData.felipe_content}
-                onChange={(e) => setFormData({ ...formData, felipe_content: e.target.value })}
-                placeholder="Especialista em abordagens..."
-                className="h-32"
-              />
-            </div>
+            {renderImageUpload('about_doctor_felipe_image', 'felipe', 'felipe_image_alt')}
+            <Input
+              placeholder="Título (Ex: Dr. Felipe Zamboni)"
+              value={formData.felipe_title}
+              onChange={(e) => setFormData({ ...formData, felipe_title: e.target.value })}
+            />
+            <Textarea
+              placeholder="Descrição..."
+              value={formData.felipe_content}
+              onChange={(e) => setFormData({ ...formData, felipe_content: e.target.value })}
+              className="h-32"
+            />
           </CardContent>
         </Card>
-
         <Card>
           <CardHeader>
-            <CardTitle>Chamada WhatsApp (CTA)</CardTitle>
-            <CardDescription>Botão de contato exibido no final da página Sobre.</CardDescription>
+            <CardTitle>Foto da Dra. Beatriz</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="space-y-2">
-              <Label>Texto do Botão</Label>
-              <Input
-                value={formData.wa_label}
-                onChange={(e) => setFormData({ ...formData, wa_label: e.target.value })}
-                placeholder="Ex: Fale conosco pelo WhatsApp"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label>Link do WhatsApp</Label>
-              <Input
-                value={formData.wa_url}
-                onChange={(e) => setFormData({ ...formData, wa_url: e.target.value })}
-                placeholder="Ex: https://wa.me/5511999999999"
-              />
-            </div>
+            {renderImageUpload('about_doctor_beatriz_image', 'beatriz', 'beatriz_image_alt')}
+            <Input
+              placeholder="Título (Ex: Dra. Beatriz Mulari)"
+              value={formData.beatriz_title}
+              onChange={(e) => setFormData({ ...formData, beatriz_title: e.target.value })}
+            />
+            <Textarea
+              placeholder="Descrição..."
+              value={formData.beatriz_content}
+              onChange={(e) => setFormData({ ...formData, beatriz_content: e.target.value })}
+              className="h-32"
+            />
           </CardContent>
         </Card>
-
         <Card>
           <CardHeader>
-            <CardTitle>SEO - Otimização para Buscas</CardTitle>
-            <CardDescription>Como a página aparece no Google e redes sociais.</CardDescription>
+            <CardTitle>WhatsApp (CTA)</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="space-y-2">
-              <Label>Título da Página (Meta Title)</Label>
-              <Input
-                value={formData.seo_title}
-                onChange={(e) => setFormData({ ...formData, seo_title: e.target.value })}
-                placeholder="Ex: Nossa História | Naturistica"
-              />
-              <p className="text-xs text-muted-foreground">
-                {formData.seo_title.length}/60 caracteres recomendados
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <Label>Descrição (Meta Description)</Label>
-              <Textarea
-                value={formData.seo_description}
-                onChange={(e) => setFormData({ ...formData, seo_description: e.target.value })}
-                placeholder="Conheça a história da Naturistica..."
-                className="h-24"
-              />
-              <p className="text-xs text-muted-foreground">
-                {formData.seo_description.length}/160 caracteres recomendados
-              </p>
-            </div>
+          <CardContent className="space-y-4">
+            <Input
+              placeholder="Rótulo"
+              value={formData.wa_label}
+              onChange={(e) => setFormData({ ...formData, wa_label: e.target.value })}
+            />
+            <Input
+              placeholder="URL"
+              value={formData.wa_url}
+              onChange={(e) => setFormData({ ...formData, wa_url: e.target.value })}
+            />
           </CardContent>
         </Card>
-
+        <Card>
+          <CardHeader>
+            <CardTitle>SEO</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Input
+              placeholder="Title"
+              value={formData.seo_title}
+              onChange={(e) => setFormData({ ...formData, seo_title: e.target.value })}
+            />
+            <Textarea
+              placeholder="Description"
+              value={formData.seo_description}
+              onChange={(e) => setFormData({ ...formData, seo_description: e.target.value })}
+            />
+          </CardContent>
+        </Card>
         <div className="flex justify-end pb-8">
-          <Button type="submit" disabled={loading} size="lg" className="text-white">
-            {loading ? (
-              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-            ) : (
-              <Save className="w-4 h-4 mr-2" />
-            )}
-            Salvar Alterações
+          <Button type="submit" disabled={loading} size="lg">
+            <Save className="w-4 h-4 mr-2" /> Salvar
           </Button>
         </div>
       </form>
