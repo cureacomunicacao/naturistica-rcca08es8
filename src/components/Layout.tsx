@@ -8,8 +8,19 @@ import { useState, useEffect } from 'react'
 const navLinks = [
   { name: 'Início', path: '/' },
   { name: 'Sobre', path: '/sobre' },
-  { name: 'Serviços', path: '/servicos' },
+  { name: 'Tratamentos', path: '/tratamentos' },
   { name: 'Blog', path: '/blog' },
+]
+
+const treatmentsList = [
+  { title: 'Ansiedade', slug: 'ansiedade' },
+  { title: 'Insônia', slug: 'insonia' },
+  { title: 'Burnout', slug: 'burnout' },
+  { title: 'TDAH', slug: 'tdah' },
+  { title: 'Trauma', slug: 'trauma' },
+  { title: 'Enxaqueca', slug: 'enxaqueca' },
+  { title: 'Fibromialgia', slug: 'fibromialgia' },
+  { title: 'Dor crônica', slug: 'dor-cronica' },
 ]
 
 export default function Layout() {
@@ -48,21 +59,60 @@ export default function Layout() {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={cn(
-                  'text-sm font-medium transition-colors hover:text-primary relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-bottom-right after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100',
-                  location.pathname === link.path
-                    ? 'text-primary after:scale-x-100'
-                    : 'text-muted-foreground',
-                )}
-              >
-                {link.name}
-              </Link>
-            ))}
-            <Button className="rounded-full px-6">Agendar consulta online</Button>
+            {navLinks.map((link) =>
+              link.name === 'Tratamentos' ? (
+                <div key={link.path} className="relative group py-2">
+                  <Link
+                    to={link.path}
+                    className={cn(
+                      'text-sm font-medium transition-colors hover:text-primary relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-bottom-right after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100',
+                      location.pathname.startsWith('/tratamentos')
+                        ? 'text-primary after:scale-x-100'
+                        : 'text-muted-foreground',
+                    )}
+                  >
+                    {link.name}
+                  </Link>
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 pt-4">
+                    <div className="bg-white rounded-xl shadow-xl border p-4 w-[500px] grid grid-cols-2 gap-2 before:absolute before:-top-2 before:left-1/2 before:-translate-x-1/2 before:border-8 before:border-transparent before:border-b-white">
+                      {treatmentsList.map((t) => (
+                        <Link
+                          key={t.slug}
+                          to={`/tratamentos/${t.slug}`}
+                          className="block p-3 hover:bg-primary/5 rounded-lg text-sm text-foreground hover:text-primary transition-colors font-medium"
+                        >
+                          {t.title}
+                        </Link>
+                      ))}
+                      <div className="col-span-2 pt-3 mt-1 border-t">
+                        <Link
+                          to="/tratamentos"
+                          className="block text-center text-sm text-primary hover:underline font-medium"
+                        >
+                          Ver todos os tratamentos →
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className={cn(
+                    'text-sm font-medium transition-colors hover:text-primary relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-bottom-right after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100',
+                    location.pathname === link.path
+                      ? 'text-primary after:scale-x-100'
+                      : 'text-muted-foreground',
+                  )}
+                >
+                  {link.name}
+                </Link>
+              ),
+            )}
+            <Button className="rounded-full px-6 text-white hover:bg-primary/90">
+              Agendar consulta online
+            </Button>
           </nav>
 
           {/* Mobile Nav */}
@@ -76,16 +126,30 @@ export default function Layout() {
               <SheetTitle className="sr-only">Menu de Navegação</SheetTitle>
               <nav className="flex flex-col gap-6 text-lg font-serif mt-8">
                 {navLinks.map((link) => (
-                  <Link
-                    key={link.path}
-                    to={link.path}
-                    className={cn(
-                      'transition-colors hover:text-primary',
-                      location.pathname === link.path ? 'text-primary' : 'text-muted-foreground',
+                  <div key={link.path} className="flex flex-col gap-2">
+                    <Link
+                      to={link.path}
+                      className={cn(
+                        'transition-colors hover:text-primary font-medium',
+                        location.pathname === link.path ? 'text-primary' : 'text-muted-foreground',
+                      )}
+                    >
+                      {link.name}
+                    </Link>
+                    {link.name === 'Tratamentos' && (
+                      <div className="pl-4 flex flex-col gap-3 mt-2 border-l-2 border-primary/20">
+                        {treatmentsList.map((t) => (
+                          <Link
+                            key={t.slug}
+                            to={`/tratamentos/${t.slug}`}
+                            className="text-base text-muted-foreground hover:text-primary"
+                          >
+                            {t.title}
+                          </Link>
+                        ))}
+                      </div>
                     )}
-                  >
-                    {link.name}
-                  </Link>
+                  </div>
                 ))}
               </nav>
               <div className="mt-auto pb-8">

@@ -3,27 +3,46 @@ import { Toaster } from '@/components/ui/toaster'
 import { Toaster as Sonner } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import Layout from './components/Layout'
+import AdminLayout from './components/AdminLayout'
+import { AuthProvider } from './hooks/use-auth'
 import Index from './pages/Index'
 import Sobre from './pages/Sobre'
-import Servicos from './pages/Servicos'
+import Tratamentos from './pages/Tratamentos'
+import TratamentoDetalhe from './pages/TratamentoDetalhe'
 import Blog from './pages/Blog'
 import NotFound from './pages/NotFound'
 
+import Login from './pages/admin/Login'
+import Dashboard from './pages/admin/Dashboard'
+import TreatmentsAdmin from './pages/admin/TreatmentsAdmin'
+import LeadsAdmin from './pages/admin/LeadsAdmin'
+
 const App = () => (
   <BrowserRouter future={{ v7_startTransition: false, v7_relativeSplatPath: false }}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path="/" element={<Index />} />
-          <Route path="/sobre" element={<Sobre />} />
-          <Route path="/servicos" element={<Servicos />} />
-          <Route path="/blog" element={<Blog />} />
-        </Route>
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </TooltipProvider>
+    <AuthProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path="/" element={<Index />} />
+            <Route path="/sobre" element={<Sobre />} />
+            <Route path="/tratamentos" element={<Tratamentos />} />
+            <Route path="/tratamentos/:slug" element={<TratamentoDetalhe />} />
+            <Route path="/blog" element={<Blog />} />
+          </Route>
+
+          <Route path="/login" element={<Login />} />
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="treatments" element={<TreatmentsAdmin />} />
+            <Route path="leads" element={<LeadsAdmin />} />
+          </Route>
+
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </TooltipProvider>
+    </AuthProvider>
   </BrowserRouter>
 )
 
