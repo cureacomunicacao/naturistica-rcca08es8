@@ -9,6 +9,10 @@ import { getPosts, getPostImageUrl, type PostRecord } from '@/services/posts'
 
 const categories = [
   'ANSIEDADE',
+  'ANSIEDADE GRAVE',
+  'DEPRESSÃO',
+  'SAÚDE MENTAL',
+  'CANNABIS MEDICINAL',
   'INSÔNIA',
   'BURNOUT',
   'DOR CRÔNICA',

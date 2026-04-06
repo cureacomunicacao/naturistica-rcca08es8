@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft, MessageCircle } from 'lucide-react'
 import { SEO } from '@/components/SEO'
 import { AnxietyQuiz } from '@/components/AnxietyQuiz'
+import { DepressionQuiz } from '@/components/DepressionQuiz'
 
 export default function BlogPostDetail() {
   const { slug } = useParams<{ slug: string }>()
@@ -36,7 +37,9 @@ export default function BlogPostDetail() {
     )
 
   const whatsappMessage = encodeURIComponent(
-    `Olá Naturística, vim pelo blog e gostaria de agendar uma consulta.`,
+    post.slug === 'sintomas-ansiedade-grave' || post.slug === 'teste-depressao-gratuito'
+      ? `Olá Naturística, li o artigo sobre ${post.title} e gostaria de agendar uma consulta urgente.`
+      : `Olá Naturística, vim pelo blog e gostaria de agendar uma consulta.`,
   )
   const whatsappUrl = `https://wa.me/5511999999999?text=${whatsappMessage}`
 
@@ -100,6 +103,12 @@ export default function BlogPostDetail() {
           </ScrollReveal>
         )}
 
+        {post.slug === 'teste-depressao-gratuito' && (
+          <ScrollReveal delay={150}>
+            <DepressionQuiz />
+          </ScrollReveal>
+        )}
+
         {post.slug === 'ansiedade-como-tratar' && (
           <ScrollReveal delay={150}>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12 mb-8">
@@ -116,27 +125,32 @@ export default function BlogPostDetail() {
         )}
 
         {/* WhatsApp CTA */}
-        <ScrollReveal delay={200}>
-          <div className="bg-white rounded-2xl p-8 md:p-12 shadow-sm border border-[#455e38]/10 text-center space-y-6 mt-16">
-            <h3 className="text-2xl font-bold font-serif text-[#455e38]">
-              Pronto para transformar sua saúde?
-            </h3>
-            <p className="text-muted-foreground text-lg max-w-md mx-auto">
-              Nossa equipe multidisciplinar está pronta para te atender com uma abordagem
-              integrativa e humanizada.
-            </p>
-            <Button
-              asChild
-              size="lg"
-              className="bg-[#455e38] hover:bg-[#455e38]/90 text-white rounded-full px-8 h-14 text-lg"
-            >
-              <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
-                <MessageCircle className="w-5 h-5 mr-2" />
-                Agendar Consulta via WhatsApp
-              </a>
-            </Button>
-          </div>
-        </ScrollReveal>
+        {post.slug !== 'teste-depressao-gratuito' && (
+          <ScrollReveal delay={200}>
+            <div className="bg-white rounded-2xl p-8 md:p-12 shadow-sm border border-[#455e38]/10 text-center space-y-6 mt-16 transition-all hover:shadow-md">
+              <h3 className="text-2xl font-bold font-serif text-[#455e38]">
+                {post.slug === 'sintomas-ansiedade-grave'
+                  ? 'Precisa de ajuda urgente?'
+                  : 'Pronto para transformar sua saúde?'}
+              </h3>
+              <p className="text-muted-foreground text-lg max-w-md mx-auto">
+                {post.slug === 'sintomas-ansiedade-grave'
+                  ? 'Nossa equipe multidisciplinar está pronta para oferecer suporte imediato e um plano de tratamento eficaz.'
+                  : 'Nossa equipe multidisciplinar está pronta para te atender com uma abordagem integrativa e humanizada.'}
+              </p>
+              <Button
+                asChild
+                size="lg"
+                className="bg-[#455e38] hover:bg-[#455e38]/90 text-white rounded-full px-8 h-14 text-lg hover:scale-105 transition-transform"
+              >
+                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+                  <MessageCircle className="w-5 h-5 mr-2" />
+                  Agendar Consulta via WhatsApp
+                </a>
+              </Button>
+            </div>
+          </ScrollReveal>
+        )}
       </div>
     </div>
   )
