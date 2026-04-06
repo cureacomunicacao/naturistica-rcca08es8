@@ -19,13 +19,13 @@ export default function Sobre() {
   )
   const imgAlt = settings.about_main?.image_alt || 'Dra Beatriz e Dr Felipe'
 
-  const felipeRecord = settings.about_doctor_felipe_image || settings.about_felipe_image
+  const felipeRecord = settings.doctor_felipe_image || settings.about_felipe_image
   const felipeImgUrl = getImageUrl(
     felipeRecord,
     'https://img.usecurling.com/ppl/large?gender=male&seed=felipe',
   )
 
-  const beatrizRecord = settings.about_doctor_beatriz_image || settings.about_beatriz_image
+  const beatrizRecord = settings.doctor_beatriz_image || settings.about_beatriz_image
   const beatrizImgUrl = getImageUrl(
     beatrizRecord,
     'https://img.usecurling.com/ppl/large?gender=female&seed=beatriz',
