@@ -19,36 +19,43 @@ import TreatmentsAdmin from './pages/admin/TreatmentsAdmin'
 import LeadsAdmin from './pages/admin/LeadsAdmin'
 import BlogAdmin from './pages/admin/BlogAdmin'
 import BlogPostForm from './pages/admin/BlogPostForm'
+import SiteSettingsAdmin from './pages/admin/SiteSettingsAdmin'
+import ContentInsightsAdmin from './pages/admin/ContentInsightsAdmin'
+import { SettingsProvider } from './hooks/use-settings'
 
 const App = () => (
   <BrowserRouter future={{ v7_startTransition: false, v7_relativeSplatPath: false }}>
     <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <Routes>
-          <Route element={<Layout />}>
-            <Route path="/" element={<Index />} />
-            <Route path="/sobre" element={<Sobre />} />
-            <Route path="/tratamentos" element={<Tratamentos />} />
-            <Route path="/tratamentos/:slug" element={<TratamentoDetalhe />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogPostDetail />} />
-          </Route>
+      <SettingsProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <Routes>
+            <Route element={<Layout />}>
+              <Route path="/" element={<Index />} />
+              <Route path="/sobre" element={<Sobre />} />
+              <Route path="/tratamentos" element={<Tratamentos />} />
+              <Route path="/tratamentos/:slug" element={<TratamentoDetalhe />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogPostDetail />} />
+            </Route>
 
-          <Route path="/login" element={<Login />} />
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<Dashboard />} />
-            <Route path="treatments" element={<TreatmentsAdmin />} />
-            <Route path="leads" element={<LeadsAdmin />} />
-            <Route path="blogs" element={<BlogAdmin />} />
-            <Route path="blogs/new" element={<BlogPostForm />} />
-            <Route path="blogs/:id" element={<BlogPostForm />} />
-          </Route>
+            <Route path="/login" element={<Login />} />
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<Dashboard />} />
+              <Route path="treatments" element={<TreatmentsAdmin />} />
+              <Route path="leads" element={<LeadsAdmin />} />
+              <Route path="blogs" element={<BlogAdmin />} />
+              <Route path="blogs/new" element={<BlogPostForm />} />
+              <Route path="blogs/:id" element={<BlogPostForm />} />
+              <Route path="settings" element={<SiteSettingsAdmin />} />
+              <Route path="insights" element={<ContentInsightsAdmin />} />
+            </Route>
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </TooltipProvider>
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </TooltipProvider>
+      </SettingsProvider>
     </AuthProvider>
   </BrowserRouter>
 )

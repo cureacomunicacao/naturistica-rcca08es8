@@ -4,6 +4,9 @@ import { Menu, Leaf } from 'lucide-react'
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet'
 import { cn } from '@/lib/utils'
 import { useState, useEffect } from 'react'
+import { useSettings } from '@/hooks/use-settings'
+import pb from '@/lib/pocketbase/client'
+import { SEO } from '@/components/SEO'
 
 const navLinks = [
   { name: 'Início', path: '/' },
@@ -25,6 +28,7 @@ const treatmentsList = [
 
 export default function Layout() {
   const location = useLocation()
+  const { settings } = useSettings()
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -41,8 +45,28 @@ export default function Layout() {
     setMobileMenuOpen(false)
   }, [location.pathname])
 
+  const getSEO = () => {
+    if (location.pathname === '/')
+      return { title: settings.home_meta_title?.value, desc: settings.home_meta_description?.value }
+    if (location.pathname === '/sobre')
+      return {
+        title: settings.about_meta_title?.value,
+        desc: settings.about_meta_description?.value,
+      }
+    if (location.pathname.startsWith('/tratamentos'))
+      return {
+        title: settings.treatments_meta_title?.value,
+        desc: settings.treatments_meta_description?.value,
+      }
+    if (location.pathname.startsWith('/blog'))
+      return { title: settings.blog_meta_title?.value, desc: settings.blog_meta_description?.value }
+    return {}
+  }
+  const seo = getSEO()
+
   return (
     <div className="flex min-h-screen flex-col selection:bg-primary selection:text-primary-foreground">
+      <SEO title={seo.title} description={seo.desc} />
       <header
         className={cn(
           'fixed top-0 w-full z-50 transition-all duration-300 glass-header',
@@ -51,10 +75,20 @@ export default function Layout() {
       >
         <div className="container flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2 group">
-            <Leaf className="h-6 w-6 text-primary group-hover:rotate-12 transition-transform duration-300" />
-            <span className="font-serif text-2xl font-semibold tracking-wide text-primary">
-              NATURISTICA
-            </span>
+            {settings?.global_logo?.image ? (
+              <img
+                src={pb.files.getUrl(settings.global_logo, settings.global_logo.image)}
+                alt="Naturistica"
+                className="h-8 object-contain"
+              />
+            ) : (
+              <>
+                <Leaf className="h-6 w-6 text-primary group-hover:rotate-12 transition-transform duration-300" />
+                <span className="font-serif text-2xl font-semibold tracking-wide text-primary">
+                  NATURISTICA
+                </span>
+              </>
+            )}
           </Link>
 
           {/* Desktop Nav */}
@@ -170,8 +204,20 @@ export default function Layout() {
         <div className="container grid grid-cols-1 md:grid-cols-3 gap-12">
           <div className="space-y-4">
             <Link to="/" className="flex items-center gap-2">
-              <Leaf className="h-6 w-6" />
-              <span className="font-serif text-2xl font-semibold tracking-wide">NATURISTICA</span>
+              {settings?.global_logo?.image ? (
+                <img
+                  src={pb.files.getUrl(settings.global_logo, settings.global_logo.image)}
+                  alt="Naturistica"
+                  className="h-8 object-contain brightness-0 invert"
+                />
+              ) : (
+                <>
+                  <Leaf className="h-6 w-6" />
+                  <span className="font-serif text-2xl font-semibold tracking-wide">
+                    NATURISTICA
+                  </span>
+                </>
+              )}
             </Link>
             <p className="text-primary-foreground/80 text-sm max-w-xs leading-relaxed">
               Onde a ciência encontra a ancestralidade para saúde e consciência. Tratamento médico
@@ -206,15 +252,20 @@ export default function Layout() {
           <div className="space-y-4">
             <h4 className="font-serif font-semibold text-lg">Contato</h4>
             <div className="space-y-2 text-sm text-primary-foreground/80">
-              <p>contato@naturistica.com.br</p>
-              <p>+55 (11) 99999-9999</p>
+              <p>{settings?.global_email?.value || 'contato@naturistica.com.br'}</p>
+              <p>{settings?.global_phone?.value || '+55 (11) 99999-9999'}</p>
               <div className="pt-4">
-                <Button
-                  variant="outline"
-                  className="rounded-full bg-transparent border-primary-foreground/20 hover:bg-primary-foreground/10 hover:text-white"
-                >
-                  Siga no Instagram
-                </Button>
+                {settings?.global_instagram?.value && (
+                  <Button
+                    variant="outline"
+                    asChild
+                    className="rounded-full bg-transparent border-primary-foreground/20 hover:bg-primary-foreground/10 hover:text-white"
+                  >
+                    <a href={settings.global_instagram.value} target="_blank" rel="noreferrer">
+                      Siga no Instagram
+                    </a>
+                  </Button>
+                )}
               </div>
             </div>
           </div>
