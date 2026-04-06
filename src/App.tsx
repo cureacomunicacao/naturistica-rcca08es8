@@ -22,6 +22,8 @@ import BlogPostForm from './pages/admin/BlogPostForm'
 import SiteSettingsAdmin from './pages/admin/SiteSettingsAdmin'
 import MediaSettingsAdmin from './pages/admin/MediaSettingsAdmin'
 import ContentInsightsAdmin from './pages/admin/ContentInsightsAdmin'
+import HomeSettingsAdmin from './pages/admin/HomeSettingsAdmin'
+import AboutSettingsAdmin from './pages/admin/AboutSettingsAdmin'
 import { SettingsProvider } from './hooks/use-settings'
 
 const App = () => (
@@ -50,6 +52,8 @@ const App = () => (
               <Route path="blogs/new" element={<BlogPostForm />} />
               <Route path="blogs/:id" element={<BlogPostForm />} />
               <Route path="settings" element={<SiteSettingsAdmin />} />
+              <Route path="settings/home" element={<HomeSettingsAdmin />} />
+              <Route path="settings/about" element={<AboutSettingsAdmin />} />
               <Route path="settings/media" element={<MediaSettingsAdmin />} />
               <Route path="insights" element={<ContentInsightsAdmin />} />
             </Route>

@@ -150,6 +150,27 @@ export default function TreatmentsAdmin() {
             </div>
             <div className="space-y-2">
               <Label>Imagem de Destaque</Label>
+              {editingId && treatments.find((t) => t.id === editingId)?.image && !file && (
+                <div className="mb-4">
+                  <img
+                    src={pb.files.getURL(
+                      treatments.find((t) => t.id === editingId),
+                      treatments.find((t) => t.id === editingId).image,
+                    )}
+                    alt="Current preview"
+                    className="h-32 w-48 object-cover rounded-md border"
+                  />
+                </div>
+              )}
+              {file && (
+                <div className="mb-4">
+                  <img
+                    src={URL.createObjectURL(file)}
+                    alt="New preview"
+                    className="h-32 w-48 object-cover rounded-md border"
+                  />
+                </div>
+              )}
               <Input
                 type="file"
                 accept="image/*"

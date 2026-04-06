@@ -55,11 +55,11 @@ const testimonialsBeatriz = [
 export default function Index() {
   const { settings } = useSettings()
 
-  const heroImage = settings.home_hero_image?.image
-    ? pb.files.getURL(settings.home_hero_image, settings.home_hero_image.image)
+  const heroImage = settings.home_hero?.image
+    ? pb.files.getURL(settings.home_hero, settings.home_hero.image)
     : 'https://img.usecurling.com/p/800/1000?q=nature%20meditation&color=green'
 
-  const heroAlt = settings.home_hero_image?.image_alt || 'Natureza e serenidade'
+  const heroAlt = settings.home_hero?.image_alt || 'Natureza e serenidade'
 
   return (
     <div className="flex flex-col gap-24 md:gap-32">
@@ -104,7 +104,7 @@ export default function Index() {
             <img
               src={heroImage}
               alt={heroAlt}
-              title={settings.home_hero_image?.value || ''}
+              title={settings.home_hero?.value || ''}
               className="absolute inset-0 w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-primary/10 mix-blend-multiply" />

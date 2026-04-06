@@ -6,11 +6,11 @@ import { SEO } from '@/components/SEO'
 export default function Sobre() {
   const { settings } = useSettings()
 
-  const mainImage = settings.about_main_image?.image
-    ? pb.files.getURL(settings.about_main_image, settings.about_main_image.image)
+  const mainImage = settings.about_main?.image
+    ? pb.files.getURL(settings.about_main, settings.about_main.image)
     : 'https://img.usecurling.com/p/600/800?q=doctor%20plants&color=green'
 
-  const imgAlt = settings.about_main_image?.image_alt || 'Dra Beatriz e Dr Felipe'
+  const imgAlt = settings.about_main?.image_alt || 'Dra Beatriz e Dr Felipe'
 
   return (
     <div className="container max-w-5xl py-12 md:py-20">
@@ -37,7 +37,7 @@ export default function Sobre() {
           <img
             src={mainImage}
             alt={imgAlt}
-            title={settings.about_main_image?.value || ''}
+            title={settings.about_main?.value || ''}
             className="absolute inset-0 w-full h-full object-cover"
           />
         </ScrollReveal>
@@ -46,17 +46,24 @@ export default function Sobre() {
           className="order-1 md:order-2 space-y-6 text-lg text-muted-foreground"
         >
           <h2 className="text-3xl font-bold text-foreground mb-4">A Jornada Naturistica</h2>
-          <p>
-            Nossa história começou nos corredores da Universidade Estadual de Londrina (UEL), onde a
-            paixão pela medicina se encontrou com o desejo de ir além do tratamento de sintomas.
-            Percebemos cedo que a medicina ocidental, embora brilhante em crises agudas, muitas
-            vezes falhava em oferecer cura real para condições crônicas e sofrimentos da alma.
-          </p>
-          <p>
-            A Naturistica nasceu da necessidade de unir o rigor científico da nossa formação com a
-            sabedoria ancestral. Vimos pacientes peregrinarem por diversos especialistas sem
-            encontrar alívio para ansiedade, insônia e dores crônicas.
-          </p>
+          {settings.about_content?.value ? (
+            <div className="whitespace-pre-wrap">{settings.about_content.value}</div>
+          ) : (
+            <>
+              <p>
+                Nossa história começou nos corredores da Universidade Estadual de Londrina (UEL),
+                onde a paixão pela medicina se encontrou com o desejo de ir além do tratamento de
+                sintomas. Percebemos cedo que a medicina ocidental, embora brilhante em crises
+                agudas, muitas vezes falhava em oferecer cura real para condições crônicas e
+                sofrimentos da alma.
+              </p>
+              <p>
+                A Naturistica nasceu da necessidade de unir o rigor científico da nossa formação com
+                a sabedoria ancestral. Vimos pacientes peregrinarem por diversos especialistas sem
+                encontrar alívio para ansiedade, insônia e dores crônicas.
+              </p>
+            </>
+          )}
         </ScrollReveal>
       </div>
 
