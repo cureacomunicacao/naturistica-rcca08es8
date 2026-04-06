@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, MessageCircle } from 'lucide-react'
 import { SEO } from '@/components/SEO'
+import { AnxietyQuiz } from '@/components/AnxietyQuiz'
 
 export default function BlogPostDetail() {
   const { slug } = useParams<{ slug: string }>()
@@ -92,6 +93,27 @@ export default function BlogPostDetail() {
             dangerouslySetInnerHTML={{ __html: post.content || '' }}
           />
         </ScrollReveal>
+
+        {post.slug === 'teste-de-ansiedade' && (
+          <ScrollReveal delay={150}>
+            <AnxietyQuiz />
+          </ScrollReveal>
+        )}
+
+        {post.slug === 'ansiedade-como-tratar' && (
+          <ScrollReveal delay={150}>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12 mb-8">
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="border-[#455e38] text-[#455e38] hover:bg-[#455e38]/10 rounded-full h-14 px-8 text-lg w-full sm:w-auto font-medium"
+              >
+                <Link to="/tratamentos">Conhecer Tratamentos da Naturística</Link>
+              </Button>
+            </div>
+          </ScrollReveal>
+        )}
 
         {/* WhatsApp CTA */}
         <ScrollReveal delay={200}>
