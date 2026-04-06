@@ -10,12 +10,15 @@ import Sobre from './pages/Sobre'
 import Tratamentos from './pages/Tratamentos'
 import TratamentoDetalhe from './pages/TratamentoDetalhe'
 import Blog from './pages/Blog'
+import BlogPostDetail from './pages/BlogPostDetail'
 import NotFound from './pages/NotFound'
 
 import Login from './pages/admin/Login'
 import Dashboard from './pages/admin/Dashboard'
 import TreatmentsAdmin from './pages/admin/TreatmentsAdmin'
 import LeadsAdmin from './pages/admin/LeadsAdmin'
+import BlogAdmin from './pages/admin/BlogAdmin'
+import BlogPostForm from './pages/admin/BlogPostForm'
 
 const App = () => (
   <BrowserRouter future={{ v7_startTransition: false, v7_relativeSplatPath: false }}>
@@ -30,6 +33,7 @@ const App = () => (
             <Route path="/tratamentos" element={<Tratamentos />} />
             <Route path="/tratamentos/:slug" element={<TratamentoDetalhe />} />
             <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPostDetail />} />
           </Route>
 
           <Route path="/login" element={<Login />} />
@@ -37,6 +41,9 @@ const App = () => (
             <Route index element={<Dashboard />} />
             <Route path="treatments" element={<TreatmentsAdmin />} />
             <Route path="leads" element={<LeadsAdmin />} />
+            <Route path="blogs" element={<BlogAdmin />} />
+            <Route path="blogs/new" element={<BlogPostForm />} />
+            <Route path="blogs/:id" element={<BlogPostForm />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />

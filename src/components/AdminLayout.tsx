@@ -1,7 +1,7 @@
 import { Navigate, Outlet, Link, useLocation } from 'react-router-dom'
 import { useAuth } from '@/hooks/use-auth'
 import { Button } from '@/components/ui/button'
-import { LayoutDashboard, Stethoscope, Users, LogOut } from 'lucide-react'
+import { LayoutDashboard, Stethoscope, Users, BookOpen, LogOut } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export default function AdminLayout() {
@@ -14,6 +14,7 @@ export default function AdminLayout() {
   const menu = [
     { name: 'Dashboard', path: '/admin', icon: LayoutDashboard },
     { name: 'Tratamentos', path: '/admin/treatments', icon: Stethoscope },
+    { name: 'Blog', path: '/admin/blogs', icon: BookOpen },
     { name: 'Leads', path: '/admin/leads', icon: Users },
   ]
 
