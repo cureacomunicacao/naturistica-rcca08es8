@@ -70,15 +70,20 @@ export default function Sobre() {
       <div className="mb-24">
         <ScrollReveal className="bg-white p-8 md:p-12 rounded-3xl border border-border/50 flex flex-col md:flex-row gap-12 items-center">
           <div className="w-full md:w-1/3 aspect-square rounded-2xl overflow-hidden relative">
-            <img
-              src={
-                settings.about_felipe_image?.image
-                  ? pb.files.getURL(settings.about_felipe_image, settings.about_felipe_image.image)
-                  : 'https://img.usecurling.com/ppl/large?gender=male&seed=felipe'
-              }
-              alt={settings.about_felipe_image?.image_alt || 'Dr. Felipe Zamboni'}
-              className="absolute inset-0 w-full h-full object-cover"
-            />
+            {(() => {
+              const record = settings.about_felipe_image || settings.about_felipe
+              const imgUrl = record?.image
+                ? `${import.meta.env.VITE_POCKETBASE_URL}/api/files/${record.collectionId}/${record.id}/${record.image}`
+                : 'https://img.usecurling.com/ppl/large?gender=male&seed=felipe'
+
+              return (
+                <img
+                  src={imgUrl}
+                  alt={record?.image_alt || 'Dr. Felipe Zamboni'}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              )
+            })()}
           </div>
           <div className="w-full md:w-2/3 space-y-6">
             <h3 className="text-3xl font-bold text-primary">
