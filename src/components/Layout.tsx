@@ -255,17 +255,19 @@ export default function Layout() {
               <p>{settings?.global_email?.value || 'contato@naturistica.com.br'}</p>
               <p>{settings?.global_phone?.value || '+55 (11) 99999-9999'}</p>
               <div className="pt-4">
-                {settings?.global_instagram?.value && (
-                  <Button
-                    variant="outline"
-                    asChild
-                    className="rounded-full bg-transparent border-primary-foreground/20 hover:bg-primary-foreground/10 hover:text-white"
+                <Button
+                  variant="outline"
+                  asChild
+                  className="rounded-full bg-primary-foreground/10 text-white border-primary-foreground/20 hover:bg-primary-foreground/20 hover:text-white transition-colors"
+                >
+                  <a
+                    href={settings?.global_instagram?.value || 'https://instagram.com'}
+                    target="_blank"
+                    rel="noreferrer"
                   >
-                    <a href={settings.global_instagram.value} target="_blank" rel="noreferrer">
-                      Siga no Instagram
-                    </a>
-                  </Button>
-                )}
+                    Siga no Instagram
+                  </a>
+                </Button>
               </div>
             </div>
           </div>

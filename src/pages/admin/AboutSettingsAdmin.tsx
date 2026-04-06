@@ -18,13 +18,26 @@ export default function AboutSettingsAdmin() {
   const [seoTitleRecord, setSeoTitleRecord] = useState<any>(null)
   const [seoDescRecord, setSeoDescRecord] = useState<any>(null)
 
+  const [felipeTitleRecord, setFelipeTitleRecord] = useState<any>(null)
+  const [felipeContentRecord, setFelipeContentRecord] = useState<any>(null)
+  const [felipeImageRecord, setFelipeImageRecord] = useState<any>(null)
+
+  const [waLabelRecord, setWaLabelRecord] = useState<any>(null)
+  const [waUrlRecord, setWaUrlRecord] = useState<any>(null)
+
   const [formData, setFormData] = useState({
     image_alt: '',
     content: '',
     seo_title: '',
     seo_description: '',
+    felipe_title: '',
+    felipe_content: '',
+    felipe_image_alt: '',
+    wa_label: '',
+    wa_url: '',
   })
   const [file, setFile] = useState<File | null>(null)
+  const [felipeFile, setFelipeFile] = useState<File | null>(null)
 
   useEffect(() => {
     fetchSettings()
@@ -38,16 +51,35 @@ export default function AboutSettingsAdmin() {
       const seoTitle = records.find((r) => r.key === 'about_seo_title')
       const seoDesc = records.find((r) => r.key === 'about_seo_description')
 
+      const felipeTitle = records.find((r) => r.key === 'about_felipe_title')
+      const felipeContent = records.find((r) => r.key === 'about_felipe_content')
+      const felipeImage = records.find((r) => r.key === 'about_felipe_image')
+
+      const waLabel = records.find((r) => r.key === 'about_whatsapp_label')
+      const waUrl = records.find((r) => r.key === 'about_whatsapp_url')
+
       setMainRecord(main)
       setContentRecord(content)
       setSeoTitleRecord(seoTitle)
       setSeoDescRecord(seoDesc)
+
+      setFelipeTitleRecord(felipeTitle)
+      setFelipeContentRecord(felipeContent)
+      setFelipeImageRecord(felipeImage)
+
+      setWaLabelRecord(waLabel)
+      setWaUrlRecord(waUrl)
 
       setFormData({
         image_alt: main?.image_alt || '',
         content: content?.value || '',
         seo_title: seoTitle?.value || '',
         seo_description: seoDesc?.value || '',
+        felipe_title: felipeTitle?.value || '',
+        felipe_content: felipeContent?.value || '',
+        felipe_image_alt: felipeImage?.image_alt || '',
+        wa_label: waLabel?.value || '',
+        wa_url: waUrl?.value || '',
       })
     } catch (err) {
       toast({
@@ -97,9 +129,49 @@ export default function AboutSettingsAdmin() {
         await pb.collection('site_settings').create(seoDescData)
       }
 
+      const felipeTitleData = { key: 'about_felipe_title', value: formData.felipe_title }
+      if (felipeTitleRecord) {
+        await pb.collection('site_settings').update(felipeTitleRecord.id, felipeTitleData)
+      } else {
+        await pb.collection('site_settings').create(felipeTitleData)
+      }
+
+      const felipeContentData = { key: 'about_felipe_content', value: formData.felipe_content }
+      if (felipeContentRecord) {
+        await pb.collection('site_settings').update(felipeContentRecord.id, felipeContentData)
+      } else {
+        await pb.collection('site_settings').create(felipeContentData)
+      }
+
+      const felipeImageData = new FormData()
+      felipeImageData.append('key', 'about_felipe_image')
+      felipeImageData.append('image_alt', formData.felipe_image_alt)
+      if (felipeFile) felipeImageData.append('image', felipeFile)
+
+      if (felipeImageRecord) {
+        await pb.collection('site_settings').update(felipeImageRecord.id, felipeImageData)
+      } else {
+        await pb.collection('site_settings').create(felipeImageData)
+      }
+
+      const waLabelData = { key: 'about_whatsapp_label', value: formData.wa_label }
+      if (waLabelRecord) {
+        await pb.collection('site_settings').update(waLabelRecord.id, waLabelData)
+      } else {
+        await pb.collection('site_settings').create(waLabelData)
+      }
+
+      const waUrlData = { key: 'about_whatsapp_url', value: formData.wa_url }
+      if (waUrlRecord) {
+        await pb.collection('site_settings').update(waUrlRecord.id, waUrlData)
+      } else {
+        await pb.collection('site_settings').create(waUrlData)
+      }
+
       toast({ title: 'Sucesso', description: 'Configurações da Página Sobre salvas.' })
       fetchSettings()
       setFile(null)
+      setFelipeFile(null)
     } catch (err: any) {
       toast({
         title: 'Erro',
@@ -203,6 +275,107 @@ export default function AboutSettingsAdmin() {
 
         <Card>
           <CardHeader>
+            <CardTitle>Dr. Felipe Zamboni</CardTitle>
+            <CardDescription>Seção dedicada à apresentação do Dr. Felipe.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-4">
+              <Label>Foto do Perfil</Label>
+              <div className="flex items-center gap-6">
+                {felipeImageRecord?.image && !felipeFile ? (
+                  <div className="relative h-40 w-40 rounded-xl overflow-hidden border">
+                    <img
+                      src={pb.files.getURL(felipeImageRecord, felipeImageRecord.image)}
+                      alt="Preview"
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  </div>
+                ) : felipeFile ? (
+                  <div className="relative h-40 w-40 rounded-xl overflow-hidden border">
+                    <img
+                      src={URL.createObjectURL(felipeFile)}
+                      alt="New Preview"
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  </div>
+                ) : (
+                  <div className="h-40 w-40 bg-muted rounded-xl border flex flex-col items-center justify-center text-muted-foreground">
+                    <ImageIcon className="w-8 h-8 mb-2 opacity-50" />
+                    <span className="text-sm">Nenhuma imagem</span>
+                  </div>
+                )}
+                <div className="flex-1 space-y-2">
+                  <Label>Nova Imagem</Label>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setFelipeFile(e.target.files?.[0] || null)}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Recomendado: Formato quadrado ou retrato, JPG ou WebP.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Texto Alternativo da Imagem (SEO)</Label>
+              <Input
+                value={formData.felipe_image_alt}
+                onChange={(e) => setFormData({ ...formData, felipe_image_alt: e.target.value })}
+                placeholder="Ex: Foto do Dr. Felipe Zamboni sorrindo"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label>Título</Label>
+              <Input
+                value={formData.felipe_title}
+                onChange={(e) => setFormData({ ...formData, felipe_title: e.target.value })}
+                placeholder="Ex: Dr. Felipe Zamboni"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label>Descrição</Label>
+              <Textarea
+                value={formData.felipe_content}
+                onChange={(e) => setFormData({ ...formData, felipe_content: e.target.value })}
+                placeholder="Especialista em abordagens..."
+                className="h-32"
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Chamada WhatsApp (CTA)</CardTitle>
+            <CardDescription>Botão de contato exibido no final da página Sobre.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-2">
+              <Label>Texto do Botão</Label>
+              <Input
+                value={formData.wa_label}
+                onChange={(e) => setFormData({ ...formData, wa_label: e.target.value })}
+                placeholder="Ex: Fale conosco pelo WhatsApp"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label>Link do WhatsApp</Label>
+              <Input
+                value={formData.wa_url}
+                onChange={(e) => setFormData({ ...formData, wa_url: e.target.value })}
+                placeholder="Ex: https://wa.me/5511999999999"
+              />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
             <CardTitle>SEO - Otimização para Buscas</CardTitle>
             <CardDescription>Como a página aparece no Google e redes sociais.</CardDescription>
           </CardHeader>
@@ -234,7 +407,7 @@ export default function AboutSettingsAdmin() {
           </CardContent>
         </Card>
 
-        <div className="flex justify-end">
+        <div className="flex justify-end pb-8">
           <Button type="submit" disabled={loading} size="lg" className="text-white">
             {loading ? (
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />

@@ -67,21 +67,33 @@ export default function Sobre() {
         </ScrollReveal>
       </div>
 
+      <div className="mb-24">
+        <ScrollReveal className="bg-white p-8 md:p-12 rounded-3xl border border-border/50 flex flex-col md:flex-row gap-12 items-center">
+          <div className="w-full md:w-1/3 aspect-square rounded-2xl overflow-hidden relative">
+            <img
+              src={
+                settings.about_felipe_image?.image
+                  ? pb.files.getURL(settings.about_felipe_image, settings.about_felipe_image.image)
+                  : 'https://img.usecurling.com/ppl/large?gender=male&seed=felipe'
+              }
+              alt={settings.about_felipe_image?.image_alt || 'Dr. Felipe Zamboni'}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          </div>
+          <div className="w-full md:w-2/3 space-y-6">
+            <h3 className="text-3xl font-bold text-primary">
+              {settings.about_felipe_title?.value || 'Dr. Felipe Zamboni'}
+            </h3>
+            <div className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+              {settings.about_felipe_content?.value ||
+                'Especialista em abordagens mente-corpo, o Dr. Felipe integrou seus estudos em medicina com a psicoterapia Gestalt e conhecimentos profundos sobre enteógenos e plantas medicinais. Sua escuta atenta busca desvendar as raízes emocionais dos sintomas físicos, guiando os pacientes para a autonomia de sua própria saúde.'}
+            </div>
+          </div>
+        </ScrollReveal>
+      </div>
+
       <div className="grid md:grid-cols-2 gap-16 mb-24">
         <ScrollReveal className="space-y-6 bg-white p-8 md:p-12 rounded-3xl border border-border/50">
-          <h3 className="text-2xl font-bold text-primary">Dr. Felipe Zamboni</h3>
-          <p className="text-muted-foreground leading-relaxed">
-            Especialista em abordagens mente-corpo, o Dr. Felipe integrou seus estudos em medicina
-            com a psicoterapia Gestalt e conhecimentos profundos sobre enteógenos e plantas
-            medicinais. Sua escuta atenta busca desvendar as raízes emocionais dos sintomas físicos,
-            guiando os pacientes para a autonomia de sua própria saúde.
-          </p>
-        </ScrollReveal>
-
-        <ScrollReveal
-          delay={100}
-          className="space-y-6 bg-white p-8 md:p-12 rounded-3xl border border-border/50"
-        >
           <h3 className="text-2xl font-bold text-primary">Dra. Beatriz Mulari</h3>
           <p className="text-muted-foreground leading-relaxed">
             Com foco em saúde feminina, Ayurveda e medicina canabinoide, a Dra. Beatriz traz uma
@@ -90,16 +102,35 @@ export default function Sobre() {
             seguro para transformações profundas de estilo de vida.
           </p>
         </ScrollReveal>
+
+        <ScrollReveal
+          delay={100}
+          className="space-y-6 bg-primary/5 p-8 md:p-12 rounded-3xl flex flex-col justify-center"
+        >
+          <h2 className="text-3xl font-bold font-serif">Nossa Filosofia</h2>
+          <p className="text-lg text-muted-foreground">
+            Trabalhamos com Cannabis Medicinal, Psicoterapia, Ayurveda e Enteógenos não como
+            alternativas isoladas, mas como ferramentas complementares. Acreditamos que a cura
+            acontece quando restauramos a comunicação perdida entre a mente, o corpo e a natureza
+            que nos cerca.
+          </p>
+        </ScrollReveal>
       </div>
 
-      <ScrollReveal className="text-center max-w-3xl mx-auto space-y-6 bg-primary/5 p-12 rounded-3xl">
-        <h2 className="text-3xl font-bold font-serif">Nossa Filosofia</h2>
-        <p className="text-lg text-muted-foreground">
-          Trabalhamos com Cannabis Medicinal, Psicoterapia, Ayurveda e Enteógenos não como
-          alternativas isoladas, mas como ferramentas complementares. Acreditamos que a cura
-          acontece quando restauramos a comunicação perdida entre a mente, o corpo e a natureza que
-          nos cerca.
+      <ScrollReveal className="text-center max-w-3xl mx-auto space-y-8 bg-primary p-12 rounded-3xl text-primary-foreground mb-24">
+        <h2 className="text-3xl font-bold font-serif">Inicie sua jornada de cura</h2>
+        <p className="text-lg text-primary-foreground/90">
+          Agende sua consulta e dê o primeiro passo para uma vida com mais saúde, consciência e
+          bem-estar.
         </p>
+        <a
+          href={settings.about_whatsapp_url?.value || 'https://wa.me/5511999999999'}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center justify-center rounded-full bg-white text-primary px-8 py-4 text-lg font-medium transition-transform hover:scale-105"
+        >
+          {settings.about_whatsapp_label?.value || 'Fale conosco pelo WhatsApp'}
+        </a>
       </ScrollReveal>
     </div>
   )
