@@ -176,6 +176,9 @@ export default function TreatmentsAdmin() {
                 accept="image/*"
                 onChange={(e) => setFile(e.target.files?.[0] || null)}
               />
+              <p className="text-xs text-muted-foreground mt-1">
+                Tamanho recomendado: 800x600px (Proporção 4:3).
+              </p>
             </div>
             <div className="space-y-2">
               <Label>Alt Text da Imagem</Label>

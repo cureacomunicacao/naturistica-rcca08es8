@@ -164,6 +164,11 @@ export default function AboutSettingsAdmin() {
               accept="image/*"
               onChange={(e) => setFiles((p) => ({ ...p, [fileKey]: e.target.files?.[0] || null }))}
             />
+            <p className="text-xs text-muted-foreground mt-1">
+              {key === 'about_main'
+                ? 'Tamanho recomendado: 1920x1080px (Banner full-width).'
+                : 'Tamanho recomendado: 1000x1200px para retrato de alta qualidade.'}
+            </p>
           </div>
         </div>
         <div className="space-y-2">

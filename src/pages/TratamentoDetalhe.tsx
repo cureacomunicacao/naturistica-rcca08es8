@@ -61,7 +61,7 @@ export default function TratamentoDetalhe() {
       <div className="container max-w-4xl mt-16">
         <ScrollReveal className="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-border">
           <div
-            className="prose prose-lg max-w-none prose-p:text-muted-foreground prose-headings:text-foreground prose-a:text-primary font-sans leading-relaxed"
+            className="prose prose-lg md:prose-xl max-w-none prose-p:text-muted-foreground prose-headings:text-foreground prose-headings:font-serif prose-a:text-primary hover:prose-a:text-primary/80 prose-strong:text-foreground prose-strong:font-semibold prose-ul:list-disc prose-ol:list-decimal prose-li:text-muted-foreground font-sans leading-relaxed"
             dangerouslySetInnerHTML={{ __html: treatment.content }}
           />
 

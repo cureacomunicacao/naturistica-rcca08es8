@@ -101,7 +101,7 @@ export default function Sobre() {
               {settings.about_journey_title?.value || 'A Jornada Naturística'}
             </h2>
             <div
-              className="prose prose-lg text-muted-foreground prose-headings:text-primary prose-a:text-primary font-sans leading-relaxed"
+              className="prose prose-lg md:prose-xl text-muted-foreground prose-headings:text-primary prose-headings:font-serif prose-a:text-primary hover:prose-a:text-primary/80 prose-strong:text-foreground prose-strong:font-semibold prose-ul:list-disc prose-ol:list-decimal prose-li:text-muted-foreground font-sans leading-relaxed"
               dangerouslySetInnerHTML={{
                 __html:
                   settings.about_journey_text?.value ||
@@ -140,7 +140,7 @@ export default function Sobre() {
                   </p>
                   <Separator className="w-12 h-1 bg-primary mb-6" />
                   <div
-                    className="prose prose-base text-muted-foreground leading-relaxed"
+                    className="prose prose-base md:prose-lg text-muted-foreground prose-strong:text-foreground prose-strong:font-semibold leading-relaxed"
                     dangerouslySetInnerHTML={{
                       __html: settings.about_felipe_content?.value || fallbackFelipe,
                     }}
@@ -162,7 +162,7 @@ export default function Sobre() {
                   </p>
                   <Separator className="w-12 h-1 bg-primary mb-6" />
                   <div
-                    className="prose prose-base text-muted-foreground leading-relaxed"
+                    className="prose prose-base md:prose-lg text-muted-foreground prose-strong:text-foreground prose-strong:font-semibold leading-relaxed"
                     dangerouslySetInnerHTML={{
                       __html: settings.about_beatriz_content?.value || fallbackBeatriz,
                     }}

@@ -92,7 +92,7 @@ export default function BlogPostDetail() {
         {/* Content */}
         <ScrollReveal delay={100}>
           <div
-            className="prose prose-lg prose-green max-w-none prose-headings:font-serif prose-headings:text-[#455e38] prose-a:text-[#455e38]"
+            className="prose prose-lg md:prose-xl prose-green max-w-none prose-headings:font-serif prose-headings:text-[#455e38] prose-p:text-gray-700 prose-a:text-[#455e38] hover:prose-a:text-[#455e38]/80 prose-strong:text-gray-900 prose-strong:font-semibold prose-ul:list-disc prose-ol:list-decimal prose-li:text-gray-700 leading-relaxed tracking-normal"
             dangerouslySetInnerHTML={{ __html: post.content || '' }}
           />
         </ScrollReveal>

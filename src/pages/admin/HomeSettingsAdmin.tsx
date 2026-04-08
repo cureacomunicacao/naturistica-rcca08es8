@@ -150,7 +150,7 @@ export default function HomeSettingsAdmin() {
                     onChange={(e) => setFile(e.target.files?.[0] || null)}
                   />
                   <p className="text-xs text-muted-foreground">
-                    Recomendado: 1200x800px ou maior, formato JPG ou WebP.
+                    Tamanho recomendado: 1920x1080px (Banner full-width). Formato JPG ou WebP.
                   </p>
                 </div>
               </div>

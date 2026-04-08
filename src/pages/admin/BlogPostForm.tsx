@@ -275,6 +275,9 @@ export default function BlogPostForm() {
                     accept="image/*"
                     onChange={(e) => setImageFile(e.target.files?.[0] || null)}
                   />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Tamanho recomendado: 1200x630px (Proporção 16:9).
+                  </p>
                 </div>
               </CardContent>
             </Card>

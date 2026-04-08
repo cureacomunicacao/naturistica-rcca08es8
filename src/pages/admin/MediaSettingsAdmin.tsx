@@ -127,6 +127,9 @@ function SectionSettings({
                 accept="image/*"
                 onChange={(e) => setFile(e.target.files?.[0] || null)}
               />
+              <p className="text-xs text-muted-foreground mt-1">
+                Tamanho recomendado: 1920x1080px (Banner full-width).
+              </p>
             </div>
             <div className="space-y-2">
               <Label>Título da Imagem (SEO Title)</Label>
@@ -242,6 +245,9 @@ function TreatmentsSeoList() {
                 accept="image/*"
                 onChange={(e) => setFile(e.target.files?.[0] || null)}
               />
+              <p className="text-xs text-muted-foreground mt-1">
+                Tamanho recomendado: 800x600px (Proporção 4:3).
+              </p>
             </div>
             <div className="space-y-2">
               <Label>Alt Text da Imagem</Label>

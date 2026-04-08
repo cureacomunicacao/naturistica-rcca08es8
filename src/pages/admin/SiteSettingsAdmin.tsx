@@ -230,7 +230,10 @@ export default function SiteSettingsAdmin() {
                   />
                   {renderImagePreview('home_hero_image')}
                 </div>
-              </div>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Tamanho recomendado: 1920x1080px (Banner full-width).
+                </p>
+              </div>{' '}
               <Button
                 disabled={loading}
                 onClick={() =>
@@ -285,6 +288,9 @@ export default function SiteSettingsAdmin() {
                     />
                     {renderImagePreview('about_hero_image')}
                   </div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Tamanho recomendado: 1920x1080px (Banner full-width).
+                  </p>
                 </div>
                 <div className="space-y-2">
                   <Label>Texto de Introdução (Suporta HTML)</Label>
@@ -330,6 +336,9 @@ export default function SiteSettingsAdmin() {
                       />
                       {renderImagePreview('doctor_felipe_image')}
                     </div>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Tamanho recomendado: 1000x1200px para retrato de alta qualidade.
+                    </p>
                   </div>
                 </div>
 
@@ -363,6 +372,9 @@ export default function SiteSettingsAdmin() {
                       />
                       {renderImagePreview('doctor_beatriz_image')}
                     </div>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Tamanho recomendado: 1000x1200px para retrato de alta qualidade.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -450,6 +462,9 @@ export default function SiteSettingsAdmin() {
                     />
                     {renderImagePreview('treatments_banner_image')}
                   </div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Tamanho recomendado: 1920x1080px (Banner full-width).
+                  </p>
                 </div>
               </div>
 
@@ -484,6 +499,9 @@ export default function SiteSettingsAdmin() {
                     />
                     {renderImagePreview('treatments_approach_image')}
                   </div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Tamanho recomendado: 1000x1200px ou quadrado.
+                  </p>
                 </div>
               </div>
 
