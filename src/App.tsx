@@ -25,12 +25,16 @@ import ContentInsightsAdmin from './pages/admin/ContentInsightsAdmin'
 import HomeSettingsAdmin from './pages/admin/HomeSettingsAdmin'
 import AboutSettingsAdmin from './pages/admin/AboutSettingsAdmin'
 import TestimonialsAdmin from './pages/admin/TestimonialsAdmin'
+import MarketingAdmin from './pages/admin/MarketingAdmin'
 import { SettingsProvider } from './hooks/use-settings'
+import { AnalyticsTracker, ScriptInjector } from './components/TrackingScripts'
 
 const App = () => (
   <BrowserRouter future={{ v7_startTransition: false, v7_relativeSplatPath: false }}>
     <AuthProvider>
       <SettingsProvider>
+        <AnalyticsTracker />
+        <ScriptInjector />
         <TooltipProvider>
           <Toaster />
           <Sonner />
@@ -58,6 +62,7 @@ const App = () => (
               <Route path="settings/media" element={<MediaSettingsAdmin />} />
               <Route path="insights" element={<ContentInsightsAdmin />} />
               <Route path="testimonials" element={<TestimonialsAdmin />} />
+              <Route path="marketing" element={<MarketingAdmin />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />

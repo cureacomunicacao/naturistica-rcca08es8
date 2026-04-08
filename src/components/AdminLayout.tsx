@@ -6,6 +6,7 @@ import {
   FileText,
   Settings,
   BarChart,
+  Megaphone,
   LogOut,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -21,6 +22,7 @@ const navItems = [
   { name: 'Página Sobre', path: '/admin/settings/about', icon: Settings },
   { name: 'Configurações', path: '/admin/settings', icon: Settings },
   { name: 'Insights', path: '/admin/insights', icon: BarChart },
+  { name: 'Marketing & SEO', path: '/admin/marketing', icon: Megaphone },
 ]
 
 export default function AdminLayout() {
