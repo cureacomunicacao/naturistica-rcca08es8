@@ -8,19 +8,34 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel'
 import { ScrollReveal } from '@/components/ScrollReveal'
-import { ArrowRight, Brain, Heart, Moon, Sparkles, Sprout, Wind } from 'lucide-react'
+import {
+  ArrowRight,
+  Brain,
+  Heart,
+  Moon,
+  Sparkles,
+  Sprout,
+  Wind,
+  Activity,
+  Flame,
+  Puzzle,
+} from 'lucide-react'
 import { useSettings } from '@/hooks/use-settings'
 import pb from '@/lib/pocketbase/client'
 import { SEO } from '@/components/SEO'
+import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 
-const treatments = [
-  { icon: Wind, label: 'Ansiedade' },
-  { icon: Moon, label: 'Insônia' },
-  { icon: Heart, label: 'Burnout' },
-  { icon: Brain, label: 'TDAH' },
-  { icon: Sparkles, label: 'Trauma' },
-  { icon: Sprout, label: 'Enxaqueca' },
-]
+const iconMap: Record<string, any> = {
+  ansiedade: Wind,
+  insonia: Moon,
+  burnout: Heart,
+  tdah: Brain,
+  trauma: Sparkles,
+  enxaqueca: Sprout,
+  'dor-cronica': Flame,
+  autismo: Puzzle,
+}
 
 const testimonialsFelipe = [
   {
@@ -54,6 +69,14 @@ const testimonialsBeatriz = [
 
 export default function Index() {
   const { settings } = useSettings()
+  const [treatments, setTreatments] = useState<any[]>([])
+
+  useEffect(() => {
+    pb.collection('treatments')
+      .getFullList({ sort: 'created' })
+      .then(setTreatments)
+      .catch(console.error)
+  }, [])
 
   const heroImage = settings.home_hero?.image
     ? pb.files.getURL(settings.home_hero, settings.home_hero.image)
