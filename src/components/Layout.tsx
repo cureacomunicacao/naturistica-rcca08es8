@@ -15,22 +15,32 @@ const navLinks = [
   { name: 'Blog', path: '/blog' },
 ]
 
-const treatmentsList = [
-  { title: 'Ansiedade', slug: 'ansiedade' },
-  { title: 'Insônia', slug: 'insonia' },
-  { title: 'Burnout', slug: 'burnout' },
-  { title: 'TDAH', slug: 'tdah' },
-  { title: 'Trauma', slug: 'trauma' },
-  { title: 'Enxaqueca', slug: 'enxaqueca' },
-  { title: 'Fibromialgia', slug: 'fibromialgia' },
-  { title: 'Dor crônica', slug: 'dor-cronica' },
-]
-
 export default function Layout() {
   const location = useLocation()
   const { settings } = useSettings()
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [treatmentsList, setTreatmentsList] = useState<{ title: string; slug: string }[]>([
+    { title: 'Ansiedade', slug: 'ansiedade' },
+    { title: 'Insônia', slug: 'insonia' },
+    { title: 'Burnout', slug: 'burnout' },
+    { title: 'TDAH', slug: 'tdah' },
+    { title: 'Trauma', slug: 'trauma' },
+    { title: 'Enxaqueca', slug: 'enxaqueca' },
+    { title: 'Fibromialgia', slug: 'fibromialgia' },
+    { title: 'Dor crônica', slug: 'dor-cronica' },
+  ])
+
+  useEffect(() => {
+    pb.collection('treatments')
+      .getFullList({ sort: '-created' })
+      .then((records) => {
+        if (records.length > 0) {
+          setTreatmentsList(records.map((r) => ({ title: r.title, slug: r.slug })))
+        }
+      })
+      .catch(console.error)
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -241,10 +251,16 @@ export default function Layout() {
             <div className="space-y-4">
               <h4 className="font-serif font-semibold text-lg">Tratamentos</h4>
               <ul className="space-y-2 text-sm text-primary-foreground/80">
-                <li>Ansiedade</li>
-                <li>Insônia</li>
-                <li>Burnout</li>
-                <li>TDAH</li>
+                {treatmentsList.slice(0, 5).map((t) => (
+                  <li key={t.slug}>
+                    <Link
+                      to={`/tratamentos/${t.slug}`}
+                      className="hover:text-white transition-colors"
+                    >
+                      {t.title}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>

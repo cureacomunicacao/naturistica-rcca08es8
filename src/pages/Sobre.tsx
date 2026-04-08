@@ -4,9 +4,21 @@ import pb from '@/lib/pocketbase/client'
 import { SEO } from '@/components/SEO'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from '@/components/ui/accordion'
+import { useState, useEffect } from 'react'
 
 export default function Sobre() {
   const { settings } = useSettings()
+  const [faqs, setFaqs] = useState<any[]>([])
+
+  useEffect(() => {
+    pb.collection('faqs').getFullList({ sort: 'order' }).then(setFaqs).catch(console.error)
+  }, [])
 
   const getImageUrl = (record: any, fallback: string) => {
     if (record?.image && record?.id) {
@@ -22,6 +34,11 @@ export default function Sobre() {
   const imgAlt =
     (settings.about_hero_image?.image_alt || settings.about_main?.image_alt) ??
     'Clínica Naturistica'
+
+  const journeyImage = getImageUrl(
+    settings.about_journey_image,
+    'https://img.usecurling.com/p/800/800?q=nature%20therapy&color=green',
+  )
 
   const felipeRecord = settings.doctor_felipe_image || settings.about_felipe_image
   const felipeImgUrl = getImageUrl(
@@ -77,18 +94,33 @@ export default function Sobre() {
       </section>
 
       <div className="container max-w-5xl mt-[-4rem] relative z-20">
-        <ScrollReveal className="bg-white rounded-3xl p-8 md:p-16 shadow-xl border border-border/50 mb-24">
-          <h2 className="text-3xl font-bold text-primary mb-8 font-serif text-center">
-            A Jornada Naturistica
-          </h2>
-          <div
-            className="prose prose-lg max-w-none text-muted-foreground prose-headings:text-primary prose-a:text-primary font-sans leading-relaxed text-center"
-            dangerouslySetInnerHTML={{ __html: settings.about_content?.value || fallbackAbout }}
-          />
+        {/* Journey Section */}
+        <ScrollReveal className="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-border/50 mb-24 grid md:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6 order-2 md:order-1">
+            <h2 className="text-3xl font-bold text-primary font-serif">
+              {settings.about_journey_title?.value || 'A Jornada Naturística'}
+            </h2>
+            <div
+              className="prose prose-lg text-muted-foreground prose-headings:text-primary prose-a:text-primary font-sans leading-relaxed"
+              dangerouslySetInnerHTML={{
+                __html:
+                  settings.about_journey_text?.value ||
+                  settings.about_content?.value ||
+                  fallbackAbout,
+              }}
+            />
+          </div>
+          <div className="relative h-[300px] md:h-[400px] rounded-2xl overflow-hidden shadow-lg order-1 md:order-2">
+            <img
+              src={journeyImage}
+              alt="Jornada Naturistica"
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+            />
+          </div>
         </ScrollReveal>
 
         {/* Doctors Section */}
-        <div className="space-y-12">
+        <div className="space-y-12 mb-24">
           <ScrollReveal>
             <Card className="overflow-hidden border-none shadow-lg rounded-3xl">
               <div className="grid md:grid-cols-2 group">
@@ -148,7 +180,28 @@ export default function Sobre() {
           </ScrollReveal>
         </div>
 
-        <ScrollReveal className="mt-24 text-center max-w-3xl mx-auto space-y-8 bg-primary/5 p-12 rounded-3xl border border-primary/10">
+        {/* FAQs Section */}
+        {faqs.length > 0 && (
+          <ScrollReveal className="max-w-3xl mx-auto mb-24 bg-white p-8 md:p-12 rounded-3xl shadow-lg border border-border/50">
+            <h2 className="text-3xl font-bold text-primary font-serif text-center mb-8">
+              Perguntas Frequentes
+            </h2>
+            <Accordion type="single" collapsible className="w-full">
+              {faqs.map((faq) => (
+                <AccordionItem key={faq.id} value={faq.id}>
+                  <AccordionTrigger className="text-left font-medium text-lg hover:text-primary transition-colors">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground text-base leading-relaxed">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </ScrollReveal>
+        )}
+
+        <ScrollReveal className="text-center max-w-3xl mx-auto space-y-8 bg-primary/5 p-12 rounded-3xl border border-primary/10">
           <h2 className="text-3xl font-bold font-serif text-primary">Inicie sua jornada de cura</h2>
           <p className="text-lg text-muted-foreground">
             Agende sua consulta e dê o primeiro passo para uma vida com mais saúde, consciência e
