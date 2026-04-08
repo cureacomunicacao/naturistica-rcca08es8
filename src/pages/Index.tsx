@@ -113,26 +113,54 @@ export default function Index() {
       </section>
 
       {/* Treatments Section */}
-      <section className="bg-white/50 py-24">
-        <div className="container">
+      <section className="bg-white/50 py-24 overflow-hidden">
+        <div className="container mb-16">
           <ScrollReveal>
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">Tratamento de:</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-center">Tratamento de:</h2>
           </ScrollReveal>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            {treatments.map((t, i) => (
-              <ScrollReveal key={i} delay={i * 100}>
-                <Card className="bg-transparent border-none shadow-none text-center group cursor-pointer hover:bg-white/80 transition-colors rounded-2xl">
-                  <CardContent className="p-6 flex flex-col items-center gap-4">
-                    <div className="p-4 rounded-full bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                      <t.icon className="w-8 h-8 stroke-[1.5]" />
-                    </div>
-                    <span className="font-medium text-lg">{t.label}</span>
-                  </CardContent>
-                </Card>
-              </ScrollReveal>
-            ))}
-          </div>
         </div>
+
+        {treatments.length > 0 && (
+          <div className="flex overflow-hidden group w-full">
+            <div className="flex shrink-0 items-center gap-6 px-3 animate-marquee group-hover:[animation-play-state:paused]">
+              {treatments.map((t) => {
+                const Icon = iconMap[t.slug] || Activity
+                return (
+                  <Link key={t.id} to={`/tratamentos/${t.slug}`} className="w-48 shrink-0">
+                    <Card className="bg-transparent border-none shadow-none text-center group/card cursor-pointer hover:bg-white/80 transition-colors rounded-2xl h-full">
+                      <CardContent className="p-6 flex flex-col items-center gap-4">
+                        <div className="p-4 rounded-full bg-primary/10 text-primary group-hover/card:bg-primary group-hover/card:text-primary-foreground transition-colors">
+                          <Icon className="w-8 h-8 stroke-[1.5]" />
+                        </div>
+                        <span className="font-medium text-lg text-balance">{t.title}</span>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                )
+              })}
+            </div>
+            <div
+              className="flex shrink-0 items-center gap-6 px-3 animate-marquee group-hover:[animation-play-state:paused]"
+              aria-hidden="true"
+            >
+              {treatments.map((t) => {
+                const Icon = iconMap[t.slug] || Activity
+                return (
+                  <Link key={`${t.id}-dup`} to={`/tratamentos/${t.slug}`} className="w-48 shrink-0">
+                    <Card className="bg-transparent border-none shadow-none text-center group/card cursor-pointer hover:bg-white/80 transition-colors rounded-2xl h-full">
+                      <CardContent className="p-6 flex flex-col items-center gap-4">
+                        <div className="p-4 rounded-full bg-primary/10 text-primary group-hover/card:bg-primary group-hover/card:text-primary-foreground transition-colors">
+                          <Icon className="w-8 h-8 stroke-[1.5]" />
+                        </div>
+                        <span className="font-medium text-lg text-balance">{t.title}</span>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                )
+              })}
+            </div>
+          </div>
+        )}
       </section>
 
       {/* Philosophy Section */}
