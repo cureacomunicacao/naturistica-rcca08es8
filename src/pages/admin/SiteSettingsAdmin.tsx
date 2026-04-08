@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import { RichTextEditor } from '@/components/RichTextEditor'
 import { Separator } from '@/components/ui/separator'
 import { toast } from 'sonner'
 import { Settings, Globe, Home, Info, Stethoscope, FileText } from 'lucide-react'
@@ -183,6 +184,9 @@ export default function SiteSettingsAdmin() {
                     />
                     {renderImagePreview('global_logo')}
                   </div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Tamanho recomendado: 400x400px (1:1).
+                  </p>
                 </div>
               </div>
               <Button
@@ -231,7 +235,7 @@ export default function SiteSettingsAdmin() {
                   {renderImagePreview('home_hero_image')}
                 </div>
                 <p className="text-xs text-muted-foreground mt-1">
-                  Tamanho recomendado: 1920x1080px (Banner full-width).
+                  Tamanho recomendado: 1920x1080px.
                 </p>
               </div>{' '}
               <Button
@@ -289,15 +293,14 @@ export default function SiteSettingsAdmin() {
                     {renderImagePreview('about_hero_image')}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
-                    Tamanho recomendado: 1920x1080px (Banner full-width).
+                    Tamanho recomendado: 1920x1080px.
                   </p>
                 </div>
                 <div className="space-y-2">
-                  <Label>Texto de Introdução (Suporta HTML)</Label>
-                  <Textarea
-                    className="min-h-[100px]"
+                  <Label>Texto de Introdução</Label>
+                  <RichTextEditor
                     value={formData['about_content']?.value || ''}
-                    onChange={(e) => handleChange('about_content', e.target.value)}
+                    onChange={(val) => handleChange('about_content', val)}
                   />
                 </div>
               </div>
@@ -317,11 +320,10 @@ export default function SiteSettingsAdmin() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Biografia (Suporta HTML)</Label>
-                    <Textarea
-                      className="min-h-[150px]"
+                    <Label>Biografia</Label>
+                    <RichTextEditor
                       value={formData['about_felipe_content']?.value || ''}
-                      onChange={(e) => handleChange('about_felipe_content', e.target.value)}
+                      onChange={(val) => handleChange('about_felipe_content', val)}
                     />
                   </div>
                   <div className="space-y-2">
@@ -337,7 +339,7 @@ export default function SiteSettingsAdmin() {
                       {renderImagePreview('doctor_felipe_image')}
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">
-                      Tamanho recomendado: 1000x1200px para retrato de alta qualidade.
+                      Tamanho recomendado: 400x400px (1:1).
                     </p>
                   </div>
                 </div>
@@ -353,11 +355,10 @@ export default function SiteSettingsAdmin() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Biografia (Suporta HTML)</Label>
-                    <Textarea
-                      className="min-h-[150px]"
+                    <Label>Biografia</Label>
+                    <RichTextEditor
                       value={formData['about_beatriz_content']?.value || ''}
-                      onChange={(e) => handleChange('about_beatriz_content', e.target.value)}
+                      onChange={(val) => handleChange('about_beatriz_content', val)}
                     />
                   </div>
                   <div className="space-y-2">
@@ -373,7 +374,7 @@ export default function SiteSettingsAdmin() {
                       {renderImagePreview('doctor_beatriz_image')}
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">
-                      Tamanho recomendado: 1000x1200px para retrato de alta qualidade.
+                      Tamanho recomendado: 400x400px (1:1).
                     </p>
                   </div>
                 </div>
@@ -463,7 +464,7 @@ export default function SiteSettingsAdmin() {
                     {renderImagePreview('treatments_banner_image')}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
-                    Tamanho recomendado: 1920x1080px (Banner full-width).
+                    Tamanho recomendado: 1920x1080px.
                   </p>
                 </div>
               </div>
@@ -480,11 +481,10 @@ export default function SiteSettingsAdmin() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Texto da Abordagem (Suporta HTML)</Label>
-                  <Textarea
-                    className="min-h-[150px]"
+                  <Label>Texto da Abordagem</Label>
+                  <RichTextEditor
                     value={formData['treatments_approach_content']?.value || ''}
-                    onChange={(e) => handleChange('treatments_approach_content', e.target.value)}
+                    onChange={(val) => handleChange('treatments_approach_content', val)}
                   />
                 </div>
                 <div className="space-y-2">
@@ -500,7 +500,7 @@ export default function SiteSettingsAdmin() {
                     {renderImagePreview('treatments_approach_image')}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
-                    Tamanho recomendado: 1000x1200px ou quadrado.
+                    Tamanho recomendado: 1200x800px.
                   </p>
                 </div>
               </div>

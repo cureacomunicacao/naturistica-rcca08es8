@@ -220,7 +220,7 @@ export default function TestimonialsAdmin() {
                 onChange={(e) => setFile(e.target.files?.[0] || null)}
               />
               <p className="text-xs text-muted-foreground mt-1">
-                Tamanho recomendado: 400x400px (Proporção 1:1) para avatares arredondados.
+                Tamanho recomendado: 400x400px (1:1).
               </p>
             </div>
 

@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { RichTextEditor } from '@/components/RichTextEditor'
 import { useToast } from '@/hooks/use-toast'
 import { Pencil } from 'lucide-react'
 
@@ -176,9 +177,7 @@ export default function TreatmentsAdmin() {
                 accept="image/*"
                 onChange={(e) => setFile(e.target.files?.[0] || null)}
               />
-              <p className="text-xs text-muted-foreground mt-1">
-                Tamanho recomendado: 800x600px (Proporção 4:3).
-              </p>
+              <p className="text-xs text-muted-foreground mt-1">Tamanho recomendado: 1200x800px.</p>
             </div>
             <div className="space-y-2">
               <Label>Alt Text da Imagem</Label>
@@ -189,11 +188,10 @@ export default function TreatmentsAdmin() {
               />
             </div>
             <div className="space-y-2">
-              <Label>Conteúdo (Aceita HTML)</Label>
-              <Textarea
+              <Label>Conteúdo</Label>
+              <RichTextEditor
                 value={formData.content}
-                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                className="h-40 font-mono text-sm"
+                onChange={(v) => setFormData({ ...formData, content: v })}
               />
             </div>
             <div className="space-y-2">

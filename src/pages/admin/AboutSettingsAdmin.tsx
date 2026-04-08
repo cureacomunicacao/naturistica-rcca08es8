@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { RichTextEditor } from '@/components/RichTextEditor'
 import { useToast } from '@/hooks/use-toast'
 import { Save, Loader2, Image as ImageIcon } from 'lucide-react'
 
@@ -166,8 +167,8 @@ export default function AboutSettingsAdmin() {
             />
             <p className="text-xs text-muted-foreground mt-1">
               {key === 'about_main'
-                ? 'Tamanho recomendado: 1920x1080px (Banner full-width).'
-                : 'Tamanho recomendado: 1000x1200px para retrato de alta qualidade.'}
+                ? 'Tamanho recomendado: 1920x1080px.'
+                : 'Tamanho recomendado: 400x400px (1:1).'}
             </p>
           </div>
         </div>
@@ -204,9 +205,9 @@ export default function AboutSettingsAdmin() {
             <CardTitle>História</CardTitle>
           </CardHeader>
           <CardContent>
-            <Textarea
+            <RichTextEditor
               value={formData.content}
-              onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+              onChange={(val) => setFormData({ ...formData, content: val })}
               className="h-64"
             />
           </CardContent>
@@ -222,10 +223,9 @@ export default function AboutSettingsAdmin() {
               value={formData.felipe_title}
               onChange={(e) => setFormData({ ...formData, felipe_title: e.target.value })}
             />
-            <Textarea
-              placeholder="Descrição..."
+            <RichTextEditor
               value={formData.felipe_content}
-              onChange={(e) => setFormData({ ...formData, felipe_content: e.target.value })}
+              onChange={(val) => setFormData({ ...formData, felipe_content: val })}
               className="h-32"
             />
           </CardContent>
@@ -241,10 +241,9 @@ export default function AboutSettingsAdmin() {
               value={formData.beatriz_title}
               onChange={(e) => setFormData({ ...formData, beatriz_title: e.target.value })}
             />
-            <Textarea
-              placeholder="Descrição..."
+            <RichTextEditor
               value={formData.beatriz_content}
-              onChange={(e) => setFormData({ ...formData, beatriz_content: e.target.value })}
+              onChange={(val) => setFormData({ ...formData, beatriz_content: val })}
               className="h-32"
             />
           </CardContent>

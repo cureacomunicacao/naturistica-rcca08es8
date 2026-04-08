@@ -12,6 +12,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { RichTextEditor } from '@/components/RichTextEditor'
 import { useToast } from '@/hooks/use-toast'
 import { getPost, createPost, updatePost, getPostImageUrl, type PostRecord } from '@/services/posts'
 import { ArrowLeft, Save } from 'lucide-react'
@@ -167,13 +168,11 @@ export default function BlogPostForm() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="content">Conteúdo (Suporta HTML)</Label>
-                  <Textarea
-                    id="content"
-                    name="content"
+                  <Label htmlFor="content">Conteúdo</Label>
+                  <RichTextEditor
                     value={formData.content}
-                    onChange={handleChange}
-                    className="min-h-[400px] font-mono text-sm"
+                    onChange={(val) => setFormData((prev) => ({ ...prev, content: val }))}
+                    className="min-h-[400px]"
                   />
                 </div>
               </CardContent>
@@ -276,7 +275,7 @@ export default function BlogPostForm() {
                     onChange={(e) => setImageFile(e.target.files?.[0] || null)}
                   />
                   <p className="text-xs text-muted-foreground mt-1">
-                    Tamanho recomendado: 1200x630px (Proporção 16:9).
+                    Tamanho recomendado: 1200x800px.
                   </p>
                 </div>
               </CardContent>
