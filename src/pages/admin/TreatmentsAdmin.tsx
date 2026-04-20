@@ -81,15 +81,12 @@ export default function TreatmentsAdmin() {
       if (file) data.append('image', file)
 
       if (editingId) {
-        const exists = treatments.some((treatment) => treatment.id === editingId)
-        if (!exists) {
+        if (typeof editingId !== 'string' || editingId.trim() === '') {
           toast({
             title: 'Erro',
-            description: 'O tratamento não foi encontrado ou já foi excluído.',
+            description: 'ID de tratamento inválido.',
             variant: 'destructive',
           })
-          setOpen(false)
-          fetchTreatments()
           return
         }
         await pb.collection('treatments').update(editingId, data)
@@ -101,7 +98,21 @@ export default function TreatmentsAdmin() {
       setOpen(false)
       fetchTreatments()
     } catch (err: any) {
-      toast({ title: 'Erro', description: err.message, variant: 'destructive' })
+      if (err.status === 404) {
+        toast({
+          title: 'Erro',
+          description: 'O registro não pôde ser encontrado. Pode ter sido excluído.',
+          variant: 'destructive',
+        })
+        setOpen(false)
+        fetchTreatments()
+      } else {
+        toast({
+          title: 'Erro',
+          description: err.message || 'Erro ao salvar tratamento',
+          variant: 'destructive',
+        })
+      }
     }
   }
 
