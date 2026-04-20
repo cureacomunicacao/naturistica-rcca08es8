@@ -89,6 +89,19 @@ export default function TreatmentsAdmin() {
           })
           return
         }
+
+        const existsLocally = treatments.some((t) => t.id === editingId)
+        if (!existsLocally) {
+          toast({
+            title: 'Erro',
+            description: 'O registro não pôde ser encontrado. Pode ter sido excluído.',
+            variant: 'destructive',
+          })
+          setOpen(false)
+          fetchTreatments()
+          return
+        }
+
         await pb.collection('treatments').update(editingId, data)
         toast({ title: 'Sucesso', description: 'Tratamento atualizado.' })
       } else {
