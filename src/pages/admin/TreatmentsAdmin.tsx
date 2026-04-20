@@ -16,6 +16,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { RichTextEditor } from '@/components/RichTextEditor'
 import { useToast } from '@/hooks/use-toast'
 import { Pencil } from 'lucide-react'
+import { useRealtime } from '@/hooks/use-realtime'
 
 export default function TreatmentsAdmin() {
   const [treatments, setTreatments] = useState<any[]>([])
@@ -41,6 +42,8 @@ export default function TreatmentsAdmin() {
   useEffect(() => {
     fetchTreatments()
   }, [])
+
+  useRealtime('treatments', fetchTreatments)
 
   const handleEdit = (t: any) => {
     setEditingId(t.id)
@@ -78,6 +81,17 @@ export default function TreatmentsAdmin() {
       if (file) data.append('image', file)
 
       if (editingId) {
+        const exists = treatments.some((treatment) => treatment.id === editingId)
+        if (!exists) {
+          toast({
+            title: 'Erro',
+            description: 'O tratamento não foi encontrado ou já foi excluído.',
+            variant: 'destructive',
+          })
+          setOpen(false)
+          fetchTreatments()
+          return
+        }
         await pb.collection('treatments').update(editingId, data)
         toast({ title: 'Sucesso', description: 'Tratamento atualizado.' })
       } else {
