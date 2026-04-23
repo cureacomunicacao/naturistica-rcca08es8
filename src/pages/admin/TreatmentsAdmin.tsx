@@ -10,7 +10,13 @@ import {
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { RichTextEditor } from '@/components/RichTextEditor'
@@ -92,12 +98,23 @@ export default function TreatmentsAdmin() {
           return
         }
 
-        const existsLocally = treatments.some((t) => t.id === editingId)
-        if (!existsLocally) {
+        try {
+          await pb.collection('treatments').getOne(editingId)
+        } catch (e) {
           toast({
             title: 'Erro',
             description: 'O registro não pôde ser encontrado. Pode ter sido excluído.',
             variant: 'destructive',
+          })
+          setEditingId(null)
+          setFile(null)
+          setFormData({
+            title: '',
+            slug: '',
+            content: '',
+            seo_title: '',
+            seo_description: '',
+            image_alt: '',
           })
           setOpen(false)
           fetchTreatments()
@@ -110,22 +127,52 @@ export default function TreatmentsAdmin() {
         await pb.collection('treatments').create(data)
         toast({ title: 'Sucesso', description: 'Tratamento criado.' })
       }
+      setEditingId(null)
+      setFile(null)
+      setFormData({
+        title: '',
+        slug: '',
+        content: '',
+        seo_title: '',
+        seo_description: '',
+        image_alt: '',
+      })
       setOpen(false)
       fetchTreatments()
     } catch (err: any) {
       const is404 = err?.status === 404 || err?.response?.code === 404
+      const isAuthError = err?.status === 401 || err?.status === 403
+
       if (is404) {
         toast({
           title: 'Erro',
           description: 'O registro não pôde ser encontrado. Pode ter sido excluído.',
           variant: 'destructive',
         })
+        setEditingId(null)
+        setFile(null)
+        setFormData({
+          title: '',
+          slug: '',
+          content: '',
+          seo_title: '',
+          seo_description: '',
+          image_alt: '',
+        })
         setOpen(false)
         fetchTreatments()
+      } else if (isAuthError) {
+        toast({
+          title: 'Sessão Expirada',
+          description: 'Sua sessão expirou ou você não tem permissão.',
+          variant: 'destructive',
+        })
+        setOpen(false)
       } else {
         toast({
           title: 'Erro',
-          description: err?.message || 'Erro ao salvar tratamento',
+          description:
+            err?.message || 'Erro ao salvar tratamento. Verifique os dados e tente novamente.',
           variant: 'destructive',
         })
       }
@@ -170,6 +217,9 @@ export default function TreatmentsAdmin() {
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{editingId ? 'Editar Tratamento' : 'Novo Tratamento'}</DialogTitle>
+            <DialogDescription className="sr-only">
+              Preencha os detalhes do tratamento abaixo.
+            </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSave} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">

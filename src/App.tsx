@@ -28,6 +28,7 @@ import TestimonialsAdmin from './pages/admin/TestimonialsAdmin'
 import MarketingAdmin from './pages/admin/MarketingAdmin'
 import { SettingsProvider } from './hooks/use-settings'
 import { AnalyticsTracker, ScriptInjector } from './components/TrackingScripts'
+import { ErrorBoundary } from './components/ErrorBoundary'
 
 const App = () => (
   <BrowserRouter future={{ v7_startTransition: false, v7_relativeSplatPath: false }}>
@@ -38,35 +39,37 @@ const App = () => (
         <TooltipProvider>
           <Toaster />
           <Sonner />
-          <Routes>
-            <Route element={<Layout />}>
-              <Route path="/" element={<Index />} />
-              <Route path="/sobre" element={<Sobre />} />
-              <Route path="/tratamentos" element={<Tratamentos />} />
-              <Route path="/tratamentos/:slug" element={<TratamentoDetalhe />} />
-              <Route path="/blog" element={<Blog />} />
-              <Route path="/blog/:slug" element={<BlogPostDetail />} />
-            </Route>
+          <ErrorBoundary>
+            <Routes>
+              <Route element={<Layout />}>
+                <Route path="/" element={<Index />} />
+                <Route path="/sobre" element={<Sobre />} />
+                <Route path="/tratamentos" element={<Tratamentos />} />
+                <Route path="/tratamentos/:slug" element={<TratamentoDetalhe />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/:slug" element={<BlogPostDetail />} />
+              </Route>
 
-            <Route path="/login" element={<Login />} />
-            <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<Dashboard />} />
-              <Route path="treatments" element={<TreatmentsAdmin />} />
-              <Route path="leads" element={<LeadsAdmin />} />
-              <Route path="blogs" element={<BlogAdmin />} />
-              <Route path="blogs/new" element={<BlogPostForm />} />
-              <Route path="blogs/:id" element={<BlogPostForm />} />
-              <Route path="settings" element={<SiteSettingsAdmin />} />
-              <Route path="settings/home" element={<HomeSettingsAdmin />} />
-              <Route path="settings/about" element={<AboutSettingsAdmin />} />
-              <Route path="settings/media" element={<MediaSettingsAdmin />} />
-              <Route path="insights" element={<ContentInsightsAdmin />} />
-              <Route path="testimonials" element={<TestimonialsAdmin />} />
-              <Route path="marketing" element={<MarketingAdmin />} />
-            </Route>
+              <Route path="/login" element={<Login />} />
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<Dashboard />} />
+                <Route path="treatments" element={<TreatmentsAdmin />} />
+                <Route path="leads" element={<LeadsAdmin />} />
+                <Route path="blogs" element={<BlogAdmin />} />
+                <Route path="blogs/new" element={<BlogPostForm />} />
+                <Route path="blogs/:id" element={<BlogPostForm />} />
+                <Route path="settings" element={<SiteSettingsAdmin />} />
+                <Route path="settings/home" element={<HomeSettingsAdmin />} />
+                <Route path="settings/about" element={<AboutSettingsAdmin />} />
+                <Route path="settings/media" element={<MediaSettingsAdmin />} />
+                <Route path="insights" element={<ContentInsightsAdmin />} />
+                <Route path="testimonials" element={<TestimonialsAdmin />} />
+                <Route path="marketing" element={<MarketingAdmin />} />
+              </Route>
 
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </ErrorBoundary>
         </TooltipProvider>
       </SettingsProvider>
     </AuthProvider>
