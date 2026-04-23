@@ -15,6 +15,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { RichTextEditor } from '@/components/RichTextEditor'
 import { useToast } from '@/hooks/use-toast'
 import { getPost, createPost, updatePost, getPostImageUrl, type PostRecord } from '@/services/posts'
+import { getErrorMessage } from '@/lib/pocketbase/errors'
 import { ArrowLeft, Save } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
@@ -100,6 +101,27 @@ export default function BlogPostForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+
+    // Explicitly check for valid content but allow large capacities (> 2000 chars)
+    if (!formData.content || formData.content.trim() === '') {
+      toast({
+        title: 'Aviso',
+        description: 'O conteúdo do post não pode estar vazio.',
+        variant: 'destructive',
+      })
+      return
+    }
+
+    // Max length check - 5MB roughly translated to 5M characters for safety
+    if (formData.content.length > 5000000) {
+      toast({
+        title: 'Aviso',
+        description: 'O conteúdo excedeu o limite máximo suportado de 5MB.',
+        variant: 'destructive',
+      })
+      return
+    }
+
     setLoading(true)
 
     try {
@@ -119,8 +141,15 @@ export default function BlogPostForm() {
         toast({ title: 'Post criado com sucesso!' })
       }
       navigate('/admin/blogs')
-    } catch (error: any) {
-      toast({ title: 'Erro ao salvar', description: error.message, variant: 'destructive' })
+    } catch (error: unknown) {
+      const message = getErrorMessage(error)
+      toast({
+        title: 'Erro ao salvar o post',
+        description:
+          message ||
+          'Houve um erro ao tentar salvar. Verifique sua conexão ou se o tamanho do conteúdo excedeu o limite.',
+        variant: 'destructive',
+      })
     } finally {
       setLoading(false)
     }
