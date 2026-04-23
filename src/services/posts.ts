@@ -25,6 +25,18 @@ export async function getPostBySlug(slug: string) {
   return await pb.collection('posts').getFirstListItem<PostRecord>(`slug="${slug}"`)
 }
 
+export async function getPost(id: string) {
+  return await pb.collection('posts').getOne<PostRecord>(id)
+}
+
+export async function createPost(data: any) {
+  return await pb.collection('posts').create<PostRecord>(data)
+}
+
+export async function updatePost(id: string, data: any) {
+  return await pb.collection('posts').update<PostRecord>(id, data)
+}
+
 export async function deletePost(id: string) {
   return await pb.collection('posts').delete(id)
 }
