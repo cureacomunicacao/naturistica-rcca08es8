@@ -45,6 +45,8 @@ export default function TreatmentsAdmin() {
 
   useRealtime('treatments', fetchTreatments)
 
+  const currentTreatment = editingId ? treatments.find((t) => t.id === editingId) : null
+
   const handleEdit = (t: any) => {
     setEditingId(t.id)
     setFormData({
@@ -111,7 +113,8 @@ export default function TreatmentsAdmin() {
       setOpen(false)
       fetchTreatments()
     } catch (err: any) {
-      if (err.status === 404) {
+      const is404 = err?.status === 404 || err?.response?.code === 404
+      if (is404) {
         toast({
           title: 'Erro',
           description: 'O registro não pôde ser encontrado. Pode ter sido excluído.',
@@ -122,7 +125,7 @@ export default function TreatmentsAdmin() {
       } else {
         toast({
           title: 'Erro',
-          description: err.message || 'Erro ao salvar tratamento',
+          description: err?.message || 'Erro ao salvar tratamento',
           variant: 'destructive',
         })
       }
@@ -189,13 +192,10 @@ export default function TreatmentsAdmin() {
             </div>
             <div className="space-y-2">
               <Label>Imagem de Destaque</Label>
-              {editingId && treatments.find((t) => t.id === editingId)?.image && !file && (
+              {currentTreatment && currentTreatment.image && !file && (
                 <div className="mb-4">
                   <img
-                    src={pb.files.getURL(
-                      treatments.find((t) => t.id === editingId),
-                      treatments.find((t) => t.id === editingId).image,
-                    )}
+                    src={pb.files.getURL(currentTreatment, currentTreatment.image)}
                     alt="Current preview"
                     className="h-32 w-48 object-cover rounded-md border"
                   />
