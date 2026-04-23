@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
 import {
   Carousel,
   CarouselContent,
@@ -25,6 +26,7 @@ import pb from '@/lib/pocketbase/client'
 import { SEO } from '@/components/SEO'
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { getPosts, type PostRecord, getPostImageUrl } from '@/services/posts'
 
 const iconMap: Record<string, any> = {
   ansiedade: Wind,
@@ -67,22 +69,91 @@ const testimonialsBeatriz = [
   },
 ]
 
+function ImageWithFallback({ src, fallback, alt, ...props }: any) {
+  const [error, setError] = useState(false)
+  const [currentSrc, setCurrentSrc] = useState(src)
+
+  useEffect(() => {
+    setCurrentSrc(src)
+    setError(false)
+  }, [src])
+
+  return (
+    <img
+      src={error ? fallback : currentSrc}
+      alt={alt}
+      onError={() => {
+        if (!error) {
+          setError(true)
+          setCurrentSrc(fallback)
+        }
+      }}
+      {...props}
+    />
+  )
+}
+
 export default function Index() {
   const { settings } = useSettings()
   const [treatments, setTreatments] = useState<any[]>([])
+  const [posts, setPosts] = useState<PostRecord[]>([])
+  const [testimonialsFelipeDb, setTestimonialsFelipeDb] = useState<any[]>([])
+  const [testimonialsBeatrizDb, setTestimonialsBeatrizDb] = useState<any[]>([])
+  const [featuredTreatment, setFeaturedTreatment] = useState<any>(null)
 
   useEffect(() => {
     pb.collection('treatments')
       .getFullList({ sort: 'created' })
       .then(setTreatments)
-      .catch(console.error)
+      .catch((err) => {
+        console.warn('Failed to load treatments:', err.message)
+      })
+
+    getPosts('status = "published"')
+      .then((res) => setPosts(res.slice(0, 3)))
+      .catch((err) => {
+        console.warn('Failed to load posts:', err.message)
+      })
+
+    pb.collection('testimonials')
+      .getFullList({ filter: 'active = true && doctor = "Felipe"' })
+      .then(setTestimonialsFelipeDb)
+      .catch((err) => {
+        console.warn('Failed to fetch testimonials Felipe:', err.message)
+      })
+
+    pb.collection('testimonials')
+      .getFullList({ filter: 'active = true && doctor = "Beatriz"' })
+      .then(setTestimonialsBeatrizDb)
+      .catch((err) => {
+        console.warn('Failed to fetch testimonials Beatriz:', err.message)
+      })
   }, [])
+
+  useEffect(() => {
+    const featuredId = settings.home_featured_treatment?.value
+    if (featuredId) {
+      pb.collection('treatments')
+        .getOne(featuredId)
+        .then(setFeaturedTreatment)
+        .catch((err) => {
+          console.warn(`Featured treatment ID ${featuredId} not found. Skipping.`, err.message)
+        })
+    } else {
+      setFeaturedTreatment(null)
+    }
+  }, [settings.home_featured_treatment])
 
   const heroImage = settings.home_hero?.image
     ? pb.files.getURL(settings.home_hero, settings.home_hero.image)
     : 'https://img.usecurling.com/p/800/1000?q=nature%20meditation&color=green'
 
   const heroAlt = settings.home_hero?.image_alt || 'Natureza e serenidade'
+
+  const activeFelipeTestimonials =
+    testimonialsFelipeDb.length > 0 ? testimonialsFelipeDb : testimonialsFelipe
+  const activeBeatrizTestimonials =
+    testimonialsBeatrizDb.length > 0 ? testimonialsBeatrizDb : testimonialsBeatriz
 
   return (
     <div className="flex flex-col gap-24 md:gap-32">
@@ -124,8 +195,9 @@ export default function Index() {
             delay={200}
             className="relative h-[500px] md:h-[600px] rounded-3xl overflow-hidden"
           >
-            <img
+            <ImageWithFallback
               src={heroImage}
+              fallback="https://img.usecurling.com/p/800/1000?q=nature%20meditation&color=green"
               alt={heroAlt}
               title={settings.home_hero?.value || ''}
               className="absolute inset-0 w-full h-full object-cover"
@@ -134,6 +206,45 @@ export default function Index() {
           </ScrollReveal>
         </div>
       </section>
+
+      {/* Featured Treatment Section */}
+      {featuredTreatment && (
+        <section className="container py-12">
+          <ScrollReveal>
+            <Card className="bg-primary/5 border-none shadow-sm overflow-hidden">
+              <div className="grid md:grid-cols-2 gap-8 items-center p-8 md:p-12">
+                <div className="space-y-6">
+                  <Badge
+                    variant="outline"
+                    className="bg-primary/10 text-primary hover:bg-primary/10 border-none"
+                  >
+                    Tratamento em Destaque
+                  </Badge>
+                  <h2 className="text-3xl font-bold">{featuredTreatment.title}</h2>
+                  {featuredTreatment.seo_description && (
+                    <p className="text-muted-foreground text-lg">
+                      {featuredTreatment.seo_description}
+                    </p>
+                  )}
+                  <Button asChild className="rounded-full">
+                    <Link to={`/tratamentos/${featuredTreatment.slug}`}>Saiba mais</Link>
+                  </Button>
+                </div>
+                {featuredTreatment.image && (
+                  <div className="relative h-[300px] rounded-2xl overflow-hidden">
+                    <ImageWithFallback
+                      src={pb.files.getURL(featuredTreatment, featuredTreatment.image)}
+                      fallback={`https://img.usecurling.com/p/600/400?q=${encodeURIComponent(featuredTreatment.title)}&color=green`}
+                      alt={featuredTreatment.title}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+              </div>
+            </Card>
+          </ScrollReveal>
+        </section>
+      )}
 
       {/* Treatments Section */}
       <section className="bg-white/50 py-24 overflow-hidden">
@@ -228,14 +339,24 @@ export default function Index() {
               </h3>
               <Carousel className="w-full">
                 <CarouselContent>
-                  {testimonialsFelipe.map((t, i) => (
+                  {activeFelipeTestimonials.map((t, i) => (
                     <CarouselItem key={i}>
-                      <Card className="bg-background border-none shadow-sm">
-                        <CardContent className="p-8 space-y-4">
+                      <Card className="bg-background border-none shadow-sm h-full">
+                        <CardContent className="p-8 space-y-4 flex flex-col h-full justify-between">
                           <p className="text-muted-foreground italic text-lg leading-relaxed">
-                            "{t.text}"
+                            "{t.text || t.content}"
                           </p>
-                          <p className="font-semibold">{t.name}</p>
+                          <div className="flex items-center gap-4 mt-4">
+                            {t.image && t.collectionId && t.id ? (
+                              <ImageWithFallback
+                                src={pb.files.getURL(t, t.image)}
+                                fallback="https://img.usecurling.com/ppl/thumbnail"
+                                alt={t.patient_name}
+                                className="w-12 h-12 rounded-full object-cover"
+                              />
+                            ) : null}
+                            <p className="font-semibold">{t.name || t.patient_name}</p>
+                          </div>
                         </CardContent>
                       </Card>
                     </CarouselItem>
@@ -255,14 +376,24 @@ export default function Index() {
               </h3>
               <Carousel className="w-full">
                 <CarouselContent>
-                  {testimonialsBeatriz.map((t, i) => (
+                  {activeBeatrizTestimonials.map((t, i) => (
                     <CarouselItem key={i}>
-                      <Card className="bg-background border-none shadow-sm">
-                        <CardContent className="p-8 space-y-4">
+                      <Card className="bg-background border-none shadow-sm h-full">
+                        <CardContent className="p-8 space-y-4 flex flex-col h-full justify-between">
                           <p className="text-muted-foreground italic text-lg leading-relaxed">
-                            "{t.text}"
+                            "{t.text || t.content}"
                           </p>
-                          <p className="font-semibold">{t.name}</p>
+                          <div className="flex items-center gap-4 mt-4">
+                            {t.image && t.collectionId && t.id ? (
+                              <ImageWithFallback
+                                src={pb.files.getURL(t, t.image)}
+                                fallback="https://img.usecurling.com/ppl/thumbnail"
+                                alt={t.patient_name}
+                                className="w-12 h-12 rounded-full object-cover"
+                              />
+                            ) : null}
+                            <p className="font-semibold">{t.name || t.patient_name}</p>
+                          </div>
                         </CardContent>
                       </Card>
                     </CarouselItem>
@@ -277,6 +408,59 @@ export default function Index() {
           </div>
         </div>
       </section>
+
+      {/* Blog Section */}
+      {posts.length > 0 && (
+        <section className="container py-24">
+          <ScrollReveal>
+            <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+              <div className="space-y-4">
+                <h2 className="text-3xl md:text-4xl font-bold">Nosso Blog</h2>
+                <p className="text-muted-foreground text-lg max-w-2xl">
+                  Artigos, reflexões e informações sobre saúde integrativa e terapias naturais.
+                </p>
+              </div>
+              <Button variant="outline" asChild className="rounded-full">
+                <Link to="/blog">Ver todos os artigos</Link>
+              </Button>
+            </div>
+            <div className="grid md:grid-cols-3 gap-8">
+              {posts.map((post) => (
+                <Link key={post.id} to={`/blog/${post.slug}`} className="group">
+                  <Card className="h-full bg-background border-none shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col">
+                    <div className="relative h-48 overflow-hidden">
+                      <ImageWithFallback
+                        src={getPostImageUrl(post)}
+                        fallback={`https://img.usecurling.com/p/600/400?q=${encodeURIComponent(post.title)}&color=green`}
+                        alt={post.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      />
+                    </div>
+                    <CardContent className="p-6 flex-1 flex flex-col">
+                      {post.category && (
+                        <Badge
+                          variant="secondary"
+                          className="w-fit mb-4 bg-primary/10 text-primary hover:bg-primary/20"
+                        >
+                          {post.category}
+                        </Badge>
+                      )}
+                      <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors line-clamp-2">
+                        {post.title}
+                      </h3>
+                      {post.seo_description && (
+                        <p className="text-muted-foreground line-clamp-3 mt-auto">
+                          {post.seo_description}
+                        </p>
+                      )}
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          </ScrollReveal>
+        </section>
+      )}
 
       {/* Consultation Info */}
       <section className="container pb-24">
@@ -317,8 +501,9 @@ export default function Index() {
               </Button>
             </div>
             <div className="relative h-[400px] rounded-2xl overflow-hidden hidden md:block">
-              <img
+              <ImageWithFallback
                 src="https://img.usecurling.com/p/600/800?q=online%20consultation%20laptop&color=green"
+                fallback="https://img.usecurling.com/p/600/800?q=doctor&color=green"
                 alt="Consulta Online"
                 className="absolute inset-0 w-full h-full object-cover"
               />
