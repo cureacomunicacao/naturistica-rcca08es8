@@ -53,18 +53,29 @@ export default function TreatmentsAdmin() {
 
   const currentTreatment = editingId ? treatments.find((t) => t.id === editingId) : null
 
-  const handleEdit = (t: any) => {
-    setEditingId(t.id)
-    setFormData({
-      title: t.title,
-      slug: t.slug,
-      content: t.content,
-      seo_title: t.seo_title || '',
-      seo_description: t.seo_description || '',
-      image_alt: t.image_alt || '',
-    })
-    setFile(null)
-    setOpen(true)
+  const handleEdit = async (t: any) => {
+    try {
+      const record = await pb.collection('treatments').getOne(t.id)
+      setEditingId(record.id)
+      setFormData({
+        title: record.title,
+        slug: record.slug,
+        content: record.content || '',
+        seo_title: record.seo_title || '',
+        seo_description: record.seo_description || '',
+        image_alt: record.image_alt || '',
+      })
+      setFile(null)
+      setOpen(true)
+    } catch (error) {
+      toast({
+        title: 'Erro',
+        description:
+          'O registro não foi encontrado. A lista foi atualizada para refletir o estado atual do servidor.',
+        variant: 'destructive',
+      })
+      fetchTreatments()
+    }
   }
 
   const handleCreate = () => {
@@ -98,29 +109,6 @@ export default function TreatmentsAdmin() {
           return
         }
 
-        try {
-          await pb.collection('treatments').getOne(editingId)
-        } catch (e) {
-          toast({
-            title: 'Erro',
-            description: 'O registro não pôde ser encontrado. Pode ter sido excluído.',
-            variant: 'destructive',
-          })
-          setEditingId(null)
-          setFile(null)
-          setFormData({
-            title: '',
-            slug: '',
-            content: '',
-            seo_title: '',
-            seo_description: '',
-            image_alt: '',
-          })
-          setOpen(false)
-          fetchTreatments()
-          return
-        }
-
         await pb.collection('treatments').update(editingId, data)
         toast({ title: 'Sucesso', description: 'Tratamento atualizado.' })
       } else {
@@ -146,7 +134,8 @@ export default function TreatmentsAdmin() {
       if (is404) {
         toast({
           title: 'Erro',
-          description: 'O registro não pôde ser encontrado. Pode ter sido excluído.',
+          description:
+            'O registro não foi encontrado. A lista foi atualizada para refletir o estado atual do servidor.',
           variant: 'destructive',
         })
         setEditingId(null)

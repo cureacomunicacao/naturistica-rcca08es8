@@ -10,7 +10,13 @@ import {
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/hooks/use-toast'
@@ -163,6 +169,9 @@ export default function TestimonialsAdmin() {
         <DialogContent className="max-w-xl">
           <DialogHeader>
             <DialogTitle>{editingId ? 'Editar Depoimento' : 'Novo Depoimento'}</DialogTitle>
+            <DialogDescription className="sr-only">
+              Preencha os detalhes do depoimento abaixo.
+            </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSave} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
