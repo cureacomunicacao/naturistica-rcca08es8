@@ -39,6 +39,8 @@ export default function TreatmentsAdmin() {
     image_alt: '',
   })
   const [file, setFile] = useState<File | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const fetchTreatments = async () => {
     const records = await pb.collection('treatments').getFullList({ sort: 'title' })
@@ -66,14 +68,22 @@ export default function TreatmentsAdmin() {
         image_alt: record.image_alt || '',
       })
       setFile(null)
+      setFieldErrors({})
       setOpen(true)
-    } catch (error) {
-      toast({
-        title: 'Erro',
-        description:
-          'O registro não foi encontrado. A lista foi atualizada para refletir o estado atual do servidor.',
-        variant: 'destructive',
-      })
+    } catch (error: any) {
+      if (error?.status === 404 || error?.response?.code === 404) {
+        toast({
+          title: 'Erro',
+          description: 'O registro não existe mais.',
+          variant: 'destructive',
+        })
+      } else {
+        toast({
+          title: 'Erro',
+          description: 'Ocorreu um erro ao carregar o registro. A lista foi atualizada.',
+          variant: 'destructive',
+        })
+      }
       fetchTreatments()
     }
   }
@@ -89,11 +99,14 @@ export default function TreatmentsAdmin() {
       image_alt: '',
     })
     setFile(null)
+    setFieldErrors({})
     setOpen(true)
   }
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
+    setLoading(true)
+    setFieldErrors({})
     try {
       const data = new FormData()
       Object.entries(formData).forEach(([k, v]) => data.append(k, v))
@@ -134,8 +147,7 @@ export default function TreatmentsAdmin() {
       if (is404) {
         toast({
           title: 'Erro',
-          description:
-            'O registro não foi encontrado. A lista foi atualizada para refletir o estado atual do servidor.',
+          description: 'O registro não existe mais.',
           variant: 'destructive',
         })
         setEditingId(null)
@@ -158,13 +170,30 @@ export default function TreatmentsAdmin() {
         })
         setOpen(false)
       } else {
-        toast({
-          title: 'Erro',
-          description:
-            err?.message || 'Erro ao salvar tratamento. Verifique os dados e tente novamente.',
-          variant: 'destructive',
+        const errors = err?.response?.data || {}
+        const extractedErrors: Record<string, string> = {}
+        Object.keys(errors).forEach((key) => {
+          extractedErrors[key] = errors[key]?.message || 'Campo inválido'
         })
+
+        if (Object.keys(extractedErrors).length > 0) {
+          setFieldErrors(extractedErrors)
+          toast({
+            title: 'Erro de validação',
+            description: 'Verifique os campos destacados.',
+            variant: 'destructive',
+          })
+        } else {
+          toast({
+            title: 'Erro',
+            description:
+              err?.message || 'Erro ao salvar tratamento. Verifique os dados e tente novamente.',
+            variant: 'destructive',
+          })
+        }
       }
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -219,6 +248,7 @@ export default function TreatmentsAdmin() {
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   required
                 />
+                {fieldErrors.title && <p className="text-sm text-red-500">{fieldErrors.title}</p>}
               </div>
               <div className="space-y-2">
                 <Label>Slug</Label>
@@ -227,6 +257,7 @@ export default function TreatmentsAdmin() {
                   onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
                   required
                 />
+                {fieldErrors.slug && <p className="text-sm text-red-500">{fieldErrors.slug}</p>}
               </div>
             </div>
             <div className="space-y-2">
@@ -286,11 +317,16 @@ export default function TreatmentsAdmin() {
               />
             </div>
             <div className="flex justify-end gap-2 pt-4">
-              <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setOpen(false)}
+                disabled={loading}
+              >
                 Cancelar
               </Button>
-              <Button type="submit" className="text-white">
-                Salvar
+              <Button type="submit" className="text-white" disabled={loading}>
+                {loading ? 'Salvando...' : 'Salvar'}
               </Button>
             </div>
           </form>

@@ -15,7 +15,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { RichTextEditor } from '@/components/RichTextEditor'
 import { useToast } from '@/hooks/use-toast'
 import { getPost, createPost, updatePost, getPostImageUrl, type PostRecord } from '@/services/posts'
-import { getErrorMessage } from '@/lib/pocketbase/errors'
+import { getErrorMessage, extractFieldErrors } from '@/lib/pocketbase/errors'
 import { ArrowLeft, Save } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
@@ -56,6 +56,7 @@ export default function BlogPostForm() {
   const [initialLoading, setInitialLoading] = useState(!!id)
   const [post, setPost] = useState<PostRecord | null>(null)
   const [imageFile, setImageFile] = useState<File | null>(null)
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const [formData, setFormData] = useState({
     title: '',
@@ -82,7 +83,18 @@ export default function BlogPostForm() {
             seo_description: data.seo_description || '',
           })
         })
-        .catch(() => toast({ title: 'Erro ao carregar post', variant: 'destructive' }))
+        .catch((err) => {
+          if (err?.status === 404 || err?.response?.code === 404) {
+            toast({
+              title: 'Erro',
+              description: 'O registro não existe mais.',
+              variant: 'destructive',
+            })
+            navigate('/admin/blogs')
+          } else {
+            toast({ title: 'Erro ao carregar post', variant: 'destructive' })
+          }
+        })
         .finally(() => setInitialLoading(false))
     }
   }, [id, toast])
@@ -141,15 +153,36 @@ export default function BlogPostForm() {
         toast({ title: 'Post criado com sucesso!' })
       }
       navigate('/admin/blogs')
-    } catch (error: unknown) {
-      const message = getErrorMessage(error)
-      toast({
-        title: 'Erro ao salvar o post',
-        description:
-          message ||
-          'Houve um erro ao tentar salvar. Verifique sua conexão ou se o tamanho do conteúdo excedeu o limite.',
-        variant: 'destructive',
-      })
+    } catch (error: any) {
+      const is404 = error?.status === 404 || error?.response?.code === 404
+      if (is404) {
+        toast({
+          title: 'Erro',
+          description: 'O registro não existe mais.',
+          variant: 'destructive',
+        })
+        navigate('/admin/blogs')
+        return
+      }
+
+      const errors = extractFieldErrors(error)
+      if (Object.keys(errors).length > 0) {
+        setFieldErrors(errors)
+        toast({
+          title: 'Erro de validação',
+          description: 'Verifique os campos destacados.',
+          variant: 'destructive',
+        })
+      } else {
+        const message = getErrorMessage(error)
+        toast({
+          title: 'Erro ao salvar o post',
+          description:
+            message ||
+            'Houve um erro ao tentar salvar. Verifique sua conexão ou se o tamanho do conteúdo excedeu o limite.',
+          variant: 'destructive',
+        })
+      }
     } finally {
       setLoading(false)
     }
@@ -185,6 +218,7 @@ export default function BlogPostForm() {
                     onChange={handleChange}
                     required
                   />
+                  {fieldErrors.title && <p className="text-sm text-red-500">{fieldErrors.title}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="slug">Slug URL</Label>
@@ -195,6 +229,7 @@ export default function BlogPostForm() {
                     onChange={handleChange}
                     required
                   />
+                  {fieldErrors.slug && <p className="text-sm text-red-500">{fieldErrors.slug}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="content">Conteúdo</Label>
@@ -227,6 +262,9 @@ export default function BlogPostForm() {
                   <span className="text-xs text-muted-foreground">
                     {formData.seo_title.length}/70
                   </span>
+                  {fieldErrors.seo_title && (
+                    <p className="text-sm text-red-500">{fieldErrors.seo_title}</p>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="seo_description">
@@ -242,6 +280,9 @@ export default function BlogPostForm() {
                   <span className="text-xs text-muted-foreground">
                     {formData.seo_description.length}/160
                   </span>
+                  {fieldErrors.seo_description && (
+                    <p className="text-sm text-red-500">{fieldErrors.seo_description}</p>
+                  )}
                 </div>
               </CardContent>
             </Card>

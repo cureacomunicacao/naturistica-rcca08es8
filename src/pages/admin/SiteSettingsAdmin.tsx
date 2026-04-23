@@ -80,16 +80,30 @@ export default function SiteSettingsAdmin() {
         }
 
         if (settings[key]) {
-          await pb.collection('site_settings').update(settings[key].id, fd)
+          try {
+            await pb.collection('site_settings').update(settings[key].id, fd)
+          } catch (updateErr: any) {
+            // Se der 404 na hora de atualizar, cria de novo
+            if (updateErr?.status === 404 || updateErr?.response?.code === 404) {
+              await pb.collection('site_settings').create(fd)
+            } else {
+              throw updateErr
+            }
+          }
         } else {
           await pb.collection('site_settings').create(fd)
         }
       }
       toast.success('Configurações salvas com sucesso!')
       await refresh()
-    } catch (err) {
+    } catch (err: any) {
       console.error(err)
-      toast.error('Erro ao salvar as configurações.')
+      const errorData = err?.response?.data
+      if (errorData && typeof errorData === 'object' && Object.keys(errorData).length > 0) {
+        toast.error('Erro de validação: Verifique os formatos enviados.')
+      } else {
+        toast.error(err?.message || 'Erro ao salvar as configurações.')
+      }
     } finally {
       setLoading(false)
     }
@@ -195,7 +209,7 @@ export default function SiteSettingsAdmin() {
                   handleSave(['global_logo', 'global_email', 'global_phone', 'global_instagram'])
                 }
               >
-                Salvar Geral
+                {loading ? 'Salvando...' : 'Salvar Geral'}
               </Button>
             </CardContent>
           </Card>
@@ -244,7 +258,7 @@ export default function SiteSettingsAdmin() {
                   handleSave(['home_meta_title', 'home_meta_description', 'home_hero_image'])
                 }
               >
-                Salvar Início
+                {loading ? 'Salvando...' : 'Salvar Início'}
               </Button>
             </CardContent>
           </Card>
@@ -420,7 +434,7 @@ export default function SiteSettingsAdmin() {
                   ])
                 }
               >
-                Salvar Página Sobre
+                {loading ? 'Salvando...' : 'Salvar Página Sobre'}
               </Button>
             </CardContent>
           </Card>
@@ -518,7 +532,7 @@ export default function SiteSettingsAdmin() {
                   ])
                 }
               >
-                Salvar Página Tratamentos
+                {loading ? 'Salvando...' : 'Salvar Página Tratamentos'}
               </Button>
             </CardContent>
           </Card>
@@ -549,7 +563,7 @@ export default function SiteSettingsAdmin() {
                 disabled={loading}
                 onClick={() => handleSave(['blog_meta_title', 'blog_meta_description'])}
               >
-                Salvar Página Blog
+                {loading ? 'Salvando...' : 'Salvar Página Blog'}
               </Button>
             </CardContent>
           </Card>

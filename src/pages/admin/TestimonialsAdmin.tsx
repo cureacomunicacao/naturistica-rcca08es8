@@ -43,6 +43,8 @@ export default function TestimonialsAdmin() {
     active: true,
   })
   const [file, setFile] = useState<File | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
   const fetchTestimonials = async () => {
     try {
@@ -57,16 +59,35 @@ export default function TestimonialsAdmin() {
     fetchTestimonials()
   }, [])
 
-  const handleEdit = (t: any) => {
-    setEditingId(t.id)
-    setFormData({
-      patient_name: t.patient_name,
-      doctor: t.doctor || '',
-      content: t.content || '',
-      active: t.active !== false,
-    })
-    setFile(null)
-    setOpen(true)
+  const handleEdit = async (t: any) => {
+    try {
+      const record = await pb.collection('testimonials').getOne(t.id)
+      setEditingId(record.id)
+      setFormData({
+        patient_name: record.patient_name,
+        doctor: record.doctor || '',
+        content: record.content || '',
+        active: record.active !== false,
+      })
+      setFile(null)
+      setFieldErrors({})
+      setOpen(true)
+    } catch (error: any) {
+      if (error?.status === 404 || error?.response?.code === 404) {
+        toast({
+          title: 'Erro',
+          description: 'O registro não existe mais.',
+          variant: 'destructive',
+        })
+      } else {
+        toast({
+          title: 'Erro',
+          description: 'Falha ao carregar o depoimento.',
+          variant: 'destructive',
+        })
+      }
+      fetchTestimonials()
+    }
   }
 
   const handleCreate = () => {
@@ -78,6 +99,7 @@ export default function TestimonialsAdmin() {
       active: true,
     })
     setFile(null)
+    setFieldErrors({})
     setOpen(true)
   }
 
@@ -94,6 +116,8 @@ export default function TestimonialsAdmin() {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault()
+    setLoading(true)
+    setFieldErrors({})
     try {
       const data = new FormData()
       Object.entries(formData).forEach(([k, v]) => data.append(k, String(v)))
@@ -109,7 +133,36 @@ export default function TestimonialsAdmin() {
       setOpen(false)
       fetchTestimonials()
     } catch (err: any) {
-      toast({ title: 'Erro', description: err.message, variant: 'destructive' })
+      const is404 = err?.status === 404 || err?.response?.code === 404
+      if (is404) {
+        toast({
+          title: 'Erro',
+          description: 'O registro não existe mais.',
+          variant: 'destructive',
+        })
+        setOpen(false)
+        fetchTestimonials()
+        return
+      }
+
+      const errors = err?.response?.data || {}
+      const extractedErrors: Record<string, string> = {}
+      Object.keys(errors).forEach((key) => {
+        extractedErrors[key] = errors[key]?.message || 'Campo inválido'
+      })
+
+      if (Object.keys(extractedErrors).length > 0) {
+        setFieldErrors(extractedErrors)
+        toast({
+          title: 'Erro de validação',
+          description: 'Verifique os campos destacados.',
+          variant: 'destructive',
+        })
+      } else {
+        toast({ title: 'Erro', description: err.message, variant: 'destructive' })
+      }
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -182,6 +235,9 @@ export default function TestimonialsAdmin() {
                   onChange={(e) => setFormData({ ...formData, patient_name: e.target.value })}
                   required
                 />
+                {fieldErrors.patient_name && (
+                  <p className="text-sm text-red-500">{fieldErrors.patient_name}</p>
+                )}
               </div>
               <div className="space-y-2">
                 <Label>Médico(a)</Label>
@@ -252,11 +308,16 @@ export default function TestimonialsAdmin() {
             </div>
 
             <div className="flex justify-end gap-2 pt-4">
-              <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setOpen(false)}
+                disabled={loading}
+              >
                 Cancelar
               </Button>
-              <Button type="submit" className="text-white">
-                Salvar
+              <Button type="submit" className="text-white" disabled={loading}>
+                {loading ? 'Salvando...' : 'Salvar'}
               </Button>
             </div>
           </form>
