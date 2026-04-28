@@ -85,19 +85,34 @@ export default function SiteSettingsAdmin() {
           fd.append('image', formData[key].file as Blob)
         }
 
-        if (settings[key]) {
+        let recordId = settings[key]?.id
+
+        if (!recordId) {
           try {
-            await pb.collection('site_settings').update(settings[key].id, fd)
-          } catch (updateErr: any) {
-            // Se der 404 na hora de atualizar, cria de novo
-            if (updateErr?.status === 404 || updateErr?.response?.code === 404) {
-              await pb.collection('site_settings').create(fd)
+            const existingRecord = await pb
+              .collection('site_settings')
+              .getFirstListItem(`key="${key}"`)
+            recordId = existingRecord.id
+          } catch (e: any) {
+            // Not found
+          }
+        }
+
+        if (recordId) {
+          await pb.collection('site_settings').update(recordId, fd)
+        } else {
+          try {
+            await pb.collection('site_settings').create(fd)
+          } catch (createErr: any) {
+            if (createErr.status === 400 || createErr.response?.code === 400) {
+              const existingRecord = await pb
+                .collection('site_settings')
+                .getFirstListItem(`key="${key}"`)
+              await pb.collection('site_settings').update(existingRecord.id, fd)
             } else {
-              throw updateErr
+              throw createErr
             }
           }
-        } else {
-          await pb.collection('site_settings').create(fd)
         }
       }
       toast.success('Configurações salvas com sucesso!')
