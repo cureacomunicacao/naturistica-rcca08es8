@@ -11,6 +11,8 @@ import Tratamentos from './pages/Tratamentos'
 import TratamentoDetalhe from './pages/TratamentoDetalhe'
 import Blog from './pages/Blog'
 import BlogPostDetail from './pages/BlogPostDetail'
+import Contato from './pages/Contato'
+import Obrigado from './pages/Obrigado'
 import NotFound from './pages/NotFound'
 
 import Login from './pages/admin/Login'
@@ -48,6 +50,8 @@ const App = () => (
                 <Route path="/tratamentos/:slug" element={<TratamentoDetalhe />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogPostDetail />} />
+                <Route path="/contato" element={<Contato />} />
+                <Route path="/obrigado" element={<Obrigado />} />
               </Route>
 
               <Route path="/login" element={<Login />} />

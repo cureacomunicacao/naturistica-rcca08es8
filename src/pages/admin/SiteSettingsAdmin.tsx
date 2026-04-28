@@ -23,6 +23,7 @@ export default function SiteSettingsAdmin() {
     const keys = [
       'global_email',
       'global_phone',
+      'whatsapp_contact_number',
       'global_instagram',
       'global_logo',
       'home_meta_title',
@@ -196,10 +197,18 @@ export default function SiteSettingsAdmin() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Telefone (WhatsApp)</Label>
+                  <Label>Telefone Exibição (Ex: (11) 99999-9999)</Label>
                   <Input
                     value={formData['global_phone']?.value || ''}
                     onChange={(e) => handleChange('global_phone', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Número WhatsApp para Redirecionamento (Somente números)</Label>
+                  <Input
+                    value={formData['whatsapp_contact_number']?.value || ''}
+                    onChange={(e) => handleChange('whatsapp_contact_number', e.target.value)}
+                    placeholder="Ex: 5511999999999"
                   />
                 </div>
                 <div className="space-y-2">
@@ -227,7 +236,13 @@ export default function SiteSettingsAdmin() {
               <Button
                 disabled={loading}
                 onClick={() =>
-                  handleSave(['global_logo', 'global_email', 'global_phone', 'global_instagram'])
+                  handleSave([
+                    'global_logo',
+                    'global_email',
+                    'global_phone',
+                    'whatsapp_contact_number',
+                    'global_instagram',
+                  ])
                 }
               >
                 {loading ? 'Salvando...' : 'Salvar Geral'}
