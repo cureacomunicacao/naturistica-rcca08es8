@@ -155,6 +155,18 @@ export default function Index() {
   const activeBeatrizTestimonials =
     testimonialsBeatrizDb.length > 0 ? testimonialsBeatrizDb : testimonialsBeatriz
 
+  const expTitle =
+    settings.expectations_title?.value || 'O que esperar da sua consulta e acompanhamento?'
+  const expItemsRaw =
+    settings.expectations_items?.value ||
+    'Consultas longas (1h30 de duração) com escuta ativa e acolhimento.\nAtendimento 100% online (Telemedicina) no conforto da sua casa.\nPrescrições digitais seguras enviadas diretamente no seu WhatsApp.\nSuporte contínuo via WhatsApp para dúvidas e ajustes de tratamento.'
+  const expItems = expItemsRaw.split('\n').filter(Boolean)
+  const expBtnText = settings.expectations_button_text?.value || 'Agendar consulta online'
+  const expImgAlt = settings.expectations_image_alt?.value || 'Consulta Online'
+  const expImage = settings.expectations_image?.image
+    ? pb.files.getURL(settings.expectations_image, settings.expectations_image.image)
+    : 'https://img.usecurling.com/p/600/800?q=online%20consultation%20laptop&color=green'
+
   return (
     <div className="flex flex-col gap-24 md:gap-32">
       <SEO
@@ -467,44 +479,26 @@ export default function Index() {
         <div className="bg-white rounded-3xl p-8 md:p-16 shadow-sm border border-border/50 max-w-5xl mx-auto">
           <ScrollReveal className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
-              <h2 className="text-3xl md:text-4xl font-bold text-balance">
-                O que esperar da sua consulta e acompanhamento?
-              </h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-balance">{expTitle}</h2>
               <ul className="space-y-4 text-muted-foreground">
-                <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary mt-1 shrink-0">
-                    ✓
-                  </div>
-                  <p>Consultas longas (1h30 de duração) com escuta ativa e acolhimento.</p>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary mt-1 shrink-0">
-                    ✓
-                  </div>
-                  <p>Atendimento 100% online (Telemedicina) no conforto da sua casa.</p>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary mt-1 shrink-0">
-                    ✓
-                  </div>
-                  <p>Prescrições digitais seguras enviadas diretamente no seu WhatsApp.</p>
-                </li>
-                <li className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary mt-1 shrink-0">
-                    ✓
-                  </div>
-                  <p>Suporte contínuo via WhatsApp para dúvidas e ajustes de tratamento.</p>
-                </li>
+                {expItems.map((item: string, idx: number) => (
+                  <li key={idx} className="flex items-start gap-3">
+                    <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary mt-1 shrink-0">
+                      ✓
+                    </div>
+                    <p>{item.trim()}</p>
+                  </li>
+                ))}
               </ul>
               <Button size="lg" className="rounded-full w-full sm:w-auto h-14 px-8 mt-4">
-                Agendar consulta online
+                {expBtnText}
               </Button>
             </div>
             <div className="relative h-[400px] rounded-2xl overflow-hidden hidden md:block">
               <ImageWithFallback
-                src="https://img.usecurling.com/p/600/800?q=online%20consultation%20laptop&color=green"
+                src={expImage}
                 fallback="https://img.usecurling.com/p/600/800?q=doctor&color=green"
-                alt="Consulta Online"
+                alt={expImgAlt}
                 className="absolute inset-0 w-full h-full object-cover"
               />
             </div>

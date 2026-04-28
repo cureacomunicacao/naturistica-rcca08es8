@@ -51,6 +51,12 @@ export default function SiteSettingsAdmin() {
       // Blog
       'blog_meta_title',
       'blog_meta_description',
+      // Expectations
+      'expectations_title',
+      'expectations_items',
+      'expectations_button_text',
+      'expectations_image',
+      'expectations_image_alt',
     ]
     keys.forEach((k) => {
       initial[k] = { value: settings[k]?.value || '', file: null }
@@ -251,7 +257,7 @@ export default function SiteSettingsAdmin() {
                 <p className="text-xs text-muted-foreground mt-1">
                   Tamanho recomendado: 1920x1080px.
                 </p>
-              </div>{' '}
+              </div>
               <Button
                 disabled={loading}
                 onClick={() =>
@@ -260,6 +266,74 @@ export default function SiteSettingsAdmin() {
               >
                 {loading ? 'Salvando...' : 'Salvar Início'}
               </Button>
+
+              <Separator className="my-6" />
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">O que esperar (Expectativas de Consulta)</h3>
+                <div className="space-y-2">
+                  <Label>Título da Seção</Label>
+                  <Input
+                    value={formData['expectations_title']?.value || ''}
+                    onChange={(e) => handleChange('expectations_title', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Benefícios / Itens (Um por linha)</Label>
+                  <Textarea
+                    rows={5}
+                    value={formData['expectations_items']?.value || ''}
+                    onChange={(e) => handleChange('expectations_items', e.target.value)}
+                    placeholder="Consultas longas (1h30 de duração)...&#10;Atendimento 100% online..."
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Texto do Botão</Label>
+                  <Input
+                    value={formData['expectations_button_text']?.value || ''}
+                    onChange={(e) => handleChange('expectations_button_text', e.target.value)}
+                  />
+                </div>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Imagem da Seção</Label>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) =>
+                          handleFileChange('expectations_image', e.target.files?.[0] || null)
+                        }
+                      />
+                      {renderImagePreview('expectations_image')}
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Tamanho recomendado: 600x800px.
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Texto Alternativo da Imagem (SEO)</Label>
+                    <Input
+                      value={formData['expectations_image_alt']?.value || ''}
+                      onChange={(e) => handleChange('expectations_image_alt', e.target.value)}
+                    />
+                  </div>
+                </div>
+                <Button
+                  disabled={loading}
+                  onClick={() =>
+                    handleSave([
+                      'expectations_title',
+                      'expectations_items',
+                      'expectations_button_text',
+                      'expectations_image',
+                      'expectations_image_alt',
+                    ])
+                  }
+                >
+                  {loading ? 'Salvando...' : 'Salvar Expectativas'}
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
