@@ -1,4 +1,4 @@
-import { Link, Outlet, useLocation } from 'react-router-dom'
+import { Link, Outlet, useLocation, Navigate } from 'react-router-dom'
 import {
   LayoutDashboard,
   Stethoscope,
@@ -27,7 +27,19 @@ const navItems = [
 
 export default function AdminLayout() {
   const location = useLocation()
-  const { signOut } = useAuth()
+  const { signOut, user, isAdmin, loading } = useAuth()
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center">Carregando...</div>
+  }
+
+  if (!user) {
+    return <Navigate to="/login" state={{ from: location }} replace />
+  }
+
+  if (!isAdmin) {
+    return <Navigate to="/" replace />
+  }
 
   return (
     <div className="min-h-screen bg-muted/30 flex">

@@ -3,6 +3,7 @@ import pb from '@/lib/pocketbase/client'
 
 interface AuthContextType {
   user: any
+  isAdmin: boolean
   signIn: (email: string, password: string) => Promise<{ error: any }>
   signOut: () => void
   loading: boolean
@@ -43,8 +44,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     pb.authStore.clear()
   }
 
+  const isAdmin = user?.is_admin === true
+
   return (
-    <AuthContext.Provider value={{ user, signIn, signOut, loading }}>
+    <AuthContext.Provider value={{ user, isAdmin, signIn, signOut, loading }}>
       {children}
     </AuthContext.Provider>
   )

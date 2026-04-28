@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-04-28T20:47:05.388Z",
+  "generatedAt": "2026-04-28T20:55:24.993Z",
   "collections": [
     {
       "name": "users",
@@ -37,6 +37,12 @@
           "required": false,
           "system": false,
           "autodateTriggers": ["onCreate", "onUpdate"]
+        },
+        {
+          "name": "is_admin",
+          "type": "bool",
+          "required": false,
+          "system": false
         }
       ],
       "indexes": [
@@ -50,9 +56,9 @@
       "apiRules": {
         "list": "",
         "view": "",
-        "create": "@request.auth.id != ''",
-        "update": "@request.auth.id != ''",
-        "delete": "@request.auth.id != ''"
+        "create": "@request.auth.is_admin = true",
+        "update": "@request.auth.is_admin = true",
+        "delete": "@request.auth.is_admin = true"
       },
       "fields": [
         {
@@ -120,9 +126,9 @@
       "apiRules": {
         "list": "",
         "view": "",
-        "create": "@request.auth.id != ''",
-        "update": "@request.auth.id != ''",
-        "delete": "@request.auth.id != ''"
+        "create": "@request.auth.is_admin = true",
+        "update": "@request.auth.is_admin = true",
+        "delete": "@request.auth.is_admin = true"
       },
       "fields": [
         {
@@ -195,11 +201,11 @@
       "name": "leads",
       "type": "base",
       "apiRules": {
-        "list": "@request.auth.id != ''",
-        "view": "@request.auth.id != ''",
+        "list": "@request.auth.is_admin = true",
+        "view": "@request.auth.is_admin = true",
         "create": "",
-        "update": "@request.auth.id != ''",
-        "delete": "@request.auth.id != ''"
+        "update": "@request.auth.is_admin = true",
+        "delete": "@request.auth.is_admin = true"
       },
       "fields": [
         {
@@ -256,9 +262,9 @@
       "apiRules": {
         "list": "",
         "view": "",
-        "create": "@request.auth.id != ''",
-        "update": "@request.auth.id != ''",
-        "delete": "@request.auth.id != ''"
+        "create": "@request.auth.is_admin = true",
+        "update": "@request.auth.is_admin = true",
+        "delete": "@request.auth.is_admin = true"
       },
       "fields": [
         {
@@ -315,9 +321,9 @@
       "apiRules": {
         "list": "",
         "view": "",
-        "create": "@request.auth.id != ''",
-        "update": "@request.auth.id != ''",
-        "delete": "@request.auth.id != ''"
+        "create": "@request.auth.is_admin = true",
+        "update": "@request.auth.is_admin = true",
+        "delete": "@request.auth.is_admin = true"
       },
       "fields": [
         {
@@ -361,9 +367,9 @@
       "apiRules": {
         "list": "",
         "view": "",
-        "create": "@request.auth.id != ''",
-        "update": "@request.auth.id != ''",
-        "delete": "@request.auth.id != ''"
+        "create": "@request.auth.is_admin = true",
+        "update": "@request.auth.is_admin = true",
+        "delete": "@request.auth.is_admin = true"
       },
       "fields": [
         {
