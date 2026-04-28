@@ -270,7 +270,7 @@ export default function SiteSettingsAdmin() {
               <Separator className="my-6" />
 
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold">O que esperar (Expectativas de Consulta)</h3>
+                <h3 className="text-lg font-semibold">Sessão: Consulta e Acompanhamento</h3>
                 <div className="space-y-2">
                   <Label>Título da Seção</Label>
                   <Input
