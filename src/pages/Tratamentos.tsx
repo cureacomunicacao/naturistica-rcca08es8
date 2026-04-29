@@ -59,10 +59,11 @@ export default function Tratamentos() {
           />
           <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-white p-6 text-center">
             <h1 className="text-4xl md:text-6xl font-bold mb-4 font-serif">
-              Tratamentos Integrativos
+              {settings.treatments_banner_title?.value || 'Tratamentos Integrativos'}
             </h1>
             <p className="text-xl md:text-2xl font-serif italic max-w-2xl mx-auto opacity-90">
-              "Tratamos a causa, não apenas os sintomas."
+              {settings.treatments_banner_subtitle?.value ||
+                '"Tratamos a causa, não apenas os sintomas."'}
             </p>
           </div>
         </ScrollReveal>
@@ -70,10 +71,11 @@ export default function Tratamentos() {
         <div className="container py-16 text-center space-y-6">
           <ScrollReveal>
             <h1 className="text-4xl md:text-6xl font-bold text-primary font-serif">
-              Tratamentos Integrativos
+              {settings.treatments_banner_title?.value || 'Tratamentos Integrativos'}
             </h1>
             <p className="text-xl text-muted-foreground font-serif italic max-w-2xl mx-auto mt-4">
-              "Tratamos a causa, não apenas os sintomas."
+              {settings.treatments_banner_subtitle?.value ||
+                '"Tratamos a causa, não apenas os sintomas."'}
             </p>
           </ScrollReveal>
         </div>
@@ -106,7 +108,9 @@ export default function Tratamentos() {
       {/* Treatments Grid */}
       <div className="container max-w-6xl mb-24">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold font-serif text-foreground">Áreas de Atuação</h2>
+          <h2 className="text-3xl font-bold font-serif text-foreground">
+            {settings.treatments_grid_title?.value || 'Áreas de Atuação'}
+          </h2>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {treatments.map((t, i) => (
@@ -150,11 +154,11 @@ export default function Tratamentos() {
           <div className="container max-w-6xl">
             <ScrollReveal className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-bold font-serif text-primary mb-4">
-                Histórias de Transformação
+                {settings.treatments_testim_title?.value || 'Histórias de Transformação'}
               </h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Relatos de pacientes que reencontraram o equilíbrio e bem-estar através do cuidado
-                integrativo.
+                {settings.treatments_testim_desc?.value ||
+                  'Relatos de pacientes que reencontraram o equilíbrio e bem-estar através do cuidado integrativo.'}
               </p>
             </ScrollReveal>
 

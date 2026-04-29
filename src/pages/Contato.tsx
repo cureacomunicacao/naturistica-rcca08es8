@@ -103,10 +103,12 @@ export default function Contato() {
       {/* Section 1: Hero */}
       <section className="bg-muted py-20 px-4">
         <div className="container max-w-4xl text-center space-y-4">
-          <h1 className="text-4xl md:text-5xl font-bold text-foreground">Fale Conosco</h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-foreground">
+            {settings.contact_hero_title?.value || 'Fale Conosco'}
+          </h1>
           <p className="text-lg text-muted-foreground">
-            Dê o primeiro passo para o seu bem-estar. Preencha o formulário abaixo e nossa equipe
-            entrará em contato com você pelo WhatsApp.
+            {settings.contact_hero_desc?.value ||
+              'Dê o primeiro passo para o seu bem-estar. Preencha o formulário abaixo e nossa equipe entrará em contato com você pelo WhatsApp.'}
           </p>
         </div>
       </section>
@@ -116,7 +118,9 @@ export default function Contato() {
         <div className="container grid md:grid-cols-2 gap-12 max-w-6xl">
           {/* Form */}
           <div className="bg-card p-8 rounded-2xl shadow-sm border">
-            <h2 className="text-2xl font-semibold mb-6">Envie sua mensagem</h2>
+            <h2 className="text-2xl font-semibold mb-6">
+              {settings.contact_form_title?.value || 'Envie sua mensagem'}
+            </h2>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <FormField
@@ -211,10 +215,12 @@ export default function Contato() {
           {/* Details */}
           <div className="space-y-8">
             <div>
-              <h2 className="text-2xl font-semibold mb-6">Informações de Contato</h2>
+              <h2 className="text-2xl font-semibold mb-6">
+                {settings.contact_info_title?.value || 'Informações de Contato'}
+              </h2>
               <p className="text-muted-foreground mb-8">
-                Estamos prontos para atender você com o maior cuidado e profissionalismo. Entre em
-                contato pelos nossos canais diretos.
+                {settings.contact_info_desc?.value ||
+                  'Estamos prontos para atender você com o maior cuidado e profissionalismo. Entre em contato pelos nossos canais diretos.'}
               </p>
 
               <div className="space-y-6">
@@ -248,7 +254,9 @@ export default function Contato() {
                   </div>
                   <div>
                     <h3 className="font-medium">Horário de Atendimento</h3>
-                    <p className="text-muted-foreground">Segunda a Sexta, das 8h às 18h</p>
+                    <p className="text-muted-foreground">
+                      {settings.contact_hours?.value || 'Segunda a Sexta, das 8h às 18h'}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -260,27 +268,38 @@ export default function Contato() {
       {/* Section 4: Benefits */}
       <section className="py-16 bg-muted/50 px-4">
         <div className="container max-w-5xl text-center">
-          <h2 className="text-3xl font-semibold mb-12">Por que escolher a Naturistica?</h2>
+          <h2 className="text-3xl font-semibold mb-12">
+            {settings.contact_benefits_title?.value || 'Por que escolher a Naturistica?'}
+          </h2>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="flex flex-col items-center p-6 space-y-4">
               <CheckCircle2 className="w-12 h-12 text-primary" />
-              <h3 className="text-xl font-medium">Atendimento Humanizado</h3>
+              <h3 className="text-xl font-medium">
+                {settings.contact_benefit1_title?.value || 'Atendimento Humanizado'}
+              </h3>
               <p className="text-muted-foreground">
-                Ouvimos você de verdade, com consultas longas e focadas na raiz do problema.
+                {settings.contact_benefit1_desc?.value ||
+                  'Ouvimos você de verdade, com consultas longas e focadas na raiz do problema.'}
               </p>
             </div>
             <div className="flex flex-col items-center p-6 space-y-4">
               <MessageSquare className="w-12 h-12 text-primary" />
-              <h3 className="text-xl font-medium">Suporte Contínuo</h3>
+              <h3 className="text-xl font-medium">
+                {settings.contact_benefit2_title?.value || 'Suporte Contínuo'}
+              </h3>
               <p className="text-muted-foreground">
-                Acompanhamento próximo via WhatsApp durante todo o tratamento.
+                {settings.contact_benefit2_desc?.value ||
+                  'Acompanhamento próximo via WhatsApp durante todo o tratamento.'}
               </p>
             </div>
             <div className="flex flex-col items-center p-6 space-y-4">
               <MapPin className="w-12 h-12 text-primary" />
-              <h3 className="text-xl font-medium">100% Online</h3>
+              <h3 className="text-xl font-medium">
+                {settings.contact_benefit3_title?.value || '100% Online'}
+              </h3>
               <p className="text-muted-foreground">
-                Consultas e retornos sem precisar sair de casa, com segurança e praticidade.
+                {settings.contact_benefit3_desc?.value ||
+                  'Consultas e retornos sem precisar sair de casa, com segurança e praticidade.'}
               </p>
             </div>
           </div>

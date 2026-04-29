@@ -85,9 +85,12 @@ export default function Sobre() {
         />
         <div className="relative z-10 text-center space-y-6 px-4 max-w-4xl mx-auto mt-12">
           <ScrollReveal>
-            <h1 className="text-4xl md:text-6xl font-bold text-white font-serif">Nossa História</h1>
+            <h1 className="text-4xl md:text-6xl font-bold text-white font-serif">
+              {settings.about_hero_title?.value || 'Nossa História'}
+            </h1>
             <p className="text-xl md:text-2xl text-white/90 font-serif mt-4 max-w-2xl mx-auto">
-              Da ciência moderna à sabedoria ancestral para uma saúde integral.
+              {settings.about_hero_subtitle?.value ||
+                'Da ciência moderna à sabedoria ancestral para uma saúde integral.'}
             </p>
           </ScrollReveal>
         </div>
@@ -184,7 +187,7 @@ export default function Sobre() {
         {faqs.length > 0 && (
           <ScrollReveal className="max-w-3xl mx-auto mb-24 bg-white p-8 md:p-12 rounded-3xl shadow-lg border border-border/50">
             <h2 className="text-3xl font-bold text-primary font-serif text-center mb-8">
-              Perguntas Frequentes
+              {settings.about_faq_title?.value || 'Perguntas Frequentes'}
             </h2>
             <Accordion type="single" collapsible className="w-full">
               {faqs.map((faq) => (
@@ -202,10 +205,12 @@ export default function Sobre() {
         )}
 
         <ScrollReveal className="text-center max-w-3xl mx-auto space-y-8 bg-primary/5 p-12 rounded-3xl border border-primary/10">
-          <h2 className="text-3xl font-bold font-serif text-primary">Inicie sua jornada de cura</h2>
+          <h2 className="text-3xl font-bold font-serif text-primary">
+            {settings.about_cta_title?.value || 'Inicie sua jornada de cura'}
+          </h2>
           <p className="text-lg text-muted-foreground">
-            Agende sua consulta e dê o primeiro passo para uma vida com mais saúde, consciência e
-            bem-estar com a equipe Naturistica.
+            {settings.about_cta_desc?.value ||
+              'Agende sua consulta e dê o primeiro passo para uma vida com mais saúde, consciência e bem-estar com a equipe Naturistica.'}
           </p>
           <a
             href={settings.about_whatsapp_url?.value || 'https://wa.me/5511999999999'}

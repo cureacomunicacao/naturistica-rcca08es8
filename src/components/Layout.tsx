@@ -12,6 +12,7 @@ const navLinks = [
   { name: 'Início', path: '/' },
   { name: 'Sobre', path: '/sobre' },
   { name: 'Tratamentos', path: '/tratamentos' },
+  { name: 'Contato', path: '/contato' },
   { name: 'Blog', path: '/blog' },
 ]
 
@@ -154,8 +155,10 @@ export default function Layout() {
                 </Link>
               ),
             )}
-            <Button className="rounded-full px-6 text-white hover:bg-primary/90">
-              Agendar consulta online
+            <Button asChild className="rounded-full px-6 text-white hover:bg-primary/90">
+              <a href={settings.global_cta_link?.value || '#'} target="_blank" rel="noreferrer">
+                {settings.global_cta_text?.value || 'Agendar consulta online'}
+              </a>
             </Button>
           </nav>
 
@@ -197,8 +200,10 @@ export default function Layout() {
                 ))}
               </nav>
               <div className="mt-auto pb-8">
-                <Button className="w-full rounded-full" size="lg">
-                  Agendar consulta online
+                <Button asChild className="w-full rounded-full" size="lg">
+                  <a href={settings.global_cta_link?.value || '#'} target="_blank" rel="noreferrer">
+                    {settings.global_cta_text?.value || 'Agendar consulta online'}
+                  </a>
                 </Button>
               </div>
             </SheetContent>

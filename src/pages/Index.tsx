@@ -194,12 +194,21 @@ export default function Index() {
               através de práticas integrativas, cannabis medicinal e psicoterapia.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button size="lg" className="rounded-full text-base h-14 px-8 group">
-                Agendar consulta online
-                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              <Button asChild size="lg" className="rounded-full text-base h-14 px-8 group">
+                <a href={settings.home_hero_btn1_link?.value || '#'}>
+                  {settings.home_hero_btn1_text?.value || 'Agendar consulta online'}
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </a>
               </Button>
-              <Button size="lg" variant="outline" className="rounded-full text-base h-14 px-8">
-                Conheça nossa história
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="rounded-full text-base h-14 px-8"
+              >
+                <Link to={settings.home_hero_btn2_link?.value || '/sobre'}>
+                  {settings.home_hero_btn2_text?.value || 'Conheça nossa história'}
+                </Link>
               </Button>
             </div>
           </ScrollReveal>
@@ -312,25 +321,22 @@ export default function Index() {
       {/* Philosophy Section */}
       <section className="container">
         <ScrollReveal className="max-w-4xl mx-auto text-center space-y-8">
-          <h2 className="text-3xl md:text-5xl font-bold text-balance mb-12">
-            A saúde em que acreditamos: <br />
-            <span className="italic font-normal text-primary">retorno ao o que você já é</span>
-          </h2>
-          <div className="space-y-6 text-lg md:text-xl leading-relaxed text-muted-foreground text-left md:text-center">
-            <p>
-              Acreditamos que a verdadeira saúde não é a ausência de doenças, mas um estado de
-              profundo alinhamento entre corpo, mente e natureza. Nossa abordagem rompe com a visão
-              fragmentada da medicina tradicional.
-            </p>
-            <p>
-              Ao unir os conhecimentos milenares da Ayurveda e do uso ritualístico de plantas
-              professoras com o rigor da ciência moderna, buscamos ir à raiz do seu sofrimento.
-            </p>
-            <p>
-              O fim da separação mente-corpo é o início da sua cura. Nós guiamos você nesse caminho
-              de volta para casa, para a sua essência mais pura e equilibrada.
-            </p>
-          </div>
+          <h2
+            className="text-3xl md:text-5xl font-bold text-balance mb-12"
+            dangerouslySetInnerHTML={{
+              __html:
+                settings.home_philosophy_title?.value ||
+                'A saúde em que acreditamos: <br /><span class="italic font-normal text-primary">retorno ao o que você já é</span>',
+            }}
+          />
+          <div
+            className="space-y-6 text-lg md:text-xl leading-relaxed text-muted-foreground text-left md:text-center"
+            dangerouslySetInnerHTML={{
+              __html:
+                settings.home_philosophy_text?.value ||
+                '<p>Acreditamos que a verdadeira saúde não é a ausência de doenças, mas um estado de profundo alinhamento entre corpo, mente e natureza. Nossa abordagem rompe com a visão fragmentada da medicina tradicional.</p><p>Ao unir os conhecimentos milenares da Ayurveda e do uso ritualístico de plantas professoras com o rigor da ciência moderna, buscamos ir à raiz do seu sofrimento.</p><p>O fim da separação mente-corpo é o início da sua cura. Nós guiamos você nesse caminho de volta para casa, para a sua essência mais pura e equilibrada.</p>',
+            }}
+          />
         </ScrollReveal>
       </section>
 
@@ -339,7 +345,8 @@ export default function Index() {
         <div className="container">
           <ScrollReveal>
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
-              Conheça histórias de alguns de nossos pacientes
+              {settings.home_testimonials_title?.value ||
+                'Conheça histórias de alguns de nossos pacientes'}
             </h2>
           </ScrollReveal>
 
@@ -427,13 +434,18 @@ export default function Index() {
           <ScrollReveal>
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
               <div className="space-y-4">
-                <h2 className="text-3xl md:text-4xl font-bold">Nosso Blog</h2>
+                <h2 className="text-3xl md:text-4xl font-bold">
+                  {settings.home_blog_title?.value || 'Nosso Blog'}
+                </h2>
                 <p className="text-muted-foreground text-lg max-w-2xl">
-                  Artigos, reflexões e informações sobre saúde integrativa e terapias naturais.
+                  {settings.home_blog_desc?.value ||
+                    'Artigos, reflexões e informações sobre saúde integrativa e terapias naturais.'}
                 </p>
               </div>
               <Button variant="outline" asChild className="rounded-full">
-                <Link to="/blog">Ver todos os artigos</Link>
+                <Link to={settings.home_blog_btn_link?.value || '/blog'}>
+                  {settings.home_blog_btn_text?.value || 'Ver todos os artigos'}
+                </Link>
               </Button>
             </div>
             <div className="grid md:grid-cols-3 gap-8">
@@ -490,8 +502,8 @@ export default function Index() {
                   </li>
                 ))}
               </ul>
-              <Button size="lg" className="rounded-full w-full sm:w-auto h-14 px-8 mt-4">
-                {expBtnText}
+              <Button asChild size="lg" className="rounded-full w-full sm:w-auto h-14 px-8 mt-4">
+                <a href={settings.expectations_button_link?.value || '#'}>{expBtnText}</a>
               </Button>
             </div>
             <div className="relative h-[400px] rounded-2xl overflow-hidden hidden md:block">

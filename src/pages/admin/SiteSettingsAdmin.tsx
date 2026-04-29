@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { RichTextEditor } from '@/components/RichTextEditor'
 import { Separator } from '@/components/ui/separator'
 import { toast } from 'sonner'
-import { Settings, Globe, Home, Info, Stethoscope, FileText } from 'lucide-react'
+import { Settings, Globe, Home, Info, Stethoscope, FileText, MessageSquare } from 'lucide-react'
 import pb from '@/lib/pocketbase/client'
 import { useSettings } from '@/hooks/use-settings'
 
@@ -26,14 +26,38 @@ export default function SiteSettingsAdmin() {
       'whatsapp_contact_number',
       'global_instagram',
       'global_logo',
+      'global_cta_text',
+      'global_cta_link',
       'home_meta_title',
       'home_meta_description',
       'home_hero_image',
+      'home_hero_btn1_text',
+      'home_hero_btn1_link',
+      'home_hero_btn2_text',
+      'home_hero_btn2_link',
+      'expectations_title',
+      'expectations_items',
+      'expectations_button_text',
+      'expectations_image',
+      'expectations_image_alt',
+      'expectations_button_link',
+      'home_philosophy_title',
+      'home_philosophy_text',
+      'home_testimonials_title',
+      'home_blog_title',
+      'home_blog_desc',
+      'home_blog_btn_text',
+      'home_blog_btn_link',
       // About
       'about_meta_title',
       'about_meta_description',
       'about_hero_image',
       'about_content',
+      'about_hero_title',
+      'about_hero_subtitle',
+      'about_faq_title',
+      'about_cta_title',
+      'about_cta_desc',
       'about_felipe_title',
       'about_felipe_content',
       'doctor_felipe_image',
@@ -46,18 +70,31 @@ export default function SiteSettingsAdmin() {
       'treatments_meta_title',
       'treatments_meta_description',
       'treatments_banner_image',
+      'treatments_banner_title',
+      'treatments_banner_subtitle',
+      'treatments_grid_title',
       'treatments_approach_title',
       'treatments_approach_content',
       'treatments_approach_image',
+      'treatments_testim_title',
+      'treatments_testim_desc',
       // Blog
       'blog_meta_title',
       'blog_meta_description',
-      // Expectations
-      'expectations_title',
-      'expectations_items',
-      'expectations_button_text',
-      'expectations_image',
-      'expectations_image_alt',
+      // Contact
+      'contact_hero_title',
+      'contact_hero_desc',
+      'contact_form_title',
+      'contact_info_title',
+      'contact_info_desc',
+      'contact_hours',
+      'contact_benefits_title',
+      'contact_benefit1_title',
+      'contact_benefit1_desc',
+      'contact_benefit2_title',
+      'contact_benefit2_desc',
+      'contact_benefit3_title',
+      'contact_benefit3_desc',
     ]
     keys.forEach((k) => {
       initial[k] = { value: settings[k]?.value || '', file: null }
@@ -176,6 +213,9 @@ export default function SiteSettingsAdmin() {
           <TabsTrigger value="treatments" className="gap-2">
             <Stethoscope className="w-4 h-4" /> Tratamentos
           </TabsTrigger>
+          <TabsTrigger value="contact" className="gap-2">
+            <MessageSquare className="w-4 h-4" /> Contato
+          </TabsTrigger>
           <TabsTrigger value="blog" className="gap-2">
             <FileText className="w-4 h-4" /> Blog
           </TabsTrigger>
@@ -219,6 +259,20 @@ export default function SiteSettingsAdmin() {
                   />
                 </div>
                 <div className="space-y-2">
+                  <Label>Texto do Botão CTA Global</Label>
+                  <Input
+                    value={formData['global_cta_text']?.value || ''}
+                    onChange={(e) => handleChange('global_cta_text', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Link do Botão CTA Global</Label>
+                  <Input
+                    value={formData['global_cta_link']?.value || ''}
+                    onChange={(e) => handleChange('global_cta_link', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2 col-span-2">
                   <Label>Logo do Site</Label>
                   <div className="flex items-center gap-2">
                     <Input
@@ -242,6 +296,8 @@ export default function SiteSettingsAdmin() {
                     'global_phone',
                     'whatsapp_contact_number',
                     'global_instagram',
+                    'global_cta_text',
+                    'global_cta_link',
                   ])
                 }
               >
@@ -288,10 +344,51 @@ export default function SiteSettingsAdmin() {
                   Tamanho recomendado: 1920x1080px.
                 </p>
               </div>
+
+              <div className="grid md:grid-cols-2 gap-4 mt-4">
+                <div className="space-y-2">
+                  <Label>Texto do Botão Principal</Label>
+                  <Input
+                    value={formData['home_hero_btn1_text']?.value || ''}
+                    onChange={(e) => handleChange('home_hero_btn1_text', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Link do Botão Principal</Label>
+                  <Input
+                    value={formData['home_hero_btn1_link']?.value || ''}
+                    onChange={(e) => handleChange('home_hero_btn1_link', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Texto do Botão Secundário</Label>
+                  <Input
+                    value={formData['home_hero_btn2_text']?.value || ''}
+                    onChange={(e) => handleChange('home_hero_btn2_text', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Link do Botão Secundário</Label>
+                  <Input
+                    value={formData['home_hero_btn2_link']?.value || ''}
+                    onChange={(e) => handleChange('home_hero_btn2_link', e.target.value)}
+                  />
+                </div>
+              </div>
+
               <Button
+                className="mt-4"
                 disabled={loading}
                 onClick={() =>
-                  handleSave(['home_meta_title', 'home_meta_description', 'home_hero_image'])
+                  handleSave([
+                    'home_meta_title',
+                    'home_meta_description',
+                    'home_hero_image',
+                    'home_hero_btn1_text',
+                    'home_hero_btn1_link',
+                    'home_hero_btn2_text',
+                    'home_hero_btn2_link',
+                  ])
                 }
               >
                 {loading ? 'Salvando...' : 'Salvar Início'}
@@ -317,12 +414,21 @@ export default function SiteSettingsAdmin() {
                     placeholder="Consultas longas (1h30 de duração)...&#10;Atendimento 100% online..."
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label>Texto do Botão</Label>
-                  <Input
-                    value={formData['expectations_button_text']?.value || ''}
-                    onChange={(e) => handleChange('expectations_button_text', e.target.value)}
-                  />
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Texto do Botão</Label>
+                    <Input
+                      value={formData['expectations_button_text']?.value || ''}
+                      onChange={(e) => handleChange('expectations_button_text', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Link do Botão</Label>
+                    <Input
+                      value={formData['expectations_button_link']?.value || ''}
+                      onChange={(e) => handleChange('expectations_button_link', e.target.value)}
+                    />
+                  </div>
                 </div>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
@@ -356,12 +462,104 @@ export default function SiteSettingsAdmin() {
                       'expectations_title',
                       'expectations_items',
                       'expectations_button_text',
+                      'expectations_button_link',
                       'expectations_image',
                       'expectations_image_alt',
                     ])
                   }
                 >
                   {loading ? 'Salvando...' : 'Salvar Expectativas'}
+                </Button>
+              </div>
+
+              <Separator className="my-6" />
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Filosofia</h3>
+                <div className="space-y-2">
+                  <Label>Título da Filosofia</Label>
+                  <Input
+                    value={formData['home_philosophy_title']?.value || ''}
+                    onChange={(e) => handleChange('home_philosophy_title', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Texto da Filosofia</Label>
+                  <RichTextEditor
+                    value={formData['home_philosophy_text']?.value || ''}
+                    onChange={(v) => handleChange('home_philosophy_text', v)}
+                  />
+                </div>
+                <Button
+                  disabled={loading}
+                  onClick={() => handleSave(['home_philosophy_title', 'home_philosophy_text'])}
+                >
+                  Salvar Filosofia
+                </Button>
+              </div>
+
+              <Separator className="my-6" />
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Depoimentos</h3>
+                <div className="space-y-2">
+                  <Label>Título dos Depoimentos</Label>
+                  <Input
+                    value={formData['home_testimonials_title']?.value || ''}
+                    onChange={(e) => handleChange('home_testimonials_title', e.target.value)}
+                  />
+                </div>
+                <Button disabled={loading} onClick={() => handleSave(['home_testimonials_title'])}>
+                  Salvar Depoimentos
+                </Button>
+              </div>
+
+              <Separator className="my-6" />
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Blog</h3>
+                <div className="space-y-2">
+                  <Label>Título do Blog</Label>
+                  <Input
+                    value={formData['home_blog_title']?.value || ''}
+                    onChange={(e) => handleChange('home_blog_title', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Descrição do Blog</Label>
+                  <Textarea
+                    value={formData['home_blog_desc']?.value || ''}
+                    onChange={(e) => handleChange('home_blog_desc', e.target.value)}
+                  />
+                </div>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Texto do Botão do Blog</Label>
+                    <Input
+                      value={formData['home_blog_btn_text']?.value || ''}
+                      onChange={(e) => handleChange('home_blog_btn_text', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Link do Botão do Blog</Label>
+                    <Input
+                      value={formData['home_blog_btn_link']?.value || ''}
+                      onChange={(e) => handleChange('home_blog_btn_link', e.target.value)}
+                    />
+                  </div>
+                </div>
+                <Button
+                  disabled={loading}
+                  onClick={() =>
+                    handleSave([
+                      'home_blog_title',
+                      'home_blog_desc',
+                      'home_blog_btn_text',
+                      'home_blog_btn_link',
+                    ])
+                  }
+                >
+                  Salvar Blog Início
                 </Button>
               </div>
             </CardContent>
@@ -379,9 +577,8 @@ export default function SiteSettingsAdmin() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-8">
-              {/* Seção Principal */}
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Introdução (Hero)</h3>
+                <h3 className="text-lg font-semibold">Títulos e Textos</h3>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Meta Title (SEO)</Label>
@@ -395,6 +592,41 @@ export default function SiteSettingsAdmin() {
                     <Input
                       value={formData['about_meta_description']?.value || ''}
                       onChange={(e) => handleChange('about_meta_description', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Título Hero</Label>
+                    <Input
+                      value={formData['about_hero_title']?.value || ''}
+                      onChange={(e) => handleChange('about_hero_title', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Subtítulo Hero</Label>
+                    <Input
+                      value={formData['about_hero_subtitle']?.value || ''}
+                      onChange={(e) => handleChange('about_hero_subtitle', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Título FAQ</Label>
+                    <Input
+                      value={formData['about_faq_title']?.value || ''}
+                      onChange={(e) => handleChange('about_faq_title', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Título CTA</Label>
+                    <Input
+                      value={formData['about_cta_title']?.value || ''}
+                      onChange={(e) => handleChange('about_cta_title', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2 col-span-2">
+                    <Label>Descrição CTA</Label>
+                    <Textarea
+                      value={formData['about_cta_desc']?.value || ''}
+                      onChange={(e) => handleChange('about_cta_desc', e.target.value)}
                     />
                   </div>
                 </div>
@@ -415,7 +647,7 @@ export default function SiteSettingsAdmin() {
                   </p>
                 </div>
                 <div className="space-y-2">
-                  <Label>Texto de Introdução</Label>
+                  <Label>Texto da Jornada</Label>
                   <RichTextEditor
                     value={formData['about_content']?.value || ''}
                     onChange={(val) => handleChange('about_content', val)}
@@ -527,6 +759,11 @@ export default function SiteSettingsAdmin() {
                     'about_meta_description',
                     'about_hero_image',
                     'about_content',
+                    'about_hero_title',
+                    'about_hero_subtitle',
+                    'about_faq_title',
+                    'about_cta_title',
+                    'about_cta_desc',
                     'about_felipe_title',
                     'about_felipe_content',
                     'doctor_felipe_image',
@@ -552,20 +789,41 @@ export default function SiteSettingsAdmin() {
             </CardHeader>
             <CardContent className="space-y-8">
               <div className="space-y-4 max-w-3xl">
-                <h3 className="text-lg font-semibold">SEO e Banner</h3>
+                <h3 className="text-lg font-semibold">Títulos e Textos</h3>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Meta Title</Label>
+                    <Label>Meta Title (SEO)</Label>
                     <Input
                       value={formData['treatments_meta_title']?.value || ''}
                       onChange={(e) => handleChange('treatments_meta_title', e.target.value)}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Meta Description</Label>
+                    <Label>Meta Description (SEO)</Label>
                     <Input
                       value={formData['treatments_meta_description']?.value || ''}
                       onChange={(e) => handleChange('treatments_meta_description', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Título do Banner</Label>
+                    <Input
+                      value={formData['treatments_banner_title']?.value || ''}
+                      onChange={(e) => handleChange('treatments_banner_title', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Subtítulo do Banner</Label>
+                    <Input
+                      value={formData['treatments_banner_subtitle']?.value || ''}
+                      onChange={(e) => handleChange('treatments_banner_subtitle', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Título da Grade de Tratamentos</Label>
+                    <Input
+                      value={formData['treatments_grid_title']?.value || ''}
+                      onChange={(e) => handleChange('treatments_grid_title', e.target.value)}
                     />
                   </div>
                 </div>
@@ -623,6 +881,26 @@ export default function SiteSettingsAdmin() {
                 </div>
               </div>
 
+              <Separator />
+
+              <div className="space-y-4 max-w-3xl">
+                <h3 className="text-lg font-semibold">Seção: Depoimentos</h3>
+                <div className="space-y-2">
+                  <Label>Título dos Depoimentos</Label>
+                  <Input
+                    value={formData['treatments_testim_title']?.value || ''}
+                    onChange={(e) => handleChange('treatments_testim_title', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Descrição dos Depoimentos</Label>
+                  <Textarea
+                    value={formData['treatments_testim_desc']?.value || ''}
+                    onChange={(e) => handleChange('treatments_testim_desc', e.target.value)}
+                  />
+                </div>
+              </div>
+
               <Button
                 disabled={loading}
                 onClick={() =>
@@ -630,13 +908,164 @@ export default function SiteSettingsAdmin() {
                     'treatments_meta_title',
                     'treatments_meta_description',
                     'treatments_banner_image',
+                    'treatments_banner_title',
+                    'treatments_banner_subtitle',
+                    'treatments_grid_title',
                     'treatments_approach_title',
                     'treatments_approach_content',
                     'treatments_approach_image',
+                    'treatments_testim_title',
+                    'treatments_testim_desc',
                   ])
                 }
               >
                 {loading ? 'Salvando...' : 'Salvar Página Tratamentos'}
+              </Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* --- CONTACT --- */}
+        <TabsContent value="contact">
+          <Card>
+            <CardHeader>
+              <CardTitle>Página de Contato</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-8">
+              <div className="space-y-4 max-w-3xl">
+                <h3 className="text-lg font-semibold">Hero / Introdução</h3>
+                <div className="space-y-2">
+                  <Label>Título</Label>
+                  <Input
+                    value={formData['contact_hero_title']?.value || ''}
+                    onChange={(e) => handleChange('contact_hero_title', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Descrição</Label>
+                  <Textarea
+                    value={formData['contact_hero_desc']?.value || ''}
+                    onChange={(e) => handleChange('contact_hero_desc', e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <Separator />
+
+              <div className="space-y-4 max-w-3xl">
+                <h3 className="text-lg font-semibold">Formulário e Informações</h3>
+                <div className="space-y-2">
+                  <Label>Título do Formulário</Label>
+                  <Input
+                    value={formData['contact_form_title']?.value || ''}
+                    onChange={(e) => handleChange('contact_form_title', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Título das Informações</Label>
+                  <Input
+                    value={formData['contact_info_title']?.value || ''}
+                    onChange={(e) => handleChange('contact_info_title', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Descrição das Informações</Label>
+                  <Textarea
+                    value={formData['contact_info_desc']?.value || ''}
+                    onChange={(e) => handleChange('contact_info_desc', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Horário de Atendimento</Label>
+                  <Input
+                    value={formData['contact_hours']?.value || ''}
+                    onChange={(e) => handleChange('contact_hours', e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <Separator />
+
+              <div className="space-y-4 max-w-3xl">
+                <h3 className="text-lg font-semibold">Benefícios</h3>
+                <div className="space-y-2">
+                  <Label>Título da Seção de Benefícios</Label>
+                  <Input
+                    value={formData['contact_benefits_title']?.value || ''}
+                    onChange={(e) => handleChange('contact_benefits_title', e.target.value)}
+                  />
+                </div>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Benefício 1 - Título</Label>
+                    <Input
+                      value={formData['contact_benefit1_title']?.value || ''}
+                      onChange={(e) => handleChange('contact_benefit1_title', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Benefício 1 - Descrição</Label>
+                    <Textarea
+                      value={formData['contact_benefit1_desc']?.value || ''}
+                      onChange={(e) => handleChange('contact_benefit1_desc', e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Benefício 2 - Título</Label>
+                    <Input
+                      value={formData['contact_benefit2_title']?.value || ''}
+                      onChange={(e) => handleChange('contact_benefit2_title', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Benefício 2 - Descrição</Label>
+                    <Textarea
+                      value={formData['contact_benefit2_desc']?.value || ''}
+                      onChange={(e) => handleChange('contact_benefit2_desc', e.target.value)}
+                    />
+                  </div>
+                </div>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Benefício 3 - Título</Label>
+                    <Input
+                      value={formData['contact_benefit3_title']?.value || ''}
+                      onChange={(e) => handleChange('contact_benefit3_title', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Benefício 3 - Descrição</Label>
+                    <Textarea
+                      value={formData['contact_benefit3_desc']?.value || ''}
+                      onChange={(e) => handleChange('contact_benefit3_desc', e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <Button
+                disabled={loading}
+                onClick={() =>
+                  handleSave([
+                    'contact_hero_title',
+                    'contact_hero_desc',
+                    'contact_form_title',
+                    'contact_info_title',
+                    'contact_info_desc',
+                    'contact_hours',
+                    'contact_benefits_title',
+                    'contact_benefit1_title',
+                    'contact_benefit1_desc',
+                    'contact_benefit2_title',
+                    'contact_benefit2_desc',
+                    'contact_benefit3_title',
+                    'contact_benefit3_desc',
+                  ])
+                }
+              >
+                {loading ? 'Salvando...' : 'Salvar Página Contato'}
               </Button>
             </CardContent>
           </Card>
