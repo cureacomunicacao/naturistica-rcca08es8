@@ -116,7 +116,7 @@ export default function Sobre() {
           <div className="relative h-[300px] md:h-[400px] rounded-2xl overflow-hidden shadow-lg order-1 md:order-2">
             <img
               src={journeyImage}
-              alt="Jornada Naturistica"
+              alt={settings.about_journey_image?.image_alt || 'Jornada Naturistica'}
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105"
             />
           </div>

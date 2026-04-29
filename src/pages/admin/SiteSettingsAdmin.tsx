@@ -16,7 +16,9 @@ export default function SiteSettingsAdmin() {
   const { settings, refresh } = useSettings()
   const [loading, setLoading] = useState(false)
 
-  const [formData, setFormData] = useState<Record<string, { value: string; file: File | null }>>({})
+  const [formData, setFormData] = useState<
+    Record<string, { value: string; file: File | null; image_alt: string }>
+  >({})
 
   useEffect(() => {
     const initial: any = {}
@@ -52,6 +54,7 @@ export default function SiteSettingsAdmin() {
       'about_meta_title',
       'about_meta_description',
       'about_hero_image',
+      'about_journey_image',
       'about_content',
       'about_hero_title',
       'about_hero_subtitle',
@@ -97,13 +100,21 @@ export default function SiteSettingsAdmin() {
       'contact_benefit3_desc',
     ]
     keys.forEach((k) => {
-      initial[k] = { value: settings[k]?.value || '', file: null }
+      initial[k] = {
+        value: settings[k]?.value || '',
+        file: null,
+        image_alt: settings[k]?.image_alt || '',
+      }
     })
     setFormData(initial)
   }, [settings])
 
   const handleChange = (key: string, value: string) => {
     setFormData((prev) => ({ ...prev, [key]: { ...prev[key], value } }))
+  }
+
+  const handleChangeAlt = (key: string, image_alt: string) => {
+    setFormData((prev) => ({ ...prev, [key]: { ...prev[key], image_alt } }))
   }
 
   const handleFileChange = (key: string, file: File | null) => {
@@ -121,6 +132,9 @@ export default function SiteSettingsAdmin() {
         fd.append('value', formData[key].value)
         if (formData[key].file) {
           fd.append('image', formData[key].file as Blob)
+        }
+        if (formData[key].image_alt !== undefined) {
+          fd.append('image_alt', formData[key].image_alt)
         }
 
         let recordId = settings[key]?.id
@@ -647,6 +661,36 @@ export default function SiteSettingsAdmin() {
                   </p>
                 </div>
                 <div className="space-y-2">
+                  <Label>Texto Alternativo da Imagem Hero (SEO)</Label>
+                  <Input
+                    value={formData['about_hero_image']?.image_alt || ''}
+                    onChange={(e) => handleChangeAlt('about_hero_image', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Imagem da Jornada</Label>
+                  <div className="flex items-center gap-2 max-w-xl">
+                    <Input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) =>
+                        handleFileChange('about_journey_image', e.target.files?.[0] || null)
+                      }
+                    />
+                    {renderImagePreview('about_journey_image')}
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Tamanho recomendado: 800x800px.
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  <Label>Texto Alternativo da Jornada (SEO)</Label>
+                  <Input
+                    value={formData['about_journey_image']?.image_alt || ''}
+                    onChange={(e) => handleChangeAlt('about_journey_image', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
                   <Label>Texto da Jornada</Label>
                   <RichTextEditor
                     value={formData['about_content']?.value || ''}
@@ -692,6 +736,13 @@ export default function SiteSettingsAdmin() {
                       Tamanho recomendado: 400x400px (1:1).
                     </p>
                   </div>
+                  <div className="space-y-2">
+                    <Label>Texto Alternativo da Foto do Dr. Felipe</Label>
+                    <Input
+                      value={formData['doctor_felipe_image']?.image_alt || ''}
+                      onChange={(e) => handleChangeAlt('doctor_felipe_image', e.target.value)}
+                    />
+                  </div>
                 </div>
 
                 {/* Dra Beatriz */}
@@ -727,6 +778,13 @@ export default function SiteSettingsAdmin() {
                       Tamanho recomendado: 400x400px (1:1).
                     </p>
                   </div>
+                  <div className="space-y-2">
+                    <Label>Texto Alternativo da Foto da Dra. Beatriz</Label>
+                    <Input
+                      value={formData['doctor_beatriz_image']?.image_alt || ''}
+                      onChange={(e) => handleChangeAlt('doctor_beatriz_image', e.target.value)}
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -758,6 +816,7 @@ export default function SiteSettingsAdmin() {
                     'about_meta_title',
                     'about_meta_description',
                     'about_hero_image',
+                    'about_journey_image',
                     'about_content',
                     'about_hero_title',
                     'about_hero_subtitle',

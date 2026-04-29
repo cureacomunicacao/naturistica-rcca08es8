@@ -19,7 +19,6 @@ const navItems = [
   { name: 'Leads', path: '/admin/leads', icon: Users },
   { name: 'Blog', path: '/admin/blogs', icon: FileText },
   { name: 'Página Inicial', path: '/admin/settings/home', icon: Settings },
-  { name: 'Página Sobre', path: '/admin/settings/about', icon: Settings },
   { name: 'Configurações', path: '/admin/settings', icon: Settings },
   { name: 'Insights', path: '/admin/insights', icon: BarChart },
   { name: 'Marketing & SEO', path: '/admin/marketing', icon: Megaphone },
