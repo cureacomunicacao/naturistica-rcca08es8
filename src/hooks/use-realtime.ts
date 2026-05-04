@@ -21,41 +21,21 @@ export function useRealtime(
 
     let unsubscribeFn: (() => Promise<void>) | undefined
     let cancelled = false
-    let retryTimer: ReturnType<typeof setTimeout>
 
-    const initSubscription = async () => {
-      try {
-        const fn = await pb.collection(collectionName).subscribe('*', (e) => {
-          callbackRef.current(e)
-        })
-
+    pb.collection(collectionName)
+      .subscribe('*', (e) => {
+        callbackRef.current(e)
+      })
+      .then((fn) => {
         if (cancelled) {
           fn().catch(() => {})
         } else {
           unsubscribeFn = fn
         }
-      } catch (err: any) {
-        if (cancelled) return
-
-        // Handle "Missing or invalid client id" (usually 400) which occurs
-        // during React Strict Mode rapid mount/unmount cycles before SSE is ready.
-        if (
-          err?.status === 400 ||
-          err?.status === 0 ||
-          err?.message?.toLowerCase().includes('client id')
-        ) {
-          retryTimer = setTimeout(initSubscription, 1000)
-        } else {
-          console.warn(`Realtime subscription error for ${collectionName}:`, err)
-        }
-      }
-    }
-
-    initSubscription()
+      })
 
     return () => {
       cancelled = true
-      clearTimeout(retryTimer)
       if (unsubscribeFn) {
         unsubscribeFn().catch(() => {})
       }

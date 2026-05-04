@@ -79,6 +79,6 @@
   }
 
   .glass-header {
-    @apply bg-background/80 backdrop-blur-md border-b border-border/50 supports-[backdrop-filter]:bg-background/60;
+    @apply bg-white/80 backdrop-blur-md supports-[backdrop-filter]:bg-white/60;
   }
 }

@@ -80,134 +80,149 @@ export default function Layout() {
       <SEO title={seo.title} description={seo.desc} />
       <header
         className={cn(
-          'fixed top-0 w-full z-50 transition-all duration-300 glass-header',
-          isScrolled ? 'py-3' : 'py-5',
+          'fixed top-0 w-full z-50 transition-all duration-500',
+          isScrolled ? 'py-4' : 'py-6',
         )}
       >
-        <div className="container flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 group">
-            {settings?.global_logo?.image ? (
-              <img
-                src={pb.files.getUrl(settings.global_logo, settings.global_logo.image)}
-                alt="Naturistica"
-                className="h-8 object-contain"
-              />
-            ) : (
-              <>
-                <Leaf className="h-6 w-6 text-primary group-hover:rotate-12 transition-transform duration-300" />
-                <span className="font-serif text-2xl font-semibold tracking-wide text-primary">
-                  NATURISTICA
-                </span>
-              </>
+        <div className={cn('container transition-all duration-500', isScrolled ? 'max-w-5xl' : '')}>
+          <div
+            className={cn(
+              'flex items-center justify-between transition-all duration-500',
+              isScrolled
+                ? 'glass-header rounded-full px-8 py-3 shadow-sm border border-border/50'
+                : 'px-4',
             )}
-          </Link>
+          >
+            <Link to="/" className="flex items-center gap-2 group">
+              {settings?.global_logo?.image ? (
+                <img
+                  src={pb.files.getUrl(settings.global_logo, settings.global_logo.image)}
+                  alt="Naturistica"
+                  className="h-8 object-contain"
+                />
+              ) : (
+                <>
+                  <Leaf className="h-6 w-6 text-primary group-hover:rotate-12 transition-transform duration-300" />
+                  <span className="font-serif text-2xl font-semibold tracking-wide text-primary">
+                    NATURISTICA
+                  </span>
+                </>
+              )}
+            </Link>
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) =>
-              link.name === 'Tratamentos' ? (
-                <div key={link.path} className="relative group py-2">
+            {/* Desktop Nav */}
+            <nav className="hidden md:flex items-center gap-8">
+              {navLinks.map((link) =>
+                link.name === 'Tratamentos' ? (
+                  <div key={link.path} className="relative group py-2">
+                    <Link
+                      to={link.path}
+                      className={cn(
+                        'text-sm font-medium transition-colors hover:text-primary relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-bottom-right after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100',
+                        location.pathname.startsWith('/tratamentos')
+                          ? 'text-primary after:scale-x-100'
+                          : 'text-muted-foreground',
+                      )}
+                    >
+                      {link.name}
+                    </Link>
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 pt-4">
+                      <div className="bg-white rounded-xl shadow-xl border p-4 w-[500px] grid grid-cols-2 gap-2 before:absolute before:-top-2 before:left-1/2 before:-translate-x-1/2 before:border-8 before:border-transparent before:border-b-white">
+                        {treatmentsList.map((t) => (
+                          <Link
+                            key={t.slug}
+                            to={`/tratamentos/${t.slug}`}
+                            className="block p-3 hover:bg-primary/5 rounded-lg text-sm text-foreground hover:text-primary transition-colors font-medium"
+                          >
+                            {t.title}
+                          </Link>
+                        ))}
+                        <div className="col-span-2 pt-3 mt-1 border-t">
+                          <Link
+                            to="/tratamentos"
+                            className="block text-center text-sm text-primary hover:underline font-medium"
+                          >
+                            Ver todos os tratamentos →
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
                   <Link
+                    key={link.path}
                     to={link.path}
                     className={cn(
                       'text-sm font-medium transition-colors hover:text-primary relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-bottom-right after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100',
-                      location.pathname.startsWith('/tratamentos')
+                      location.pathname === link.path
                         ? 'text-primary after:scale-x-100'
                         : 'text-muted-foreground',
                     )}
                   >
                     {link.name}
                   </Link>
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 pt-4">
-                    <div className="bg-white rounded-xl shadow-xl border p-4 w-[500px] grid grid-cols-2 gap-2 before:absolute before:-top-2 before:left-1/2 before:-translate-x-1/2 before:border-8 before:border-transparent before:border-b-white">
-                      {treatmentsList.map((t) => (
-                        <Link
-                          key={t.slug}
-                          to={`/tratamentos/${t.slug}`}
-                          className="block p-3 hover:bg-primary/5 rounded-lg text-sm text-foreground hover:text-primary transition-colors font-medium"
-                        >
-                          {t.title}
-                        </Link>
-                      ))}
-                      <div className="col-span-2 pt-3 mt-1 border-t">
-                        <Link
-                          to="/tratamentos"
-                          className="block text-center text-sm text-primary hover:underline font-medium"
-                        >
-                          Ver todos os tratamentos →
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  className={cn(
-                    'text-sm font-medium transition-colors hover:text-primary relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-bottom-right after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100',
-                    location.pathname === link.path
-                      ? 'text-primary after:scale-x-100'
-                      : 'text-muted-foreground',
-                  )}
-                >
-                  {link.name}
-                </Link>
-              ),
-            )}
-            <Button asChild className="rounded-full px-6 text-white hover:bg-primary/90">
-              <a href={settings.global_cta_link?.value || '#'} target="_blank" rel="noreferrer">
-                {settings.global_cta_text?.value || 'Agendar consulta online'}
-              </a>
-            </Button>
-          </nav>
-
-          {/* Mobile Nav */}
-          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-            <SheetTrigger asChild className="md:hidden">
-              <Button variant="ghost" size="icon" aria-label="Menu">
-                <Menu className="h-6 w-6" />
+                ),
+              )}
+              <Button asChild className="rounded-full px-6 text-white hover:bg-primary/90">
+                <a href={settings.global_cta_link?.value || '#'} target="_blank" rel="noreferrer">
+                  {settings.global_cta_text?.value || 'Agendar consulta online'}
+                </a>
               </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px] flex flex-col pt-12">
-              <SheetTitle className="sr-only">Menu de Navegação</SheetTitle>
-              <nav className="flex flex-col gap-6 text-lg font-serif mt-8">
-                {navLinks.map((link) => (
-                  <div key={link.path} className="flex flex-col gap-2">
-                    <Link
-                      to={link.path}
-                      className={cn(
-                        'transition-colors hover:text-primary font-medium',
-                        location.pathname === link.path ? 'text-primary' : 'text-muted-foreground',
-                      )}
-                    >
-                      {link.name}
-                    </Link>
-                    {link.name === 'Tratamentos' && (
-                      <div className="pl-4 flex flex-col gap-3 mt-2 border-l-2 border-primary/20">
-                        {treatmentsList.map((t) => (
-                          <Link
-                            key={t.slug}
-                            to={`/tratamentos/${t.slug}`}
-                            className="text-base text-muted-foreground hover:text-primary"
-                          >
-                            {t.title}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </nav>
-              <div className="mt-auto pb-8">
-                <Button asChild className="w-full rounded-full" size="lg">
-                  <a href={settings.global_cta_link?.value || '#'} target="_blank" rel="noreferrer">
-                    {settings.global_cta_text?.value || 'Agendar consulta online'}
-                  </a>
+            </nav>
+
+            {/* Mobile Nav */}
+            <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+              <SheetTrigger asChild className="md:hidden">
+                <Button variant="ghost" size="icon" aria-label="Menu">
+                  <Menu className="h-6 w-6" />
                 </Button>
-              </div>
-            </SheetContent>
-          </Sheet>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[300px] sm:w-[400px] flex flex-col pt-12">
+                <SheetTitle className="sr-only">Menu de Navegação</SheetTitle>
+                <nav className="flex flex-col gap-6 text-lg font-serif mt-8">
+                  {navLinks.map((link) => (
+                    <div key={link.path} className="flex flex-col gap-2">
+                      <Link
+                        to={link.path}
+                        className={cn(
+                          'transition-colors hover:text-primary font-medium',
+                          location.pathname === link.path
+                            ? 'text-primary'
+                            : 'text-muted-foreground',
+                        )}
+                      >
+                        {link.name}
+                      </Link>
+                      {link.name === 'Tratamentos' && (
+                        <div className="pl-4 flex flex-col gap-3 mt-2 border-l-2 border-primary/20">
+                          {treatmentsList.map((t) => (
+                            <Link
+                              key={t.slug}
+                              to={`/tratamentos/${t.slug}`}
+                              className="text-base text-muted-foreground hover:text-primary"
+                            >
+                              {t.title}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </nav>
+                <div className="mt-auto pb-8">
+                  <Button asChild className="w-full rounded-full" size="lg">
+                    <a
+                      href={settings.global_cta_link?.value || '#'}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {settings.global_cta_text?.value || 'Agendar consulta online'}
+                    </a>
+                  </Button>
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </header>
 

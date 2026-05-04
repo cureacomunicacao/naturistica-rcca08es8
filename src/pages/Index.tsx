@@ -69,7 +69,7 @@ const testimonialsBeatriz = [
   },
 ]
 
-function ImageWithFallback({ src, fallback, alt, ...props }: any) {
+function ImageWithFallback({ src, fallback, alt, className, title }: any) {
   const [error, setError] = useState(false)
   const [currentSrc, setCurrentSrc] = useState(src)
 
@@ -82,13 +82,14 @@ function ImageWithFallback({ src, fallback, alt, ...props }: any) {
     <img
       src={error ? fallback : currentSrc}
       alt={alt}
+      title={title}
+      className={className}
       onError={() => {
         if (!error) {
           setError(true)
           setCurrentSrc(fallback)
         }
       }}
-      {...props}
     />
   )
 }
@@ -168,7 +169,7 @@ export default function Index() {
     : 'https://img.usecurling.com/p/600/800?q=online%20consultation%20laptop&color=green'
 
   return (
-    <div className="flex flex-col gap-24 md:gap-32">
+    <div className="flex flex-col bg-white overflow-hidden text-foreground">
       <SEO
         title={settings.home_seo_title?.value || 'Saúde & Consciência | Naturistica'}
         description={
@@ -177,13 +178,18 @@ export default function Index() {
         }
       />
       {/* Hero Section */}
-      <section className="container pt-12 md:pt-20">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+      <section className="container relative pt-32 pb-24 md:pt-40 md:pb-32">
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[60%] bg-primary/5 rounded-[40%_60%_70%_30%/40%_50%_60%_50%] blur-3xl mix-blend-multiply" />
+          <div className="absolute top-[20%] -right-[10%] w-[40%] h-[50%] bg-secondary/40 rounded-[60%_40%_30%_70%/60%_30%_70%_40%] blur-3xl mix-blend-multiply" />
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-12 items-center relative z-10">
           <ScrollReveal className="space-y-8">
             <div className="space-y-4">
               <h1 className="text-5xl md:text-7xl font-bold leading-tight text-balance">
                 Saúde & <br />
-                <span className="text-primary/80 italic">Consciência</span>
+                <span className="text-primary/80 italic font-serif">Consciência</span>
               </h1>
               <p className="text-xl md:text-2xl text-muted-foreground font-serif text-balance">
                 quando a ciência encontra a ancestralidade.
@@ -194,7 +200,11 @@ export default function Index() {
               através de práticas integrativas, cannabis medicinal e psicoterapia.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button asChild size="lg" className="rounded-full text-base h-14 px-8 group">
+              <Button
+                asChild
+                size="lg"
+                className="rounded-full text-base h-14 px-8 group shadow-lg shadow-primary/20"
+              >
                 <a href={settings.home_hero_btn1_link?.value || '#'}>
                   {settings.home_hero_btn1_text?.value || 'Agendar consulta online'}
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -204,7 +214,7 @@ export default function Index() {
                 asChild
                 size="lg"
                 variant="outline"
-                className="rounded-full text-base h-14 px-8"
+                className="rounded-full text-base h-14 px-8 border-primary/20 hover:bg-primary/5"
               >
                 <Link to={settings.home_hero_btn2_link?.value || '/sobre'}>
                   {settings.home_hero_btn2_text?.value || 'Conheça nossa história'}
@@ -214,30 +224,30 @@ export default function Index() {
           </ScrollReveal>
           <ScrollReveal
             delay={200}
-            className="relative h-[500px] md:h-[600px] rounded-3xl overflow-hidden"
+            className="relative h-[500px] md:h-[600px] flex items-center justify-center"
           >
+            <div className="absolute inset-0 bg-primary/10 rounded-[40%_60%_70%_30%/40%_50%_60%_50%] rotate-6 scale-105 transition-all duration-700" />
             <ImageWithFallback
               src={heroImage}
               fallback="https://img.usecurling.com/p/800/1000?q=nature%20meditation&color=green"
               alt={heroAlt}
               title={settings.home_hero?.value || ''}
-              className="absolute inset-0 w-full h-full object-cover"
+              className="relative z-10 w-[90%] h-[90%] object-cover rounded-[30%_70%_70%_30%/30%_30%_70%_70%] shadow-xl transition-all duration-1000 hover:rounded-[50%_50%_30%_70%/50%_50%_70%_30%]"
             />
-            <div className="absolute inset-0 bg-primary/10 mix-blend-multiply" />
           </ScrollReveal>
         </div>
       </section>
 
       {/* Featured Treatment Section */}
       {featuredTreatment && (
-        <section className="container py-12">
+        <section className="container py-12 relative z-10">
           <ScrollReveal>
-            <Card className="bg-primary/5 border-none shadow-sm overflow-hidden">
+            <Card className="bg-primary/5 border-none shadow-sm overflow-hidden rounded-[2rem]">
               <div className="grid md:grid-cols-2 gap-8 items-center p-8 md:p-12">
                 <div className="space-y-6">
                   <Badge
                     variant="outline"
-                    className="bg-primary/10 text-primary hover:bg-primary/10 border-none"
+                    className="bg-white text-primary border-none shadow-sm px-4 py-1 text-sm rounded-full"
                   >
                     Tratamento em Destaque
                   </Badge>
@@ -247,12 +257,12 @@ export default function Index() {
                       {featuredTreatment.seo_description}
                     </p>
                   )}
-                  <Button asChild className="rounded-full">
+                  <Button asChild className="rounded-full shadow-md">
                     <Link to={`/tratamentos/${featuredTreatment.slug}`}>Saiba mais</Link>
                   </Button>
                 </div>
                 {featuredTreatment.image && (
-                  <div className="relative h-[300px] rounded-2xl overflow-hidden">
+                  <div className="relative h-[300px] rounded-[30%_70%_70%_30%/30%_30%_70%_70%] overflow-hidden">
                     <ImageWithFallback
                       src={pb.files.getURL(featuredTreatment, featuredTreatment.image)}
                       fallback={`https://img.usecurling.com/p/600/400?q=${encodeURIComponent(featuredTreatment.title)}&color=green`}
@@ -268,23 +278,38 @@ export default function Index() {
       )}
 
       {/* Treatments Section */}
-      <section className="bg-white/50 py-24 overflow-hidden">
-        <div className="container mb-16">
+      <section className="relative py-24 bg-primary/5 mt-12">
+        <div className="absolute top-0 left-0 w-full overflow-hidden leading-none rotate-180 -mt-[1px]">
+          <svg
+            className="relative block w-[calc(100%+1.3px)] h-[50px] lg:h-[80px]"
+            data-name="Layer 1"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1200 120"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.08,130.83,123.8,188.4,107.4C236.4,93.5,280.4,70.5,321.39,56.44Z"
+              className="fill-white"
+            ></path>
+          </svg>
+        </div>
+
+        <div className="container mb-16 pt-8">
           <ScrollReveal>
             <h2 className="text-3xl md:text-4xl font-bold text-center">Tratamento de:</h2>
           </ScrollReveal>
         </div>
 
         {treatments.length > 0 && (
-          <div className="flex overflow-hidden group w-full">
+          <div className="flex overflow-hidden group w-full pb-8">
             <div className="flex shrink-0 items-center gap-6 px-3 animate-marquee group-hover:[animation-play-state:paused]">
               {treatments.map((t) => {
                 const Icon = iconMap[t.slug] || Activity
                 return (
                   <Link key={t.id} to={`/tratamentos/${t.slug}`} className="w-48 shrink-0">
-                    <Card className="bg-transparent border-none shadow-none text-center group/card cursor-pointer hover:bg-white/80 transition-colors rounded-2xl h-full">
+                    <Card className="bg-white border-none shadow-sm text-center group/card cursor-pointer hover:shadow-md transition-all rounded-[2rem] h-full">
                       <CardContent className="p-6 flex flex-col items-center gap-4">
-                        <div className="p-4 rounded-full bg-primary/10 text-primary group-hover/card:bg-primary group-hover/card:text-primary-foreground transition-colors">
+                        <div className="p-4 rounded-[40%_60%_70%_30%/40%_50%_60%_50%] bg-primary/10 text-primary group-hover/card:bg-primary group-hover/card:text-primary-foreground transition-colors">
                           <Icon className="w-8 h-8 stroke-[1.5]" />
                         </div>
                         <span className="font-medium text-lg text-balance">{t.title}</span>
@@ -302,9 +327,9 @@ export default function Index() {
                 const Icon = iconMap[t.slug] || Activity
                 return (
                   <Link key={`${t.id}-dup`} to={`/tratamentos/${t.slug}`} className="w-48 shrink-0">
-                    <Card className="bg-transparent border-none shadow-none text-center group/card cursor-pointer hover:bg-white/80 transition-colors rounded-2xl h-full">
+                    <Card className="bg-white border-none shadow-sm text-center group/card cursor-pointer hover:shadow-md transition-all rounded-[2rem] h-full">
                       <CardContent className="p-6 flex flex-col items-center gap-4">
-                        <div className="p-4 rounded-full bg-primary/10 text-primary group-hover/card:bg-primary group-hover/card:text-primary-foreground transition-colors">
+                        <div className="p-4 rounded-[40%_60%_70%_30%/40%_50%_60%_50%] bg-primary/10 text-primary group-hover/card:bg-primary group-hover/card:text-primary-foreground transition-colors">
                           <Icon className="w-8 h-8 stroke-[1.5]" />
                         </div>
                         <span className="font-medium text-lg text-balance">{t.title}</span>
@@ -316,10 +341,25 @@ export default function Index() {
             </div>
           </div>
         )}
+
+        <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none -mb-[1px]">
+          <svg
+            className="relative block w-[calc(100%+1.3px)] h-[50px] lg:h-[80px]"
+            data-name="Layer 1"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1200 120"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.08,130.83,123.8,188.4,107.4C236.4,93.5,280.4,70.5,321.39,56.44Z"
+              className="fill-white"
+            ></path>
+          </svg>
+        </div>
       </section>
 
       {/* Philosophy Section */}
-      <section className="container">
+      <section className="container py-24">
         <ScrollReveal className="max-w-4xl mx-auto text-center space-y-8">
           <h2
             className="text-3xl md:text-5xl font-bold text-balance mb-12"
@@ -341,8 +381,9 @@ export default function Index() {
       </section>
 
       {/* Testimonials */}
-      <section className="bg-primary/5 py-24 overflow-hidden">
-        <div className="container">
+      <section className="py-24 bg-secondary/20 rounded-[4rem] mx-4 md:mx-12 overflow-hidden relative">
+        <div className="absolute inset-0 bg-[url('https://img.usecurling.com/p/800/800?q=leaves%20pattern&color=green')] opacity-5 mix-blend-overlay pointer-events-none" />
+        <div className="container relative z-10">
           <ScrollReveal>
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
               {settings.home_testimonials_title?.value ||
@@ -353,14 +394,14 @@ export default function Index() {
           <div className="grid md:grid-cols-2 gap-12">
             {/* Dr. Felipe */}
             <ScrollReveal delay={100} className="space-y-6">
-              <h3 className="text-xl font-serif text-primary border-b border-primary/20 pb-4">
+              <h3 className="text-xl font-serif text-primary border-b border-primary/10 pb-4">
                 Pacientes Dr. Felipe Zamboni
               </h3>
               <Carousel className="w-full">
                 <CarouselContent>
                   {activeFelipeTestimonials.map((t, i) => (
                     <CarouselItem key={i}>
-                      <Card className="bg-background border-none shadow-sm h-full">
+                      <Card className="bg-white border-none shadow-sm rounded-3xl h-full">
                         <CardContent className="p-8 space-y-4 flex flex-col h-full justify-between">
                           <p className="text-muted-foreground italic text-lg leading-relaxed">
                             "{t.text || t.content}"
@@ -382,22 +423,22 @@ export default function Index() {
                   ))}
                 </CarouselContent>
                 <div className="flex justify-end gap-2 mt-4">
-                  <CarouselPrevious className="relative inset-auto translate-y-0" />
-                  <CarouselNext className="relative inset-auto translate-y-0" />
+                  <CarouselPrevious className="relative inset-auto translate-y-0 bg-white hover:bg-white border-none shadow-sm" />
+                  <CarouselNext className="relative inset-auto translate-y-0 bg-white hover:bg-white border-none shadow-sm" />
                 </div>
               </Carousel>
             </ScrollReveal>
 
             {/* Dra. Beatriz */}
             <ScrollReveal delay={200} className="space-y-6">
-              <h3 className="text-xl font-serif text-primary border-b border-primary/20 pb-4">
+              <h3 className="text-xl font-serif text-primary border-b border-primary/10 pb-4">
                 Pacientes Dra. Beatriz Mulari
               </h3>
               <Carousel className="w-full">
                 <CarouselContent>
                   {activeBeatrizTestimonials.map((t, i) => (
                     <CarouselItem key={i}>
-                      <Card className="bg-background border-none shadow-sm h-full">
+                      <Card className="bg-white border-none shadow-sm rounded-3xl h-full">
                         <CardContent className="p-8 space-y-4 flex flex-col h-full justify-between">
                           <p className="text-muted-foreground italic text-lg leading-relaxed">
                             "{t.text || t.content}"
@@ -419,8 +460,8 @@ export default function Index() {
                   ))}
                 </CarouselContent>
                 <div className="flex justify-end gap-2 mt-4">
-                  <CarouselPrevious className="relative inset-auto translate-y-0" />
-                  <CarouselNext className="relative inset-auto translate-y-0" />
+                  <CarouselPrevious className="relative inset-auto translate-y-0 bg-white hover:bg-white border-none shadow-sm" />
+                  <CarouselNext className="relative inset-auto translate-y-0 bg-white hover:bg-white border-none shadow-sm" />
                 </div>
               </Carousel>
             </ScrollReveal>
@@ -442,7 +483,7 @@ export default function Index() {
                     'Artigos, reflexões e informações sobre saúde integrativa e terapias naturais.'}
                 </p>
               </div>
-              <Button variant="outline" asChild className="rounded-full">
+              <Button variant="outline" asChild className="rounded-full shadow-sm">
                 <Link to={settings.home_blog_btn_link?.value || '/blog'}>
                   {settings.home_blog_btn_text?.value || 'Ver todos os artigos'}
                 </Link>
@@ -451,8 +492,8 @@ export default function Index() {
             <div className="grid md:grid-cols-3 gap-8">
               {posts.map((post) => (
                 <Link key={post.id} to={`/blog/${post.slug}`} className="group">
-                  <Card className="h-full bg-background border-none shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col">
-                    <div className="relative h-48 overflow-hidden">
+                  <Card className="h-full bg-white border-none shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col rounded-[2rem]">
+                    <div className="relative h-48 overflow-hidden rounded-b-[30%] bg-primary/5">
                       <ImageWithFallback
                         src={getPostImageUrl(post)}
                         fallback={`https://img.usecurling.com/p/600/400?q=${encodeURIComponent(post.title)}&color=green`}
@@ -460,11 +501,11 @@ export default function Index() {
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       />
                     </div>
-                    <CardContent className="p-6 flex-1 flex flex-col">
+                    <CardContent className="p-8 flex-1 flex flex-col">
                       {post.category && (
                         <Badge
                           variant="secondary"
-                          className="w-fit mb-4 bg-primary/10 text-primary hover:bg-primary/20"
+                          className="w-fit mb-4 bg-primary/10 text-primary hover:bg-primary/20 border-none px-3"
                         >
                           {post.category}
                         </Badge>
@@ -487,26 +528,30 @@ export default function Index() {
       )}
 
       {/* Consultation Info */}
-      <section className="container pb-24">
-        <div className="bg-white rounded-3xl p-8 md:p-16 shadow-sm border border-border/50 max-w-5xl mx-auto">
+      <section className="container pb-12">
+        <div className="bg-primary/5 rounded-[3rem] p-8 md:p-16 border-none max-w-5xl mx-auto shadow-sm">
           <ScrollReveal className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
               <h2 className="text-3xl md:text-4xl font-bold text-balance">{expTitle}</h2>
               <ul className="space-y-4 text-muted-foreground">
                 {expItems.map((item: string, idx: number) => (
                   <li key={idx} className="flex items-start gap-3">
-                    <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary mt-1 shrink-0">
+                    <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-primary mt-1 shrink-0">
                       ✓
                     </div>
                     <p>{item.trim()}</p>
                   </li>
                 ))}
               </ul>
-              <Button asChild size="lg" className="rounded-full w-full sm:w-auto h-14 px-8 mt-4">
+              <Button
+                asChild
+                size="lg"
+                className="rounded-full w-full sm:w-auto h-14 px-8 mt-4 shadow-md"
+              >
                 <a href={settings.expectations_button_link?.value || '#'}>{expBtnText}</a>
               </Button>
             </div>
-            <div className="relative h-[400px] rounded-2xl overflow-hidden hidden md:block">
+            <div className="relative h-[400px] rounded-[40%_60%_70%_30%/40%_50%_60%_50%] overflow-hidden hidden md:block shadow-lg">
               <ImageWithFallback
                 src={expImage}
                 fallback="https://img.usecurling.com/p/600/800?q=doctor&color=green"

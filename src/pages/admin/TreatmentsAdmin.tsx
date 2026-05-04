@@ -21,8 +21,18 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { RichTextEditor } from '@/components/RichTextEditor'
 import { useToast } from '@/hooks/use-toast'
-import { Pencil } from 'lucide-react'
+import { Pencil, Trash2 } from 'lucide-react'
 import { useRealtime } from '@/hooks/use-realtime'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 
 export default function TreatmentsAdmin() {
   const [treatments, setTreatments] = useState<any[]>([])
@@ -41,6 +51,7 @@ export default function TreatmentsAdmin() {
   const [file, setFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+  const [itemToDelete, setItemToDelete] = useState<any>(null)
 
   const fetchTreatments = async () => {
     const records = await pb.collection('treatments').getFullList({ sort: 'title' })
@@ -197,6 +208,19 @@ export default function TreatmentsAdmin() {
     }
   }
 
+  const handleDelete = async () => {
+    if (!itemToDelete) return
+    try {
+      await pb.collection('treatments').delete(itemToDelete.id)
+      toast({ title: 'Sucesso', description: 'Tratamento excluído.' })
+      fetchTreatments()
+    } catch (error) {
+      toast({ title: 'Erro', description: 'Falha ao excluir tratamento.', variant: 'destructive' })
+    } finally {
+      setItemToDelete(null)
+    }
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -221,15 +245,45 @@ export default function TreatmentsAdmin() {
                 <TableCell className="font-medium">{t.title}</TableCell>
                 <TableCell>{t.slug}</TableCell>
                 <TableCell>
-                  <Button variant="ghost" size="icon" onClick={() => handleEdit(t)}>
-                    <Pencil className="w-4 h-4" />
-                  </Button>
+                  <div className="flex items-center gap-2">
+                    <Button variant="ghost" size="icon" onClick={() => handleEdit(t)}>
+                      <Pencil className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => setItemToDelete(t)}
+                      className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </div>
+
+      <AlertDialog open={!!itemToDelete} onOpenChange={(open) => !open && setItemToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja excluir este tratamento? Esta ação não pode ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDelete}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Confirmar
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
