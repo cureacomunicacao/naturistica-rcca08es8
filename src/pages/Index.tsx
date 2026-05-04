@@ -401,8 +401,8 @@ export default function Index() {
                 <CarouselContent>
                   {activeFelipeTestimonials.map((t, i) => (
                     <CarouselItem key={i}>
-                      <Card className="bg-white border-none shadow-sm rounded-3xl h-full">
-                        <CardContent className="p-8 space-y-4 flex flex-col h-full justify-between">
+                      <Card className="bg-white border-none shadow-sm rounded-3xl">
+                        <CardContent className="p-6 md:p-8 space-y-4 flex flex-col justify-between">
                           <p className="text-muted-foreground italic text-lg leading-relaxed">
                             "{t.text || t.content}"
                           </p>
@@ -438,8 +438,8 @@ export default function Index() {
                 <CarouselContent>
                   {activeBeatrizTestimonials.map((t, i) => (
                     <CarouselItem key={i}>
-                      <Card className="bg-white border-none shadow-sm rounded-3xl h-full">
-                        <CardContent className="p-8 space-y-4 flex flex-col h-full justify-between">
+                      <Card className="bg-white border-none shadow-sm rounded-3xl">
+                        <CardContent className="p-6 md:p-8 space-y-4 flex flex-col justify-between">
                           <p className="text-muted-foreground italic text-lg leading-relaxed">
                             "{t.text || t.content}"
                           </p>

@@ -6,8 +6,8 @@
 
 @layer base {
   :root {
-    /* Soft Cream Background: #fdf6ee -> HSL 32, 73%, 96% */
-    --background: 32 73% 96%;
+    /* Clean White Background */
+    --background: 0 0% 100%;
     /* Dark charcoal text for readability */
     --foreground: 120 10% 20%;
 

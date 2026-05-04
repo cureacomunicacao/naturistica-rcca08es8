@@ -81,18 +81,23 @@ export default function Layout() {
       <header
         className={cn(
           'fixed top-0 w-full z-50 transition-all duration-500',
-          isScrolled ? 'py-4' : 'py-6',
+          isScrolled ? 'py-3' : 'py-6',
         )}
       >
-        <div className={cn('container transition-all duration-500', isScrolled ? 'max-w-5xl' : '')}>
-          <div
-            className={cn(
-              'flex items-center justify-between transition-all duration-500',
-              isScrolled
-                ? 'glass-header rounded-full px-8 py-3 shadow-sm border border-border/50'
-                : 'px-4',
-            )}
-          >
+        {/* Organic Wavy Background */}
+        <div className="absolute inset-x-0 top-0 h-full bg-white pointer-events-none z-[-1]"></div>
+        <svg
+          className="absolute inset-x-0 top-full w-full h-[30px] text-white pointer-events-none z-[-1] drop-shadow-[0_4px_4px_rgba(0,0,0,0.03)]"
+          preserveAspectRatio="none"
+          viewBox="0 0 1440 30"
+          fill="currentColor"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M0,0 C480,40 960,-20 1440,15 L1440,0 L0,0 Z" />
+        </svg>
+
+        <div className="container relative z-10 transition-all duration-500">
+          <div className="flex items-center justify-between px-4">
             <Link to="/" className="flex items-center gap-2 group">
               {settings?.global_logo?.image ? (
                 <img
