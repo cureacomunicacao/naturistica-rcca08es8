@@ -7,6 +7,12 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { RichTextEditor } from '@/components/RichTextEditor'
 import { Separator } from '@/components/ui/separator'
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from '@/components/ui/accordion'
 import { toast } from 'sonner'
 import { Settings, Globe, Home, Info, Stethoscope, FileText, MessageSquare } from 'lucide-react'
 import pb from '@/lib/pocketbase/client'
