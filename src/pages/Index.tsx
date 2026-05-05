@@ -429,13 +429,42 @@ export default function Index() {
               <h3 className="text-xl font-serif text-primary border-b border-primary/10 pb-4">
                 Pacientes Dr. Felipe Zamboni
               </h3>
-              <Carousel className="w-full">
+
+              {/* Mobile: Single-column stack */}
+              <div className="flex flex-col gap-6 md:hidden">
+                {activeFelipeTestimonials.map((t, i) => (
+                  <Card
+                    key={i}
+                    className="w-full bg-white border-none shadow-sm rounded-3xl flex flex-col h-full"
+                  >
+                    <CardContent className="flex-1 p-6 flex flex-col">
+                      <p className="text-muted-foreground italic text-base leading-relaxed break-words mb-6 grow">
+                        "{t.content || t.text}"
+                      </p>
+                      <div className="flex items-center gap-4 mt-auto shrink-0">
+                        {t.image && t.collectionId && t.id ? (
+                          <ImageWithFallback
+                            src={pb.files.getURL(t, t.image)}
+                            fallback="https://img.usecurling.com/ppl/thumbnail"
+                            alt={t.patient_name || t.name}
+                            className="w-12 h-12 rounded-full object-cover shrink-0 aspect-square"
+                          />
+                        ) : null}
+                        <p className="font-semibold text-base">{t.patient_name || t.name}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {/* Desktop: Carousel */}
+              <Carousel className="w-full hidden md:block">
                 <CarouselContent className="items-stretch">
                   {activeFelipeTestimonials.map((t, i) => (
-                    <CarouselItem key={i} className="flex">
-                      <Card className="w-full bg-white border-none shadow-sm rounded-3xl flex flex-col">
-                        <CardContent className="flex-1 p-6 md:p-8 flex flex-col justify-between">
-                          <p className="text-muted-foreground italic text-base md:text-lg leading-relaxed break-words mb-4">
+                    <CarouselItem key={i} className="h-auto">
+                      <Card className="w-full h-full bg-white border-none shadow-sm rounded-3xl flex flex-col">
+                        <CardContent className="flex-1 p-8 flex flex-col">
+                          <p className="text-muted-foreground italic text-lg leading-relaxed break-words mb-6 grow">
                             "{t.content || t.text}"
                           </p>
                           <div className="flex items-center gap-4 mt-auto shrink-0">
@@ -444,7 +473,7 @@ export default function Index() {
                                 src={pb.files.getURL(t, t.image)}
                                 fallback="https://img.usecurling.com/ppl/thumbnail"
                                 alt={t.patient_name || t.name}
-                                className="w-12 h-12 rounded-full object-cover shrink-0"
+                                className="w-12 h-12 rounded-full object-cover shrink-0 aspect-square"
                               />
                             ) : null}
                             <p className="font-semibold text-base">{t.patient_name || t.name}</p>
@@ -466,13 +495,42 @@ export default function Index() {
               <h3 className="text-xl font-serif text-primary border-b border-primary/10 pb-4">
                 Pacientes Dra. Beatriz Mulari
               </h3>
-              <Carousel className="w-full">
+
+              {/* Mobile: Single-column stack */}
+              <div className="flex flex-col gap-6 md:hidden">
+                {activeBeatrizTestimonials.map((t, i) => (
+                  <Card
+                    key={i}
+                    className="w-full bg-white border-none shadow-sm rounded-3xl flex flex-col h-full"
+                  >
+                    <CardContent className="flex-1 p-6 flex flex-col">
+                      <p className="text-muted-foreground italic text-base leading-relaxed break-words mb-6 grow">
+                        "{t.content || t.text}"
+                      </p>
+                      <div className="flex items-center gap-4 mt-auto shrink-0">
+                        {t.image && t.collectionId && t.id ? (
+                          <ImageWithFallback
+                            src={pb.files.getURL(t, t.image)}
+                            fallback="https://img.usecurling.com/ppl/thumbnail"
+                            alt={t.patient_name || t.name}
+                            className="w-12 h-12 rounded-full object-cover shrink-0 aspect-square"
+                          />
+                        ) : null}
+                        <p className="font-semibold text-base">{t.patient_name || t.name}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {/* Desktop: Carousel */}
+              <Carousel className="w-full hidden md:block">
                 <CarouselContent className="items-stretch">
                   {activeBeatrizTestimonials.map((t, i) => (
-                    <CarouselItem key={i} className="flex">
-                      <Card className="w-full bg-white border-none shadow-sm rounded-3xl flex flex-col">
-                        <CardContent className="flex-1 p-6 md:p-8 flex flex-col justify-between">
-                          <p className="text-muted-foreground italic text-base md:text-lg leading-relaxed break-words mb-4">
+                    <CarouselItem key={i} className="h-auto">
+                      <Card className="w-full h-full bg-white border-none shadow-sm rounded-3xl flex flex-col">
+                        <CardContent className="flex-1 p-8 flex flex-col">
+                          <p className="text-muted-foreground italic text-lg leading-relaxed break-words mb-6 grow">
                             "{t.content || t.text}"
                           </p>
                           <div className="flex items-center gap-4 mt-auto shrink-0">
@@ -481,7 +539,7 @@ export default function Index() {
                                 src={pb.files.getURL(t, t.image)}
                                 fallback="https://img.usecurling.com/ppl/thumbnail"
                                 alt={t.patient_name || t.name}
-                                className="w-12 h-12 rounded-full object-cover shrink-0"
+                                className="w-12 h-12 rounded-full object-cover shrink-0 aspect-square"
                               />
                             ) : null}
                             <p className="font-semibold text-base">{t.patient_name || t.name}</p>
