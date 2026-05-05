@@ -176,8 +176,8 @@ export default function TestimonialsAdmin() {
         </Button>
       </div>
 
-      <div className="bg-white border rounded-md">
-        <Table>
+      <div className="bg-white border rounded-md overflow-x-auto">
+        <Table className="min-w-[600px]">
           <TableHeader>
             <TableRow>
               <TableHead>Paciente</TableHead>

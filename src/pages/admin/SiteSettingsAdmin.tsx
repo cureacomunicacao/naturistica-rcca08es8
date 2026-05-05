@@ -45,9 +45,9 @@ export default function SiteSettingsAdmin() {
       'expectations_button_link',
       'home_philosophy_title',
       'home_philosophy_text',
-      'home_testimonials_title',
-      'testimonials_felipe_title',
-      'testimonials_beatriz_title',
+      'testimonials_title',
+      'testimonials_subtitle_felipe',
+      'testimonials_subtitle_beatriz',
       'featured_treatment_badge',
       'featured_treatment_btn',
       'global_brand_name',
@@ -663,23 +663,25 @@ export default function SiteSettingsAdmin() {
                 <div className="space-y-2">
                   <Label>Título dos Depoimentos</Label>
                   <Input
-                    value={formData['home_testimonials_title']?.value || ''}
-                    onChange={(e) => handleChange('home_testimonials_title', e.target.value)}
+                    value={formData['testimonials_title']?.value || ''}
+                    onChange={(e) => handleChange('testimonials_title', e.target.value)}
                   />
                 </div>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Subtítulo Dr. Felipe</Label>
                     <Input
-                      value={formData['testimonials_felipe_title']?.value || ''}
-                      onChange={(e) => handleChange('testimonials_felipe_title', e.target.value)}
+                      value={formData['testimonials_subtitle_felipe']?.value || ''}
+                      onChange={(e) => handleChange('testimonials_subtitle_felipe', e.target.value)}
                     />
                   </div>
                   <div className="space-y-2">
                     <Label>Subtítulo Dra. Beatriz</Label>
                     <Input
-                      value={formData['testimonials_beatriz_title']?.value || ''}
-                      onChange={(e) => handleChange('testimonials_beatriz_title', e.target.value)}
+                      value={formData['testimonials_subtitle_beatriz']?.value || ''}
+                      onChange={(e) =>
+                        handleChange('testimonials_subtitle_beatriz', e.target.value)
+                      }
                     />
                   </div>
                 </div>
@@ -687,9 +689,9 @@ export default function SiteSettingsAdmin() {
                   disabled={loading}
                   onClick={() =>
                     handleSave([
-                      'home_testimonials_title',
-                      'testimonials_felipe_title',
-                      'testimonials_beatriz_title',
+                      'testimonials_title',
+                      'testimonials_subtitle_felipe',
+                      'testimonials_subtitle_beatriz',
                     ])
                   }
                 >

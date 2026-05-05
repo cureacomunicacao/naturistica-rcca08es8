@@ -400,7 +400,7 @@ export default function Index() {
         <div className="container px-4 md:px-8 relative z-10">
           <ScrollReveal>
             <EditableText
-              settingKey="home_testimonials_title"
+              settingKey="testimonials_title"
               defaultText="Conheça histórias de alguns de nossos pacientes"
               as="h2"
               className="text-3xl md:text-4xl font-bold text-center mb-12 md:mb-16"
@@ -412,7 +412,7 @@ export default function Index() {
             {testimonialsFelipeDb.length > 0 && (
               <ScrollReveal delay={100} className="space-y-6">
                 <EditableText
-                  settingKey="testimonials_felipe_title"
+                  settingKey="testimonials_subtitle_felipe"
                   defaultText="Pacientes Dr. Felipe Zamboni"
                   as="h3"
                   className="text-xl font-serif text-primary border-b border-primary/10 pb-4"
@@ -483,7 +483,7 @@ export default function Index() {
             {testimonialsBeatrizDb.length > 0 && (
               <ScrollReveal delay={200} className="space-y-6">
                 <EditableText
-                  settingKey="testimonials_beatriz_title"
+                  settingKey="testimonials_subtitle_beatriz"
                   defaultText="Pacientes Dra. Beatriz Mulari"
                   as="h3"
                   className="text-xl font-serif text-primary border-b border-primary/10 pb-4"
