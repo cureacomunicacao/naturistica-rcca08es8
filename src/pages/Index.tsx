@@ -27,6 +27,7 @@ import { SEO } from '@/components/SEO'
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { getPosts, type PostRecord, getPostImageUrl } from '@/services/posts'
+import { EditableText } from '@/components/EditableText'
 
 const iconMap: Record<string, any> = {
   ansiedade: Wind,
@@ -187,18 +188,30 @@ export default function Index() {
         <div className="grid md:grid-cols-2 gap-12 items-center relative z-10">
           <ScrollReveal className="space-y-8">
             <div className="space-y-4">
-              <h1 className="text-5xl md:text-7xl font-bold leading-tight text-balance">
-                Saúde & <br />
-                <span className="text-primary/80 italic font-serif">Consciência</span>
-              </h1>
-              <p className="text-xl md:text-2xl text-muted-foreground font-serif text-balance">
-                quando a ciência encontra a ancestralidade.
-              </p>
+              <EditableText
+                settingKey="home_hero_title"
+                defaultText={
+                  "Saúde & <br /><span class='text-primary/80 italic font-serif'>Consciência</span>"
+                }
+                as="h1"
+                className="text-5xl md:text-7xl font-bold leading-tight text-balance"
+                isHtml={true}
+                multiline={true}
+              />
+              <EditableText
+                settingKey="home_hero_subtitle"
+                defaultText="quando a ciência encontra a ancestralidade."
+                as="p"
+                className="text-xl md:text-2xl text-muted-foreground font-serif text-balance"
+              />
             </div>
-            <p className="text-lg leading-relaxed text-muted-foreground max-w-lg">
-              Somos uma clínica médica dedicada a resgatar o equilíbrio natural do seu corpo e mente
-              através de práticas integrativas, cannabis medicinal e psicoterapia.
-            </p>
+            <EditableText
+              settingKey="home_hero_desc"
+              defaultText="Somos uma clínica médica dedicada a resgatar o equilíbrio natural do seu corpo e mente através de práticas integrativas, cannabis medicinal e psicoterapia."
+              as="p"
+              className="text-lg leading-relaxed text-muted-foreground max-w-lg"
+              multiline={true}
+            />
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Button
                 asChild
@@ -206,7 +219,11 @@ export default function Index() {
                 className="rounded-full text-base h-14 px-8 group shadow-lg shadow-primary/20"
               >
                 <a href={settings.home_hero_btn1_link?.value || '#'}>
-                  {settings.home_hero_btn1_text?.value || 'Agendar consulta online'}
+                  <EditableText
+                    settingKey="home_hero_btn1_text"
+                    defaultText="Agendar consulta online"
+                    as="span"
+                  />
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </a>
               </Button>
@@ -217,7 +234,11 @@ export default function Index() {
                 className="rounded-full text-base h-14 px-8 border-primary/20 hover:bg-primary/5"
               >
                 <Link to={settings.home_hero_btn2_link?.value || '/sobre'}>
-                  {settings.home_hero_btn2_text?.value || 'Conheça nossa história'}
+                  <EditableText
+                    settingKey="home_hero_btn2_text"
+                    defaultText="Conheça nossa história"
+                    as="span"
+                  />
                 </Link>
               </Button>
             </div>
@@ -296,7 +317,12 @@ export default function Index() {
 
         <div className="container mb-16 pt-8">
           <ScrollReveal>
-            <h2 className="text-3xl md:text-4xl font-bold text-center">Tratamento de:</h2>
+            <EditableText
+              settingKey="home_treatments_title"
+              defaultText="Tratamento de:"
+              as="h2"
+              className="text-3xl md:text-4xl font-bold text-center"
+            />
           </ScrollReveal>
         </div>
 
@@ -361,21 +387,25 @@ export default function Index() {
       {/* Philosophy Section */}
       <section className="container py-24">
         <ScrollReveal className="max-w-4xl mx-auto text-center space-y-8">
-          <h2
+          <EditableText
+            settingKey="home_philosophy_title"
+            defaultText={
+              'A saúde em que acreditamos: <br /><span class="italic font-normal text-primary">retorno ao o que você já é</span>'
+            }
+            as="h2"
             className="text-3xl md:text-5xl font-bold text-balance mb-12"
-            dangerouslySetInnerHTML={{
-              __html:
-                settings.home_philosophy_title?.value ||
-                'A saúde em que acreditamos: <br /><span class="italic font-normal text-primary">retorno ao o que você já é</span>',
-            }}
+            isHtml={true}
+            multiline={true}
           />
-          <div
+          <EditableText
+            settingKey="home_philosophy_text"
+            defaultText={
+              '<p>Acreditamos que a verdadeira saúde não é a ausência de doenças, mas um estado de profundo alinhamento entre corpo, mente e natureza. Nossa abordagem rompe com a visão fragmentada da medicina tradicional.</p><p>Ao unir os conhecimentos milenares da Ayurveda e do uso ritualístico de plantas professoras com o rigor da ciência moderna, buscamos ir à raiz do seu sofrimento.</p><p>O fim da separação mente-corpo é o início da sua cura. Nós guiamos você nesse caminho de volta para casa, para a sua essência mais pura e equilibrada.</p>'
+            }
+            as="div"
             className="space-y-6 text-lg md:text-xl leading-relaxed text-muted-foreground text-left md:text-center"
-            dangerouslySetInnerHTML={{
-              __html:
-                settings.home_philosophy_text?.value ||
-                '<p>Acreditamos que a verdadeira saúde não é a ausência de doenças, mas um estado de profundo alinhamento entre corpo, mente e natureza. Nossa abordagem rompe com a visão fragmentada da medicina tradicional.</p><p>Ao unir os conhecimentos milenares da Ayurveda e do uso ritualístico de plantas professoras com o rigor da ciência moderna, buscamos ir à raiz do seu sofrimento.</p><p>O fim da separação mente-corpo é o início da sua cura. Nós guiamos você nesse caminho de volta para casa, para a sua essência mais pura e equilibrada.</p>',
-            }}
+            isHtml={true}
+            multiline={true}
           />
         </ScrollReveal>
       </section>
@@ -385,10 +415,12 @@ export default function Index() {
         <div className="absolute inset-0 bg-[url('https://img.usecurling.com/p/800/800?q=leaves%20pattern&color=green')] opacity-5 mix-blend-overlay pointer-events-none" />
         <div className="container relative z-10">
           <ScrollReveal>
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
-              {settings.home_testimonials_title?.value ||
-                'Conheça histórias de alguns de nossos pacientes'}
-            </h2>
+            <EditableText
+              settingKey="home_testimonials_title"
+              defaultText="Conheça histórias de alguns de nossos pacientes"
+              as="h2"
+              className="text-3xl md:text-4xl font-bold text-center mb-16"
+            />
           </ScrollReveal>
 
           <div className="grid md:grid-cols-2 gap-12">
@@ -475,17 +507,27 @@ export default function Index() {
           <ScrollReveal>
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
               <div className="space-y-4">
-                <h2 className="text-3xl md:text-4xl font-bold">
-                  {settings.home_blog_title?.value || 'Nosso Blog'}
-                </h2>
-                <p className="text-muted-foreground text-lg max-w-2xl">
-                  {settings.home_blog_desc?.value ||
-                    'Artigos, reflexões e informações sobre saúde integrativa e terapias naturais.'}
-                </p>
+                <EditableText
+                  settingKey="home_blog_title"
+                  defaultText="Nosso Blog"
+                  as="h2"
+                  className="text-3xl md:text-4xl font-bold"
+                />
+                <EditableText
+                  settingKey="home_blog_desc"
+                  defaultText="Artigos, reflexões e informações sobre saúde integrativa e terapias naturais."
+                  as="p"
+                  className="text-muted-foreground text-lg max-w-2xl"
+                  multiline={true}
+                />
               </div>
               <Button variant="outline" asChild className="rounded-full shadow-sm">
                 <Link to={settings.home_blog_btn_link?.value || '/blog'}>
-                  {settings.home_blog_btn_text?.value || 'Ver todos os artigos'}
+                  <EditableText
+                    settingKey="home_blog_btn_text"
+                    defaultText="Ver todos os artigos"
+                    as="span"
+                  />
                 </Link>
               </Button>
             </div>
@@ -532,23 +574,41 @@ export default function Index() {
         <div className="bg-primary/5 rounded-[3rem] p-8 md:p-16 border-none max-w-5xl mx-auto shadow-sm">
           <ScrollReveal className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
-              <h2 className="text-3xl md:text-4xl font-bold text-balance">{expTitle}</h2>
-              <ul className="space-y-4 text-muted-foreground">
-                {expItems.map((item: string, idx: number) => (
-                  <li key={idx} className="flex items-start gap-3">
-                    <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-primary mt-1 shrink-0">
-                      ✓
-                    </div>
-                    <p>{item.trim()}</p>
-                  </li>
-                ))}
-              </ul>
+              <EditableText
+                settingKey="expectations_title"
+                defaultText={expTitle}
+                as="h2"
+                className="text-3xl md:text-4xl font-bold text-balance"
+              />
+              <EditableText
+                settingKey="expectations_items"
+                defaultText={expItemsRaw}
+                as="div"
+                multiline={true}
+              >
+                <ul className="space-y-4 text-muted-foreground">
+                  {expItems.map((item: string, idx: number) => (
+                    <li key={idx} className="flex items-start gap-3">
+                      <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-primary mt-1 shrink-0">
+                        ✓
+                      </div>
+                      <p>{item.trim()}</p>
+                    </li>
+                  ))}
+                </ul>
+              </EditableText>
               <Button
                 asChild
                 size="lg"
                 className="rounded-full w-full sm:w-auto h-14 px-8 mt-4 shadow-md"
               >
-                <a href={settings.expectations_button_link?.value || '#'}>{expBtnText}</a>
+                <a href={settings.expectations_button_link?.value || '#'}>
+                  <EditableText
+                    settingKey="expectations_button_text"
+                    defaultText={expBtnText}
+                    as="span"
+                  />
+                </a>
               </Button>
             </div>
             <div className="relative h-[400px] rounded-[40%_60%_70%_30%/40%_50%_60%_50%] overflow-hidden hidden md:block shadow-lg">
