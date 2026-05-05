@@ -430,15 +430,15 @@ export default function Index() {
                 Pacientes Dr. Felipe Zamboni
               </h3>
               <Carousel className="w-full">
-                <CarouselContent>
+                <CarouselContent className="items-stretch">
                   {activeFelipeTestimonials.map((t, i) => (
-                    <CarouselItem key={i}>
-                      <Card className="min-h-full h-auto bg-white border-none shadow-sm rounded-3xl flex flex-col">
-                        <CardContent className="flex-1 p-6 md:p-8 space-y-4 flex flex-col justify-between">
-                          <p className="text-muted-foreground italic text-base md:text-lg leading-relaxed break-words">
+                    <CarouselItem key={i} className="flex">
+                      <Card className="w-full bg-white border-none shadow-sm rounded-3xl flex flex-col">
+                        <CardContent className="flex-1 p-6 md:p-8 flex flex-col justify-between">
+                          <p className="text-muted-foreground italic text-base md:text-lg leading-relaxed break-words mb-4">
                             "{t.content || t.text}"
                           </p>
-                          <div className="flex items-center gap-4 mt-6 shrink-0">
+                          <div className="flex items-center gap-4 mt-auto shrink-0">
                             {t.image && t.collectionId && t.id ? (
                               <ImageWithFallback
                                 src={pb.files.getURL(t, t.image)}
@@ -467,15 +467,15 @@ export default function Index() {
                 Pacientes Dra. Beatriz Mulari
               </h3>
               <Carousel className="w-full">
-                <CarouselContent>
+                <CarouselContent className="items-stretch">
                   {activeBeatrizTestimonials.map((t, i) => (
-                    <CarouselItem key={i}>
-                      <Card className="min-h-full h-auto bg-white border-none shadow-sm rounded-3xl flex flex-col">
-                        <CardContent className="flex-1 p-6 md:p-8 space-y-4 flex flex-col justify-between">
-                          <p className="text-muted-foreground italic text-base md:text-lg leading-relaxed break-words">
+                    <CarouselItem key={i} className="flex">
+                      <Card className="w-full bg-white border-none shadow-sm rounded-3xl flex flex-col">
+                        <CardContent className="flex-1 p-6 md:p-8 flex flex-col justify-between">
+                          <p className="text-muted-foreground italic text-base md:text-lg leading-relaxed break-words mb-4">
                             "{t.content || t.text}"
                           </p>
-                          <div className="flex items-center gap-4 mt-6 shrink-0">
+                          <div className="flex items-center gap-4 mt-auto shrink-0">
                             {t.image && t.collectionId && t.id ? (
                               <ImageWithFallback
                                 src={pb.files.getURL(t, t.image)}
