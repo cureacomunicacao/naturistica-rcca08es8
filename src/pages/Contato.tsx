@@ -76,13 +76,9 @@ export default function Contato() {
       if (!payload.treatment_ref) delete payload.treatment_ref
 
       await pb.collection('leads').create(payload)
-      const selectedTreatment = treatments.find((t) => t.id === values.treatment_ref)
-      navigate('/obrigado', {
-        state: {
-          ...values,
-          treatmentName: selectedTreatment?.title || 'Não especificado',
-        },
-      })
+
+      const text = `*Nome:* ${values.name}\n*E-mail:* ${values.email || 'Não informado'}\n*Telefone:* ${values.phone}\n*Mensagem:* ${values.message || 'Nenhuma'}`
+      window.location.href = `https://wa.me/5543991692047?text=${encodeURIComponent(text)}`
     } catch (err) {
       console.error(err)
       const fieldErrors = extractFieldErrors(err)

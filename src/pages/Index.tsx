@@ -192,7 +192,12 @@ export default function Index() {
                 size="lg"
                 className="rounded-full text-base h-14 px-8 group shadow-lg shadow-primary/20"
               >
-                <a href={settings.home_hero_btn1_link?.value || '#'}>
+                <a
+                  href={
+                    settings.home_hero_btn1_link?.value ||
+                    'https://wa.me/5543991692047?text=OI%C3%A1%2C%20vim%20do%20Site%20e%20quero%20agendar%20uma%20consulta.'
+                  }
+                >
                   <EditableText
                     settingKey="home_hero_btn1_text"
                     defaultText="Agendar consulta online"
@@ -654,7 +659,12 @@ export default function Index() {
                 size="lg"
                 className="rounded-full w-full sm:w-auto h-14 px-8 mt-4 shadow-md"
               >
-                <a href={settings.expectations_button_link?.value || '#'}>
+                <a
+                  href={
+                    settings.expectations_button_link?.value ||
+                    'https://wa.me/5543991692047?text=OI%C3%A1%2C%20vim%20do%20Site%20e%20quero%20agendar%20uma%20consulta.'
+                  }
+                >
                   <EditableText
                     settingKey="expectations_button_text"
                     defaultText={expBtnText}

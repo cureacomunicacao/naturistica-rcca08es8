@@ -169,7 +169,14 @@ export default function Layout() {
                 ),
               )}
               <Button asChild className="rounded-full px-6 text-white hover:bg-primary/90">
-                <a href={settings.global_cta_link?.value || '#'} target="_blank" rel="noreferrer">
+                <a
+                  href={
+                    settings.global_cta_link?.value ||
+                    'https://wa.me/5543991692047?text=OI%C3%A1%2C%20vim%20do%20Site%20e%20quero%20agendar%20uma%20consulta.'
+                  }
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   {settings.global_cta_text?.value || 'Agendar consulta online'}
                 </a>
               </Button>
@@ -217,7 +224,10 @@ export default function Layout() {
                 <div className="mt-auto pb-8">
                   <Button asChild className="w-full rounded-full" size="lg">
                     <a
-                      href={settings.global_cta_link?.value || '#'}
+                      href={
+                        settings.global_cta_link?.value ||
+                        'https://wa.me/5543991692047?text=OI%C3%A1%2C%20vim%20do%20Site%20e%20quero%20agendar%20uma%20consulta.'
+                      }
                       target="_blank"
                       rel="noreferrer"
                     >
@@ -300,7 +310,7 @@ export default function Layout() {
             </h4>
             <div className="space-y-2 text-sm text-primary-foreground/80">
               <p>{settings?.global_email?.value || 'contato@naturistica.com.br'}</p>
-              <p>{settings?.global_phone?.value || '+55 (11) 99999-9999'}</p>
+              <p>{settings?.global_phone?.value || '+55 (43) 99169-2047'}</p>
               <div className="pt-4">
                 <Button
                   variant="outline"

@@ -213,7 +213,10 @@ export default function Sobre() {
               'Agende sua consulta e dê o primeiro passo para uma vida com mais saúde, consciência e bem-estar com a equipe Naturistica.'}
           </p>
           <a
-            href={settings.about_whatsapp_url?.value || 'https://wa.me/5511999999999'}
+            href={
+              settings.about_whatsapp_url?.value ||
+              'https://wa.me/5543991692047?text=OI%C3%A1%2C%20vim%20do%20Site%20e%20quero%20agendar%20uma%20consulta.'
+            }
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center justify-center rounded-full bg-primary text-white px-8 py-4 text-lg font-medium transition-transform hover:scale-105 shadow-md"

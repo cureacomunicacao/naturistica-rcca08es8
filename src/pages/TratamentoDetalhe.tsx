@@ -76,9 +76,16 @@ export default function TratamentoDetalhe() {
             <Button
               size="lg"
               className="rounded-full h-14 px-8 bg-[#25D366] hover:bg-[#128C7E] text-white gap-2 text-base"
+              asChild
             >
-              <MessageCircle className="w-5 h-5" />
-              Agendar consulta via WhatsApp
+              <a
+                href="https://wa.me/5543991692047?text=OI%C3%A1%2C%20vim%20do%20Site%20e%20quero%20agendar%20uma%20consulta."
+                target="_blank"
+                rel="noreferrer"
+              >
+                <MessageCircle className="w-5 h-5" />
+                Agendar consulta via WhatsApp
+              </a>
             </Button>
           </div>
         </ScrollReveal>
