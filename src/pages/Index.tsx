@@ -411,19 +411,19 @@ export default function Index() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-24 bg-secondary/20 rounded-[4rem] mx-4 md:mx-12 overflow-hidden relative">
+      <section className="py-16 md:py-24 bg-secondary/20 rounded-3xl md:rounded-[4rem] mx-2 sm:mx-4 md:mx-12 overflow-hidden relative">
         <div className="absolute inset-0 bg-[url('https://img.usecurling.com/p/800/800?q=leaves%20pattern&color=green')] opacity-5 mix-blend-overlay pointer-events-none" />
-        <div className="container relative z-10">
+        <div className="container px-4 md:px-8 relative z-10">
           <ScrollReveal>
             <EditableText
               settingKey="home_testimonials_title"
               defaultText="Conheça histórias de alguns de nossos pacientes"
               as="h2"
-              className="text-3xl md:text-4xl font-bold text-center mb-16"
+              className="text-3xl md:text-4xl font-bold text-center mb-12 md:mb-16"
             />
           </ScrollReveal>
 
-          <div className="grid md:grid-cols-2 gap-12">
+          <div className="grid md:grid-cols-2 gap-10 md:gap-12">
             {/* Dr. Felipe */}
             <ScrollReveal delay={100} className="space-y-6">
               <h3 className="text-xl font-serif text-primary border-b border-primary/10 pb-4">
@@ -433,23 +433,21 @@ export default function Index() {
                 <CarouselContent>
                   {activeFelipeTestimonials.map((t, i) => (
                     <CarouselItem key={i}>
-                      <Card className="h-full bg-white border-none shadow-sm rounded-3xl flex flex-col">
-                        <CardContent className="flex-1 p-5 md:p-8 space-y-4 flex flex-col justify-between">
-                          <p className="text-muted-foreground italic text-base md:text-lg leading-relaxed">
-                            "{t.text || t.content}"
+                      <Card className="min-h-full h-auto bg-white border-none shadow-sm rounded-3xl flex flex-col">
+                        <CardContent className="flex-1 p-6 md:p-8 space-y-4 flex flex-col justify-between">
+                          <p className="text-muted-foreground italic text-base md:text-lg leading-relaxed break-words">
+                            "{t.content || t.text}"
                           </p>
-                          <div className="flex items-center gap-4 mt-4 shrink-0">
+                          <div className="flex items-center gap-4 mt-6 shrink-0">
                             {t.image && t.collectionId && t.id ? (
                               <ImageWithFallback
                                 src={pb.files.getURL(t, t.image)}
                                 fallback="https://img.usecurling.com/ppl/thumbnail"
-                                alt={t.patient_name}
-                                className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover shrink-0"
+                                alt={t.patient_name || t.name}
+                                className="w-12 h-12 rounded-full object-cover shrink-0"
                               />
                             ) : null}
-                            <p className="font-semibold text-sm md:text-base">
-                              {t.name || t.patient_name}
-                            </p>
+                            <p className="font-semibold text-base">{t.patient_name || t.name}</p>
                           </div>
                         </CardContent>
                       </Card>
@@ -472,23 +470,21 @@ export default function Index() {
                 <CarouselContent>
                   {activeBeatrizTestimonials.map((t, i) => (
                     <CarouselItem key={i}>
-                      <Card className="h-full bg-white border-none shadow-sm rounded-3xl flex flex-col">
-                        <CardContent className="flex-1 p-5 md:p-8 space-y-4 flex flex-col justify-between">
-                          <p className="text-muted-foreground italic text-base md:text-lg leading-relaxed">
-                            "{t.text || t.content}"
+                      <Card className="min-h-full h-auto bg-white border-none shadow-sm rounded-3xl flex flex-col">
+                        <CardContent className="flex-1 p-6 md:p-8 space-y-4 flex flex-col justify-between">
+                          <p className="text-muted-foreground italic text-base md:text-lg leading-relaxed break-words">
+                            "{t.content || t.text}"
                           </p>
-                          <div className="flex items-center gap-4 mt-4 shrink-0">
+                          <div className="flex items-center gap-4 mt-6 shrink-0">
                             {t.image && t.collectionId && t.id ? (
                               <ImageWithFallback
                                 src={pb.files.getURL(t, t.image)}
                                 fallback="https://img.usecurling.com/ppl/thumbnail"
-                                alt={t.patient_name}
-                                className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover shrink-0"
+                                alt={t.patient_name || t.name}
+                                className="w-12 h-12 rounded-full object-cover shrink-0"
                               />
                             ) : null}
-                            <p className="font-semibold text-sm md:text-base">
-                              {t.name || t.patient_name}
-                            </p>
+                            <p className="font-semibold text-base">{t.patient_name || t.name}</p>
                           </div>
                         </CardContent>
                       </Card>
