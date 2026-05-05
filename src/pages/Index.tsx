@@ -270,7 +270,11 @@ export default function Index() {
                     variant="outline"
                     className="bg-white text-primary border-none shadow-sm px-4 py-1 text-sm rounded-full"
                   >
-                    Tratamento em Destaque
+                    <EditableText
+                      settingKey="featured_treatment_badge"
+                      defaultText="Tratamento em Destaque"
+                      as="span"
+                    />
                   </Badge>
                   <h2 className="text-3xl font-bold">{featuredTreatment.title}</h2>
                   {featuredTreatment.seo_description && (
@@ -279,7 +283,13 @@ export default function Index() {
                     </p>
                   )}
                   <Button asChild className="rounded-full shadow-md">
-                    <Link to={`/tratamentos/${featuredTreatment.slug}`}>Saiba mais</Link>
+                    <Link to={`/tratamentos/${featuredTreatment.slug}`}>
+                      <EditableText
+                        settingKey="featured_treatment_btn"
+                        defaultText="Saiba mais"
+                        as="span"
+                      />
+                    </Link>
                   </Button>
                 </div>
                 {featuredTreatment.image && (
@@ -426,9 +436,12 @@ export default function Index() {
           <div className="grid md:grid-cols-2 gap-10 md:gap-12">
             {/* Dr. Felipe */}
             <ScrollReveal delay={100} className="space-y-6">
-              <h3 className="text-xl font-serif text-primary border-b border-primary/10 pb-4">
-                Pacientes Dr. Felipe Zamboni
-              </h3>
+              <EditableText
+                settingKey="testimonials_felipe_title"
+                defaultText="Pacientes Dr. Felipe Zamboni"
+                as="h3"
+                className="text-xl font-serif text-primary border-b border-primary/10 pb-4"
+              />
 
               {/* Mobile: Single-column stack */}
               <div className="flex flex-col gap-6 md:hidden">
@@ -492,9 +505,12 @@ export default function Index() {
 
             {/* Dra. Beatriz */}
             <ScrollReveal delay={200} className="space-y-6">
-              <h3 className="text-xl font-serif text-primary border-b border-primary/10 pb-4">
-                Pacientes Dra. Beatriz Mulari
-              </h3>
+              <EditableText
+                settingKey="testimonials_beatriz_title"
+                defaultText="Pacientes Dra. Beatriz Mulari"
+                as="h3"
+                className="text-xl font-serif text-primary border-b border-primary/10 pb-4"
+              />
 
               {/* Mobile: Single-column stack */}
               <div className="flex flex-col gap-6 md:hidden">

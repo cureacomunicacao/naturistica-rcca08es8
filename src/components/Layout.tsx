@@ -109,7 +109,7 @@ export default function Layout() {
                 <>
                   <Leaf className="h-6 w-6 text-primary group-hover:rotate-12 transition-transform duration-300" />
                   <span className="font-serif text-2xl font-semibold tracking-wide text-primary">
-                    NATURISTICA
+                    {settings.global_brand_name?.value || 'NATURISTICA'}
                   </span>
                 </>
               )}
@@ -249,20 +249,22 @@ export default function Layout() {
                 <>
                   <Leaf className="h-6 w-6" />
                   <span className="font-serif text-2xl font-semibold tracking-wide">
-                    NATURISTICA
+                    {settings.global_brand_name?.value || 'NATURISTICA'}
                   </span>
                 </>
               )}
             </Link>
             <p className="text-primary-foreground/80 text-sm max-w-xs leading-relaxed">
-              Onde a ciência encontra a ancestralidade para saúde e consciência. Tratamento médico
-              humanizado e integrativo.
+              {settings.footer_description?.value ||
+                'Onde a ciência encontra a ancestralidade para saúde e consciência. Tratamento médico humanizado e integrativo.'}
             </p>
           </div>
 
           <div className="grid grid-cols-2 gap-8">
             <div className="space-y-4">
-              <h4 className="font-serif font-semibold text-lg">Navegação</h4>
+              <h4 className="font-serif font-semibold text-lg">
+                {settings.footer_nav_title?.value || 'Navegação'}
+              </h4>
               <ul className="space-y-2 text-sm text-primary-foreground/80">
                 {navLinks.map((link) => (
                   <li key={link.path}>
@@ -274,7 +276,9 @@ export default function Layout() {
               </ul>
             </div>
             <div className="space-y-4">
-              <h4 className="font-serif font-semibold text-lg">Tratamentos</h4>
+              <h4 className="font-serif font-semibold text-lg">
+                {settings.footer_treatments_title?.value || 'Tratamentos'}
+              </h4>
               <ul className="space-y-2 text-sm text-primary-foreground/80">
                 {treatmentsList.slice(0, 5).map((t) => (
                   <li key={t.slug}>
@@ -291,7 +295,9 @@ export default function Layout() {
           </div>
 
           <div className="space-y-4">
-            <h4 className="font-serif font-semibold text-lg">Contato</h4>
+            <h4 className="font-serif font-semibold text-lg">
+              {settings.footer_contact_title?.value || 'Contato'}
+            </h4>
             <div className="space-y-2 text-sm text-primary-foreground/80">
               <p>{settings?.global_email?.value || 'contato@naturistica.com.br'}</p>
               <p>{settings?.global_phone?.value || '+55 (11) 99999-9999'}</p>
@@ -306,7 +312,7 @@ export default function Layout() {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    Siga no Instagram
+                    {settings.footer_instagram_btn?.value || 'Siga no Instagram'}
                   </a>
                 </Button>
               </div>
@@ -314,7 +320,12 @@ export default function Layout() {
           </div>
         </div>
         <div className="container mt-16 pt-8 border-t border-primary-foreground/10 text-center text-sm text-primary-foreground/60">
-          <p>© {new Date().getFullYear()} Naturistica. Todos os direitos reservados.</p>
+          <p>
+            {(
+              settings.footer_copyright?.value ||
+              '© {year} Naturistica. Todos os direitos reservados.'
+            ).replace('{year}', new Date().getFullYear().toString())}
+          </p>
         </div>
       </footer>
     </div>

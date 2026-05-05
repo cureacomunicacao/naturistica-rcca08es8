@@ -46,6 +46,17 @@ export default function SiteSettingsAdmin() {
       'home_philosophy_title',
       'home_philosophy_text',
       'home_testimonials_title',
+      'testimonials_felipe_title',
+      'testimonials_beatriz_title',
+      'featured_treatment_badge',
+      'featured_treatment_btn',
+      'global_brand_name',
+      'footer_description',
+      'footer_nav_title',
+      'footer_treatments_title',
+      'footer_contact_title',
+      'footer_instagram_btn',
+      'footer_copyright',
       'home_blog_title',
       'home_blog_desc',
       'home_blog_btn_text',
@@ -244,6 +255,13 @@ export default function SiteSettingsAdmin() {
             <CardContent className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
+                  <Label>Nome da Marca (Texto alternativo à logo)</Label>
+                  <Input
+                    value={formData['global_brand_name']?.value || ''}
+                    onChange={(e) => handleChange('global_brand_name', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
                   <Label>Email de Contato</Label>
                   <Input
                     value={formData['global_email']?.value || ''}
@@ -305,6 +323,7 @@ export default function SiteSettingsAdmin() {
                 disabled={loading}
                 onClick={() =>
                   handleSave([
+                    'global_brand_name',
                     'global_logo',
                     'global_email',
                     'global_phone',
@@ -316,6 +335,69 @@ export default function SiteSettingsAdmin() {
                 }
               >
                 {loading ? 'Salvando...' : 'Salvar Geral'}
+              </Button>
+
+              <Separator className="my-6" />
+              <h3 className="text-lg font-semibold">Rodapé (Footer)</h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-2 col-span-2">
+                  <Label>Descrição do Rodapé</Label>
+                  <Textarea
+                    value={formData['footer_description']?.value || ''}
+                    onChange={(e) => handleChange('footer_description', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Título Navegação</Label>
+                  <Input
+                    value={formData['footer_nav_title']?.value || ''}
+                    onChange={(e) => handleChange('footer_nav_title', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Título Tratamentos</Label>
+                  <Input
+                    value={formData['footer_treatments_title']?.value || ''}
+                    onChange={(e) => handleChange('footer_treatments_title', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Título Contato</Label>
+                  <Input
+                    value={formData['footer_contact_title']?.value || ''}
+                    onChange={(e) => handleChange('footer_contact_title', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Botão Instagram</Label>
+                  <Input
+                    value={formData['footer_instagram_btn']?.value || ''}
+                    onChange={(e) => handleChange('footer_instagram_btn', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2 col-span-2">
+                  <Label>Texto de Copyright (use {`{year}`} para o ano atual)</Label>
+                  <Input
+                    value={formData['footer_copyright']?.value || ''}
+                    onChange={(e) => handleChange('footer_copyright', e.target.value)}
+                  />
+                </div>
+              </div>
+              <Button
+                className="mt-4"
+                disabled={loading}
+                onClick={() =>
+                  handleSave([
+                    'footer_description',
+                    'footer_nav_title',
+                    'footer_treatments_title',
+                    'footer_contact_title',
+                    'footer_instagram_btn',
+                    'footer_copyright',
+                  ])
+                }
+              >
+                {loading ? 'Salvando...' : 'Salvar Rodapé'}
               </Button>
             </CardContent>
           </Card>
@@ -523,8 +605,61 @@ export default function SiteSettingsAdmin() {
                     onChange={(e) => handleChange('home_testimonials_title', e.target.value)}
                   />
                 </div>
-                <Button disabled={loading} onClick={() => handleSave(['home_testimonials_title'])}>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Subtítulo Dr. Felipe</Label>
+                    <Input
+                      value={formData['testimonials_felipe_title']?.value || ''}
+                      onChange={(e) => handleChange('testimonials_felipe_title', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Subtítulo Dra. Beatriz</Label>
+                    <Input
+                      value={formData['testimonials_beatriz_title']?.value || ''}
+                      onChange={(e) => handleChange('testimonials_beatriz_title', e.target.value)}
+                    />
+                  </div>
+                </div>
+                <Button
+                  disabled={loading}
+                  onClick={() =>
+                    handleSave([
+                      'home_testimonials_title',
+                      'testimonials_felipe_title',
+                      'testimonials_beatriz_title',
+                    ])
+                  }
+                >
                   Salvar Depoimentos
+                </Button>
+              </div>
+
+              <Separator className="my-6" />
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Tratamento em Destaque</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Texto do Badge (Rótulo)</Label>
+                    <Input
+                      value={formData['featured_treatment_badge']?.value || ''}
+                      onChange={(e) => handleChange('featured_treatment_badge', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Texto do Botão</Label>
+                    <Input
+                      value={formData['featured_treatment_btn']?.value || ''}
+                      onChange={(e) => handleChange('featured_treatment_btn', e.target.value)}
+                    />
+                  </div>
+                </div>
+                <Button
+                  disabled={loading}
+                  onClick={() => handleSave(['featured_treatment_badge', 'featured_treatment_btn'])}
+                >
+                  Salvar Destaque
                 </Button>
               </div>
 
