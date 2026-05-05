@@ -8,17 +8,17 @@ import { useSettings } from '@/hooks/use-settings'
 import pb from '@/lib/pocketbase/client'
 import { SEO } from '@/components/SEO'
 
-const navLinks = [
-  { name: 'Início', path: '/' },
-  { name: 'Sobre', path: '/sobre' },
-  { name: 'Tratamentos', path: '/tratamentos' },
-  { name: 'Contato', path: '/contato' },
-  { name: 'Blog', path: '/blog' },
-]
-
 export default function Layout() {
   const location = useLocation()
   const { settings } = useSettings()
+
+  const navLinks = [
+    { name: settings.nav_home?.value || 'Início', path: '/' },
+    { name: settings.nav_about?.value || 'Sobre', path: '/sobre' },
+    { name: settings.nav_treatments?.value || 'Tratamentos', path: '/tratamentos' },
+    { name: settings.nav_contact?.value || 'Contato', path: '/contato' },
+    { name: settings.nav_blog?.value || 'Blog', path: '/blog' },
+  ]
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [treatmentsList, setTreatmentsList] = useState<{ title: string; slug: string }[]>([

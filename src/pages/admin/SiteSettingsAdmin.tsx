@@ -61,6 +61,19 @@ export default function SiteSettingsAdmin() {
       'home_blog_desc',
       'home_blog_btn_text',
       'home_blog_btn_link',
+      'contact_label_name',
+      'contact_label_phone',
+      'contact_label_email',
+      'contact_label_treatment',
+      'contact_placeholder_treatment',
+      'contact_label_message',
+      'contact_btn_submit',
+      'contact_btn_submitting',
+      'nav_home',
+      'nav_about',
+      'nav_treatments',
+      'nav_contact',
+      'nav_blog',
       // About
       'about_meta_title',
       'about_meta_description',
@@ -398,6 +411,55 @@ export default function SiteSettingsAdmin() {
                 }
               >
                 {loading ? 'Salvando...' : 'Salvar Rodapé'}
+              </Button>
+
+              <Separator className="my-6" />
+              <h3 className="text-lg font-semibold">Nomes dos Links de Navegação</h3>
+              <div className="grid md:grid-cols-3 gap-6">
+                <div className="space-y-2">
+                  <Label>Início</Label>
+                  <Input
+                    value={formData['nav_home']?.value || ''}
+                    onChange={(e) => handleChange('nav_home', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Sobre</Label>
+                  <Input
+                    value={formData['nav_about']?.value || ''}
+                    onChange={(e) => handleChange('nav_about', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Tratamentos</Label>
+                  <Input
+                    value={formData['nav_treatments']?.value || ''}
+                    onChange={(e) => handleChange('nav_treatments', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Contato</Label>
+                  <Input
+                    value={formData['nav_contact']?.value || ''}
+                    onChange={(e) => handleChange('nav_contact', e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Blog</Label>
+                  <Input
+                    value={formData['nav_blog']?.value || ''}
+                    onChange={(e) => handleChange('nav_blog', e.target.value)}
+                  />
+                </div>
+              </div>
+              <Button
+                className="mt-4"
+                disabled={loading}
+                onClick={() =>
+                  handleSave(['nav_home', 'nav_about', 'nav_treatments', 'nav_contact', 'nav_blog'])
+                }
+              >
+                {loading ? 'Salvando...' : 'Salvar Links'}
               </Button>
             </CardContent>
           </Card>
@@ -1239,6 +1301,72 @@ export default function SiteSettingsAdmin() {
                 </div>
               </div>
 
+              <Separator className="my-6" />
+
+              <div className="space-y-4 max-w-3xl">
+                <h3 className="text-lg font-semibold">Textos do Formulário</h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Rótulo: Nome</Label>
+                    <Input
+                      value={formData['contact_label_name']?.value || ''}
+                      onChange={(e) => handleChange('contact_label_name', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Rótulo: Telefone</Label>
+                    <Input
+                      value={formData['contact_label_phone']?.value || ''}
+                      onChange={(e) => handleChange('contact_label_phone', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Rótulo: Email</Label>
+                    <Input
+                      value={formData['contact_label_email']?.value || ''}
+                      onChange={(e) => handleChange('contact_label_email', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Rótulo: Tratamento</Label>
+                    <Input
+                      value={formData['contact_label_treatment']?.value || ''}
+                      onChange={(e) => handleChange('contact_label_treatment', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Placeholder: Tratamento</Label>
+                    <Input
+                      value={formData['contact_placeholder_treatment']?.value || ''}
+                      onChange={(e) =>
+                        handleChange('contact_placeholder_treatment', e.target.value)
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Rótulo: Mensagem</Label>
+                    <Input
+                      value={formData['contact_label_message']?.value || ''}
+                      onChange={(e) => handleChange('contact_label_message', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Botão Enviar (Normal)</Label>
+                    <Input
+                      value={formData['contact_btn_submit']?.value || ''}
+                      onChange={(e) => handleChange('contact_btn_submit', e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Botão Enviar (Carregando)</Label>
+                    <Input
+                      value={formData['contact_btn_submitting']?.value || ''}
+                      onChange={(e) => handleChange('contact_btn_submitting', e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+
               <Button
                 disabled={loading}
                 onClick={() =>
@@ -1256,6 +1384,14 @@ export default function SiteSettingsAdmin() {
                     'contact_benefit2_desc',
                     'contact_benefit3_title',
                     'contact_benefit3_desc',
+                    'contact_label_name',
+                    'contact_label_phone',
+                    'contact_label_email',
+                    'contact_label_treatment',
+                    'contact_placeholder_treatment',
+                    'contact_label_message',
+                    'contact_btn_submit',
+                    'contact_btn_submitting',
                   ])
                 }
               >

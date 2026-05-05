@@ -128,7 +128,9 @@ export default function Contato() {
                   name="name"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Nome Completo *</FormLabel>
+                      <FormLabel>
+                        {settings.contact_label_name?.value || 'Nome Completo *'}
+                      </FormLabel>
                       <FormControl>
                         <Input placeholder="Seu nome" {...field} />
                       </FormControl>
@@ -143,7 +145,7 @@ export default function Contato() {
                     name="phone"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>WhatsApp *</FormLabel>
+                        <FormLabel>{settings.contact_label_phone?.value || 'WhatsApp *'}</FormLabel>
                         <FormControl>
                           <Input placeholder="(00) 00000-0000" {...field} />
                         </FormControl>
@@ -156,7 +158,7 @@ export default function Contato() {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Email</FormLabel>
+                        <FormLabel>{settings.contact_label_email?.value || 'Email'}</FormLabel>
                         <FormControl>
                           <Input type="email" placeholder="seu@email.com" {...field} />
                         </FormControl>
@@ -171,11 +173,18 @@ export default function Contato() {
                   name="treatment_ref"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Qual tratamento você procura?</FormLabel>
+                      <FormLabel>
+                        {settings.contact_label_treatment?.value || 'Qual tratamento você procura?'}
+                      </FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="Selecione um tratamento..." />
+                            <SelectValue
+                              placeholder={
+                                settings.contact_placeholder_treatment?.value ||
+                                'Selecione um tratamento...'
+                              }
+                            />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -196,7 +205,9 @@ export default function Contato() {
                   name="message"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Mensagem (Opcional)</FormLabel>
+                      <FormLabel>
+                        {settings.contact_label_message?.value || 'Mensagem (Opcional)'}
+                      </FormLabel>
                       <FormControl>
                         <Textarea placeholder="Como podemos ajudar?" rows={4} {...field} />
                       </FormControl>
@@ -206,7 +217,9 @@ export default function Contato() {
                 />
 
                 <Button type="submit" className="w-full" disabled={isSubmitting}>
-                  {isSubmitting ? 'Enviando...' : 'Enviar e Continuar no WhatsApp'}
+                  {isSubmitting
+                    ? settings.contact_btn_submitting?.value || 'Enviando...'
+                    : settings.contact_btn_submit?.value || 'Enviar e Continuar no WhatsApp'}
                 </Button>
               </form>
             </Form>
@@ -311,7 +324,7 @@ export default function Contato() {
         <section className="py-16 px-4">
           <div className="container max-w-5xl">
             <h2 className="text-3xl font-semibold mb-12 text-center">
-              O que dizem nossos pacientes
+              {settings.treatments_testim_title?.value || 'O que dizem nossos pacientes'}
             </h2>
             <div className="grid md:grid-cols-2 gap-6">
               {testimonials.slice(0, 4).map((t) => (

@@ -11,15 +11,15 @@ import {
 import { ScrollReveal } from '@/components/ScrollReveal'
 import {
   ArrowRight,
-  Brain,
-  Heart,
-  Moon,
-  Sparkles,
-  Sprout,
-  Wind,
   Activity,
   Flame,
   Puzzle,
+  Wind,
+  Moon,
+  Heart,
+  Brain,
+  Sparkles,
+  Sprout,
 } from 'lucide-react'
 import { useSettings } from '@/hooks/use-settings'
 import pb from '@/lib/pocketbase/client'
@@ -28,6 +28,7 @@ import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { getPosts, type PostRecord, getPostImageUrl } from '@/services/posts'
 import { EditableText } from '@/components/EditableText'
+import { useRealtime } from '@/hooks/use-realtime'
 
 const iconMap: Record<string, any> = {
   ansiedade: Wind,
@@ -39,36 +40,6 @@ const iconMap: Record<string, any> = {
   'dor-cronica': Flame,
   autismo: Puzzle,
 }
-
-const testimonialsFelipe = [
-  {
-    name: 'Mariana F. Torres',
-    text: 'Encontrei no Dr. Felipe um acolhimento raro. O tratamento integrado mudou minha forma de lidar com o estresse do dia a dia.',
-  },
-  {
-    name: 'Jhulia A. Silva',
-    text: 'A visão ancestral combinada com a medicina moderna me trouxe uma clareza que eu buscava há anos na terapia convencional.',
-  },
-  {
-    name: 'Rafael M. Jotta',
-    text: 'Profissionalismo e empatia. O acompanhamento contínuo fez toda a diferença na minha recuperação do burnout.',
-  },
-]
-
-const testimonialsBeatriz = [
-  {
-    name: 'Lavinia Moreira',
-    text: 'A Dra. Beatriz tem uma escuta atenta e profunda. Senti que finalmente fui compreendida em minhas questões de insônia crônica.',
-  },
-  {
-    name: 'Fernanda Garmatter',
-    text: 'O tratamento com cannabis medicinal conduzido de forma tão ética me devolveu a qualidade de vida. Gratidão imensa.',
-  },
-  {
-    name: 'Luiz Carlos Bassetto',
-    text: 'Uma abordagem que respeita o tempo do paciente. A integração com Ayurveda foi um divisor de águas na minha saúde.',
-  },
-]
 
 function ImageWithFallback({ src, fallback, alt, className, title }: any) {
   const [error, setError] = useState(false)
@@ -103,6 +74,22 @@ export default function Index() {
   const [testimonialsBeatrizDb, setTestimonialsBeatrizDb] = useState<any[]>([])
   const [featuredTreatment, setFeaturedTreatment] = useState<any>(null)
 
+  const fetchTestimonials = () => {
+    pb.collection('testimonials')
+      .getFullList({ filter: 'active = true && doctor = "Felipe"' })
+      .then(setTestimonialsFelipeDb)
+      .catch((err) => {
+        console.warn('Failed to fetch testimonials Felipe:', err.message)
+      })
+
+    pb.collection('testimonials')
+      .getFullList({ filter: 'active = true && doctor = "Beatriz"' })
+      .then(setTestimonialsBeatrizDb)
+      .catch((err) => {
+        console.warn('Failed to fetch testimonials Beatriz:', err.message)
+      })
+  }
+
   useEffect(() => {
     pb.collection('treatments')
       .getFullList({ sort: 'created' })
@@ -117,20 +104,12 @@ export default function Index() {
         console.warn('Failed to load posts:', err.message)
       })
 
-    pb.collection('testimonials')
-      .getFullList({ filter: 'active = true && doctor = "Felipe"' })
-      .then(setTestimonialsFelipeDb)
-      .catch((err) => {
-        console.warn('Failed to fetch testimonials Felipe:', err.message)
-      })
-
-    pb.collection('testimonials')
-      .getFullList({ filter: 'active = true && doctor = "Beatriz"' })
-      .then(setTestimonialsBeatrizDb)
-      .catch((err) => {
-        console.warn('Failed to fetch testimonials Beatriz:', err.message)
-      })
+    fetchTestimonials()
   }, [])
+
+  useRealtime('testimonials', () => {
+    fetchTestimonials()
+  })
 
   useEffect(() => {
     const featuredId = settings.home_featured_treatment?.value
@@ -151,11 +130,6 @@ export default function Index() {
     : 'https://img.usecurling.com/p/800/1000?q=nature%20meditation&color=green'
 
   const heroAlt = settings.home_hero?.image_alt || 'Natureza e serenidade'
-
-  const activeFelipeTestimonials =
-    testimonialsFelipeDb.length > 0 ? testimonialsFelipeDb : testimonialsFelipe
-  const activeBeatrizTestimonials =
-    testimonialsBeatrizDb.length > 0 ? testimonialsBeatrizDb : testimonialsBeatriz
 
   const expTitle =
     settings.expectations_title?.value || 'O que esperar da sua consulta e acompanhamento?'
@@ -435,142 +409,146 @@ export default function Index() {
 
           <div className="grid md:grid-cols-2 gap-10 md:gap-12">
             {/* Dr. Felipe */}
-            <ScrollReveal delay={100} className="space-y-6">
-              <EditableText
-                settingKey="testimonials_felipe_title"
-                defaultText="Pacientes Dr. Felipe Zamboni"
-                as="h3"
-                className="text-xl font-serif text-primary border-b border-primary/10 pb-4"
-              />
+            {testimonialsFelipeDb.length > 0 && (
+              <ScrollReveal delay={100} className="space-y-6">
+                <EditableText
+                  settingKey="testimonials_felipe_title"
+                  defaultText="Pacientes Dr. Felipe Zamboni"
+                  as="h3"
+                  className="text-xl font-serif text-primary border-b border-primary/10 pb-4"
+                />
 
-              {/* Mobile: Single-column stack */}
-              <div className="flex flex-col gap-6 md:hidden">
-                {activeFelipeTestimonials.map((t, i) => (
-                  <Card
-                    key={i}
-                    className="w-full bg-white border-none shadow-sm rounded-3xl flex flex-col h-full"
-                  >
-                    <CardContent className="flex-1 p-6 flex flex-col">
-                      <p className="text-muted-foreground italic text-base leading-relaxed break-words mb-6 grow">
-                        "{t.content || t.text}"
-                      </p>
-                      <div className="flex items-center gap-4 mt-auto shrink-0">
-                        {t.image && t.collectionId && t.id ? (
-                          <ImageWithFallback
-                            src={pb.files.getURL(t, t.image)}
-                            fallback="https://img.usecurling.com/ppl/thumbnail"
-                            alt={t.patient_name || t.name}
-                            className="w-12 h-12 rounded-full object-cover shrink-0 aspect-square"
-                          />
-                        ) : null}
-                        <p className="font-semibold text-base">{t.patient_name || t.name}</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-
-              {/* Desktop: Carousel */}
-              <Carousel className="w-full hidden md:block">
-                <CarouselContent className="items-stretch">
-                  {activeFelipeTestimonials.map((t, i) => (
-                    <CarouselItem key={i} className="h-auto">
-                      <Card className="w-full h-full bg-white border-none shadow-sm rounded-3xl flex flex-col">
-                        <CardContent className="flex-1 p-8 flex flex-col">
-                          <p className="text-muted-foreground italic text-lg leading-relaxed break-words mb-6 grow">
-                            "{t.content || t.text}"
-                          </p>
-                          <div className="flex items-center gap-4 mt-auto shrink-0">
-                            {t.image && t.collectionId && t.id ? (
-                              <ImageWithFallback
-                                src={pb.files.getURL(t, t.image)}
-                                fallback="https://img.usecurling.com/ppl/thumbnail"
-                                alt={t.patient_name || t.name}
-                                className="w-12 h-12 rounded-full object-cover shrink-0 aspect-square"
-                              />
-                            ) : null}
-                            <p className="font-semibold text-base">{t.patient_name || t.name}</p>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </CarouselItem>
+                {/* Mobile: Single-column stack */}
+                <div className="flex flex-col gap-6 md:hidden">
+                  {testimonialsFelipeDb.map((t, i) => (
+                    <Card
+                      key={i}
+                      className="w-full bg-white border-none shadow-sm rounded-3xl flex flex-col h-full"
+                    >
+                      <CardContent className="flex-1 p-6 flex flex-col">
+                        <p className="text-muted-foreground italic text-base leading-relaxed break-words mb-6 grow">
+                          "{t.content}"
+                        </p>
+                        <div className="flex items-center gap-4 mt-auto shrink-0">
+                          {t.image && t.collectionId && t.id ? (
+                            <ImageWithFallback
+                              src={pb.files.getURL(t, t.image)}
+                              fallback="https://img.usecurling.com/ppl/thumbnail"
+                              alt={t.patient_name}
+                              className="w-12 h-12 rounded-full object-cover shrink-0 aspect-square"
+                            />
+                          ) : null}
+                          <p className="font-semibold text-base">{t.patient_name}</p>
+                        </div>
+                      </CardContent>
+                    </Card>
                   ))}
-                </CarouselContent>
-                <div className="flex justify-end gap-2 mt-4">
-                  <CarouselPrevious className="relative inset-auto translate-y-0 bg-white hover:bg-white border-none shadow-sm" />
-                  <CarouselNext className="relative inset-auto translate-y-0 bg-white hover:bg-white border-none shadow-sm" />
                 </div>
-              </Carousel>
-            </ScrollReveal>
+
+                {/* Desktop: Carousel */}
+                <Carousel className="w-full hidden md:block">
+                  <CarouselContent className="items-stretch">
+                    {testimonialsFelipeDb.map((t, i) => (
+                      <CarouselItem key={i} className="h-auto">
+                        <Card className="w-full h-full bg-white border-none shadow-sm rounded-3xl flex flex-col">
+                          <CardContent className="flex-1 p-8 flex flex-col">
+                            <p className="text-muted-foreground italic text-lg leading-relaxed break-words mb-6 grow">
+                              "{t.content}"
+                            </p>
+                            <div className="flex items-center gap-4 mt-auto shrink-0">
+                              {t.image && t.collectionId && t.id ? (
+                                <ImageWithFallback
+                                  src={pb.files.getURL(t, t.image)}
+                                  fallback="https://img.usecurling.com/ppl/thumbnail"
+                                  alt={t.patient_name}
+                                  className="w-12 h-12 rounded-full object-cover shrink-0 aspect-square"
+                                />
+                              ) : null}
+                              <p className="font-semibold text-base">{t.patient_name}</p>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <div className="flex justify-end gap-2 mt-4">
+                    <CarouselPrevious className="relative inset-auto translate-y-0 bg-white hover:bg-white border-none shadow-sm" />
+                    <CarouselNext className="relative inset-auto translate-y-0 bg-white hover:bg-white border-none shadow-sm" />
+                  </div>
+                </Carousel>
+              </ScrollReveal>
+            )}
 
             {/* Dra. Beatriz */}
-            <ScrollReveal delay={200} className="space-y-6">
-              <EditableText
-                settingKey="testimonials_beatriz_title"
-                defaultText="Pacientes Dra. Beatriz Mulari"
-                as="h3"
-                className="text-xl font-serif text-primary border-b border-primary/10 pb-4"
-              />
+            {testimonialsBeatrizDb.length > 0 && (
+              <ScrollReveal delay={200} className="space-y-6">
+                <EditableText
+                  settingKey="testimonials_beatriz_title"
+                  defaultText="Pacientes Dra. Beatriz Mulari"
+                  as="h3"
+                  className="text-xl font-serif text-primary border-b border-primary/10 pb-4"
+                />
 
-              {/* Mobile: Single-column stack */}
-              <div className="flex flex-col gap-6 md:hidden">
-                {activeBeatrizTestimonials.map((t, i) => (
-                  <Card
-                    key={i}
-                    className="w-full bg-white border-none shadow-sm rounded-3xl flex flex-col h-full"
-                  >
-                    <CardContent className="flex-1 p-6 flex flex-col">
-                      <p className="text-muted-foreground italic text-base leading-relaxed break-words mb-6 grow">
-                        "{t.content || t.text}"
-                      </p>
-                      <div className="flex items-center gap-4 mt-auto shrink-0">
-                        {t.image && t.collectionId && t.id ? (
-                          <ImageWithFallback
-                            src={pb.files.getURL(t, t.image)}
-                            fallback="https://img.usecurling.com/ppl/thumbnail"
-                            alt={t.patient_name || t.name}
-                            className="w-12 h-12 rounded-full object-cover shrink-0 aspect-square"
-                          />
-                        ) : null}
-                        <p className="font-semibold text-base">{t.patient_name || t.name}</p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-
-              {/* Desktop: Carousel */}
-              <Carousel className="w-full hidden md:block">
-                <CarouselContent className="items-stretch">
-                  {activeBeatrizTestimonials.map((t, i) => (
-                    <CarouselItem key={i} className="h-auto">
-                      <Card className="w-full h-full bg-white border-none shadow-sm rounded-3xl flex flex-col">
-                        <CardContent className="flex-1 p-8 flex flex-col">
-                          <p className="text-muted-foreground italic text-lg leading-relaxed break-words mb-6 grow">
-                            "{t.content || t.text}"
-                          </p>
-                          <div className="flex items-center gap-4 mt-auto shrink-0">
-                            {t.image && t.collectionId && t.id ? (
-                              <ImageWithFallback
-                                src={pb.files.getURL(t, t.image)}
-                                fallback="https://img.usecurling.com/ppl/thumbnail"
-                                alt={t.patient_name || t.name}
-                                className="w-12 h-12 rounded-full object-cover shrink-0 aspect-square"
-                              />
-                            ) : null}
-                            <p className="font-semibold text-base">{t.patient_name || t.name}</p>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </CarouselItem>
+                {/* Mobile: Single-column stack */}
+                <div className="flex flex-col gap-6 md:hidden">
+                  {testimonialsBeatrizDb.map((t, i) => (
+                    <Card
+                      key={i}
+                      className="w-full bg-white border-none shadow-sm rounded-3xl flex flex-col h-full"
+                    >
+                      <CardContent className="flex-1 p-6 flex flex-col">
+                        <p className="text-muted-foreground italic text-base leading-relaxed break-words mb-6 grow">
+                          "{t.content}"
+                        </p>
+                        <div className="flex items-center gap-4 mt-auto shrink-0">
+                          {t.image && t.collectionId && t.id ? (
+                            <ImageWithFallback
+                              src={pb.files.getURL(t, t.image)}
+                              fallback="https://img.usecurling.com/ppl/thumbnail"
+                              alt={t.patient_name}
+                              className="w-12 h-12 rounded-full object-cover shrink-0 aspect-square"
+                            />
+                          ) : null}
+                          <p className="font-semibold text-base">{t.patient_name}</p>
+                        </div>
+                      </CardContent>
+                    </Card>
                   ))}
-                </CarouselContent>
-                <div className="flex justify-end gap-2 mt-4">
-                  <CarouselPrevious className="relative inset-auto translate-y-0 bg-white hover:bg-white border-none shadow-sm" />
-                  <CarouselNext className="relative inset-auto translate-y-0 bg-white hover:bg-white border-none shadow-sm" />
                 </div>
-              </Carousel>
-            </ScrollReveal>
+
+                {/* Desktop: Carousel */}
+                <Carousel className="w-full hidden md:block">
+                  <CarouselContent className="items-stretch">
+                    {testimonialsBeatrizDb.map((t, i) => (
+                      <CarouselItem key={i} className="h-auto">
+                        <Card className="w-full h-full bg-white border-none shadow-sm rounded-3xl flex flex-col">
+                          <CardContent className="flex-1 p-8 flex flex-col">
+                            <p className="text-muted-foreground italic text-lg leading-relaxed break-words mb-6 grow">
+                              "{t.content}"
+                            </p>
+                            <div className="flex items-center gap-4 mt-auto shrink-0">
+                              {t.image && t.collectionId && t.id ? (
+                                <ImageWithFallback
+                                  src={pb.files.getURL(t, t.image)}
+                                  fallback="https://img.usecurling.com/ppl/thumbnail"
+                                  alt={t.patient_name}
+                                  className="w-12 h-12 rounded-full object-cover shrink-0 aspect-square"
+                                />
+                              ) : null}
+                              <p className="font-semibold text-base">{t.patient_name}</p>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                  <div className="flex justify-end gap-2 mt-4">
+                    <CarouselPrevious className="relative inset-auto translate-y-0 bg-white hover:bg-white border-none shadow-sm" />
+                    <CarouselNext className="relative inset-auto translate-y-0 bg-white hover:bg-white border-none shadow-sm" />
+                  </div>
+                </Carousel>
+              </ScrollReveal>
+            )}
           </div>
         </div>
       </section>
