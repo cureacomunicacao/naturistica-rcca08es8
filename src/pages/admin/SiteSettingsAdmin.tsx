@@ -81,6 +81,11 @@ export default function SiteSettingsAdmin() {
       'about_journey_image',
       'about_content',
       'about_hero_title',
+      ...[1, 2, 3, 4, 5, 6].flatMap((n) => [
+        `about_journey_s${n}_title`,
+        `about_journey_s${n}_content`,
+        `about_journey_s${n}_image`,
+      ]),
       'about_hero_subtitle',
       'about_faq_title',
       'about_cta_title',
@@ -890,12 +895,85 @@ export default function SiteSettingsAdmin() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label>Texto da Jornada</Label>
+                  <Label>Texto da Jornada (Legado)</Label>
                   <RichTextEditor
                     value={formData['about_content']?.value || ''}
                     onChange={(val) => handleChange('about_content', val)}
                   />
                 </div>
+              </div>
+
+              <Separator />
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">Nossa Jornada (6 Seções Alternadas)</h3>
+                <Accordion type="single" collapsible className="w-full">
+                  {[1, 2, 3, 4, 5, 6].map((num) => (
+                    <AccordionItem key={num} value={`s${num}`}>
+                      <AccordionTrigger>Sessão {num}</AccordionTrigger>
+                      <AccordionContent className="space-y-4 pt-4 px-1">
+                        <div className="space-y-2">
+                          <Label>Título da Sessão {num}</Label>
+                          <Input
+                            value={formData[`about_journey_s${num}_title`]?.value || ''}
+                            onChange={(e) =>
+                              handleChange(`about_journey_s${num}_title`, e.target.value)
+                            }
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Texto da Sessão {num}</Label>
+                          <RichTextEditor
+                            value={formData[`about_journey_s${num}_content`]?.value || ''}
+                            onChange={(val) => handleChange(`about_journey_s${num}_content`, val)}
+                          />
+                        </div>
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label>Imagem da Sessão {num}</Label>
+                            <div className="flex items-center gap-2">
+                              <Input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) =>
+                                  handleFileChange(
+                                    `about_journey_s${num}_image`,
+                                    e.target.files?.[0] || null,
+                                  )
+                                }
+                              />
+                              {renderImagePreview(`about_journey_s${num}_image`)}
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            <Label>Texto Alt da Imagem (SEO)</Label>
+                            <Input
+                              value={formData[`about_journey_s${num}_image`]?.image_alt || ''}
+                              onChange={(e) =>
+                                handleChangeAlt(`about_journey_s${num}_image`, e.target.value)
+                              }
+                            />
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+                <Button
+                  variant="secondary"
+                  disabled={loading}
+                  onClick={() =>
+                    handleSave(
+                      [1, 2, 3, 4, 5, 6].flatMap((n) => [
+                        `about_journey_s${n}_title`,
+                        `about_journey_s${n}_content`,
+                        `about_journey_s${n}_image`,
+                      ]),
+                    )
+                  }
+                >
+                  {loading ? 'Salvando...' : 'Salvar Apenas Jornada'}
+                </Button>
               </div>
 
               <Separator />

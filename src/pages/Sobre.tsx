@@ -35,11 +35,6 @@ export default function Sobre() {
     (settings.about_hero_image?.image_alt || settings.about_main?.image_alt) ??
     'Clínica Naturistica'
 
-  const journeyImage = getImageUrl(
-    settings.about_journey_image,
-    'https://img.usecurling.com/p/800/800?q=nature%20therapy&color=green',
-  )
-
   const felipeRecord = settings.doctor_felipe_image || settings.about_felipe_image
   const felipeImgUrl = getImageUrl(
     felipeRecord,
@@ -51,9 +46,6 @@ export default function Sobre() {
     beatrizRecord,
     'https://img.usecurling.com/ppl/large?gender=female&seed=beatriz',
   )
-
-  const fallbackAbout =
-    '<p>Nossa história começou nos corredores da Universidade Estadual de Londrina (UEL), onde a paixão pela medicina se encontrou com o desejo de ir além do tratamento de sintomas.</p><p>A Naturistica nasceu da necessidade de unir o rigor científico da nossa formação com a sabedoria ancestral, criando um espaço de cura integrativa focado no ser humano como um todo.</p>'
 
   const fallbackFelipe =
     '<p>Especialista em abordagens mente-corpo, o Dr. Felipe integrou seus estudos em medicina com a psicoterapia Gestalt e conhecimentos profundos sobre enteógenos e plantas medicinais.</p><p>Sua escuta atenta busca desvendar as raízes emocionais dos sintomas físicos, guiando os pacientes para a autonomia de sua própria saúde.</p>'
@@ -97,30 +89,80 @@ export default function Sobre() {
       </section>
 
       <div className="container max-w-5xl mt-[-4rem] relative z-20">
-        {/* Journey Section */}
-        <ScrollReveal className="bg-white rounded-3xl p-8 md:p-16 shadow-xl border border-border/50 mb-24 flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
-          <div className="flex-1 space-y-8 order-2 lg:order-1 lg:pr-8">
-            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif">
-              {settings.about_journey_title?.value || 'A Jornada Naturística'}
-            </h2>
-            <div
-              className="prose prose-lg lg:prose-xl text-muted-foreground prose-headings:text-primary prose-headings:font-serif prose-a:text-primary hover:prose-a:text-primary/80 prose-strong:text-foreground prose-strong:font-semibold prose-ul:list-disc prose-ol:list-decimal prose-li:text-muted-foreground font-sans leading-relaxed"
-              dangerouslySetInnerHTML={{
-                __html:
-                  settings.about_journey_text?.value ||
-                  settings.about_content?.value ||
-                  fallbackAbout,
-              }}
-            />
-          </div>
-          <div className="relative w-full lg:w-5/12 h-[350px] md:h-[450px] lg:h-auto lg:aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl order-1 lg:order-2 shrink-0">
-            <img
-              src={journeyImage}
-              alt={settings.about_journey_image?.image_alt || 'Jornada Naturistica'}
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105"
-            />
-          </div>
-        </ScrollReveal>
+        {/* Journey Sections (Z-Pattern) */}
+        <div className="space-y-16 md:space-y-24 mb-24">
+          {[1, 2, 3, 4, 5, 6].map((num, idx) => {
+            const titleKey = `about_journey_s${num}_title`
+            const contentKey = `about_journey_s${num}_content`
+            const imageKey = `about_journey_s${num}_image`
+
+            const fallbacks = [
+              {
+                title: 'Nossa Origem',
+                text: '<p>Nossa história começou nos corredores da Universidade Estadual de Londrina (UEL), onde a paixão pela medicina se encontrou com o desejo de ir além do tratamento de sintomas.</p>',
+              },
+              {
+                title: 'O Nascimento da Naturistica',
+                text: '<p>A Naturistica nasceu da necessidade de unir o rigor científico da nossa formação com a sabedoria ancestral, criando um espaço de cura integrativa focado no ser humano como um todo.</p>',
+              },
+              {
+                title: 'Além dos Sintomas',
+                text: '<p>Percebemos que o tratamento convencional muitas vezes apenas mascarava as raízes dos problemas. Nosso objetivo sempre foi investigar as causas profundas e emocionais de cada paciente.</p>',
+              },
+              {
+                title: 'Medicinas Tradicionais',
+                text: '<p>Decidimos buscar conhecimento nas medicinas tradicionais, incorporando práticas como Ayurveda e fitoterapia, que enxergam o indivíduo em sua totalidade sistêmica.</p>',
+              },
+              {
+                title: 'Novas Perspectivas de Cura',
+                text: '<p>O estudo aprofundado do uso de enteógenos e da medicina canabinoide nos trouxe ferramentas inovadoras e poderosas para transformações de vida consistentes.</p>',
+              },
+              {
+                title: 'O Nosso Propósito',
+                text: '<p>Hoje, oferecemos um espaço seguro, acolhedor e fundamentado na ciência, guiando nossos pacientes para a autonomia e protagonismo de sua própria saúde.</p>',
+              },
+            ]
+
+            const defaultFallback = fallbacks[idx]
+            const title = settings[titleKey]?.value || defaultFallback.title
+            const content = settings[contentKey]?.value || defaultFallback.text
+            const imageRecord = settings[imageKey]
+            const imageUrl = getImageUrl(
+              imageRecord,
+              `https://img.usecurling.com/p/800/800?q=nature%20therapy&seed=${num}`,
+            )
+            const imageAlt = imageRecord?.image_alt || title
+
+            // Z-Pattern: Even index (0, 2, 4) -> Image Right, Text Left. Odd index (1, 3, 5) -> Image Left, Text Right
+            const isImageLeft = idx % 2 !== 0
+
+            return (
+              <ScrollReveal
+                key={num}
+                className={`flex flex-col ${
+                  isImageLeft ? 'lg:flex-row-reverse' : 'lg:flex-row'
+                } gap-12 lg:gap-16 items-center bg-white p-8 md:p-12 rounded-3xl shadow-xl border border-border/50`}
+              >
+                <div className="flex-1 space-y-6">
+                  <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif">
+                    {title}
+                  </h2>
+                  <div
+                    className="prose prose-lg text-muted-foreground prose-headings:text-primary prose-headings:font-serif prose-a:text-primary hover:prose-a:text-primary/80 prose-strong:text-foreground prose-strong:font-semibold prose-ul:list-disc prose-ol:list-decimal prose-li:text-muted-foreground font-sans leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: content }}
+                  />
+                </div>
+                <div className="relative w-full lg:w-5/12 h-[350px] md:h-[400px] rounded-3xl overflow-hidden shadow-2xl shrink-0">
+                  <img
+                    src={imageUrl}
+                    alt={imageAlt}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                  />
+                </div>
+              </ScrollReveal>
+            )
+          })}
+        </div>
 
         {/* Doctors Section */}
         <div className="space-y-12 mb-24">
