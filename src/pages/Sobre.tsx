@@ -98,13 +98,13 @@ export default function Sobre() {
 
       <div className="container max-w-5xl mt-[-4rem] relative z-20">
         {/* Journey Section */}
-        <ScrollReveal className="bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-border/50 mb-24 grid md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6 order-2 md:order-1">
-            <h2 className="text-3xl font-bold text-primary font-serif">
+        <ScrollReveal className="bg-white rounded-3xl p-8 md:p-16 shadow-xl border border-border/50 mb-24 flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
+          <div className="flex-1 space-y-8 order-2 lg:order-1 lg:pr-8">
+            <h2 className="text-3xl md:text-4xl font-bold text-primary font-serif">
               {settings.about_journey_title?.value || 'A Jornada Naturística'}
             </h2>
             <div
-              className="prose prose-lg md:prose-xl text-muted-foreground prose-headings:text-primary prose-headings:font-serif prose-a:text-primary hover:prose-a:text-primary/80 prose-strong:text-foreground prose-strong:font-semibold prose-ul:list-disc prose-ol:list-decimal prose-li:text-muted-foreground font-sans leading-relaxed"
+              className="prose prose-lg lg:prose-xl text-muted-foreground prose-headings:text-primary prose-headings:font-serif prose-a:text-primary hover:prose-a:text-primary/80 prose-strong:text-foreground prose-strong:font-semibold prose-ul:list-disc prose-ol:list-decimal prose-li:text-muted-foreground font-sans leading-relaxed"
               dangerouslySetInnerHTML={{
                 __html:
                   settings.about_journey_text?.value ||
@@ -113,7 +113,7 @@ export default function Sobre() {
               }}
             />
           </div>
-          <div className="relative h-[300px] md:h-[400px] rounded-2xl overflow-hidden shadow-lg order-1 md:order-2">
+          <div className="relative w-full lg:w-5/12 h-[350px] md:h-[450px] lg:h-auto lg:aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl order-1 lg:order-2 shrink-0">
             <img
               src={journeyImage}
               alt={settings.about_journey_image?.image_alt || 'Jornada Naturistica'}

@@ -77,8 +77,11 @@ export default function Contato() {
 
       await pb.collection('leads').create(payload)
 
-      const text = `*Nome:* ${values.name}\n*E-mail:* ${values.email || 'Não informado'}\n*Telefone:* ${values.phone}\n*Mensagem:* ${values.message || 'Nenhuma'}`
-      window.location.href = `https://wa.me/5543991692047?text=${encodeURIComponent(text)}`
+      const treatmentName = values.treatment_ref
+        ? treatments.find((t) => t.id === values.treatment_ref)?.title || ''
+        : ''
+
+      navigate('/obrigado', { state: { ...values, treatmentName } })
     } catch (err) {
       console.error(err)
       const fieldErrors = extractFieldErrors(err)

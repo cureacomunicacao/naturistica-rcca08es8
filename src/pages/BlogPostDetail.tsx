@@ -36,12 +36,8 @@ export default function BlogPostDetail() {
       </div>
     )
 
-  const whatsappMessage = encodeURIComponent(
-    post.slug === 'sintomas-ansiedade-grave' || post.slug === 'teste-depressao-gratuito'
-      ? `Olá Naturística, li o artigo sobre ${post.title} e gostaria de agendar uma consulta urgente.`
-      : `Olá Naturística, vim pelo blog e gostaria de agendar uma consulta.`,
-  )
-  const whatsappUrl = `https://wa.me/5511999999999?text=${whatsappMessage}`
+  const whatsappUrl =
+    'https://wa.me/5543991692047?text=OI%C3%A1%2C%20vim%20do%20Site%20e%20quero%20agendar%20uma%20consulta.'
 
   return (
     <div className="bg-[#fdf6ee] min-h-screen pb-20">

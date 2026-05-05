@@ -75,10 +75,8 @@ export function AnxietyQuiz() {
     }
   }
 
-  const whatsappMessage = encodeURIComponent(
-    `Olá Naturística, fiz o teste de ansiedade gratuito no blog e meu resultado indicou Ansiedade ${result.level} (Pontuação: ${totalScore}). Gostaria de agendar uma avaliação.`,
-  )
-  const whatsappUrl = `https://wa.me/5543991692047?text=${whatsappMessage}`
+  const whatsappUrl =
+    'https://wa.me/5543991692047?text=OI%C3%A1%2C%20vim%20do%20Site%20e%20quero%20agendar%20uma%20consulta.'
 
   const Icon = result.icon
 

@@ -56,10 +56,8 @@ export function DepressionQuiz() {
     setAnswers((prev) => ({ ...prev, [currentStep]: val }))
   }
 
-  const whatsappMessage = encodeURIComponent(
-    'Olá Naturística, fiz o teste de depressão no blog e gostaria de agendar uma consulta para entender melhor meus sintomas.',
-  )
-  const whatsappUrl = `https://wa.me/5543991692047?text=${whatsappMessage}`
+  const whatsappUrl =
+    'https://wa.me/5543991692047?text=OI%C3%A1%2C%20vim%20do%20Site%20e%20quero%20agendar%20uma%20consulta.'
 
   if (showResult) {
     return (

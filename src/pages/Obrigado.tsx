@@ -19,7 +19,7 @@ export default function Obrigado() {
     const timer = setTimeout(() => {
       setRedirecting(true)
 
-      const phone = settings['whatsapp_contact_number']?.value || '5511999999999'
+      const phone = settings['whatsapp_contact_number']?.value || '5543991692047'
       const rawPhone = phone.replace(/\D/g, '')
 
       const lines = [
@@ -28,7 +28,7 @@ export default function Obrigado() {
         `*Nome:* ${data.name}`,
         `*Email:* ${data.email || 'Não informado'}`,
         `*Telefone:* ${data.phone}`,
-        `*Interesse:* ${data.treatmentName}`,
+        `*Interesse:* ${data.treatmentName || 'Não especificado'}`,
         `*Mensagem:* ${data.message || 'Sem mensagem'}`,
       ]
 
