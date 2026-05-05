@@ -433,21 +433,23 @@ export default function Index() {
                 <CarouselContent>
                   {activeFelipeTestimonials.map((t, i) => (
                     <CarouselItem key={i}>
-                      <Card className="bg-white border-none shadow-sm rounded-3xl">
-                        <CardContent className="p-6 md:p-8 space-y-4 flex flex-col justify-between">
-                          <p className="text-muted-foreground italic text-lg leading-relaxed">
+                      <Card className="h-full bg-white border-none shadow-sm rounded-3xl flex flex-col">
+                        <CardContent className="flex-1 p-5 md:p-8 space-y-4 flex flex-col justify-between">
+                          <p className="text-muted-foreground italic text-base md:text-lg leading-relaxed">
                             "{t.text || t.content}"
                           </p>
-                          <div className="flex items-center gap-4 mt-4">
+                          <div className="flex items-center gap-4 mt-4 shrink-0">
                             {t.image && t.collectionId && t.id ? (
                               <ImageWithFallback
                                 src={pb.files.getURL(t, t.image)}
                                 fallback="https://img.usecurling.com/ppl/thumbnail"
                                 alt={t.patient_name}
-                                className="w-12 h-12 rounded-full object-cover"
+                                className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover shrink-0"
                               />
                             ) : null}
-                            <p className="font-semibold">{t.name || t.patient_name}</p>
+                            <p className="font-semibold text-sm md:text-base">
+                              {t.name || t.patient_name}
+                            </p>
                           </div>
                         </CardContent>
                       </Card>
@@ -470,21 +472,23 @@ export default function Index() {
                 <CarouselContent>
                   {activeBeatrizTestimonials.map((t, i) => (
                     <CarouselItem key={i}>
-                      <Card className="bg-white border-none shadow-sm rounded-3xl">
-                        <CardContent className="p-6 md:p-8 space-y-4 flex flex-col justify-between">
-                          <p className="text-muted-foreground italic text-lg leading-relaxed">
+                      <Card className="h-full bg-white border-none shadow-sm rounded-3xl flex flex-col">
+                        <CardContent className="flex-1 p-5 md:p-8 space-y-4 flex flex-col justify-between">
+                          <p className="text-muted-foreground italic text-base md:text-lg leading-relaxed">
                             "{t.text || t.content}"
                           </p>
-                          <div className="flex items-center gap-4 mt-4">
+                          <div className="flex items-center gap-4 mt-4 shrink-0">
                             {t.image && t.collectionId && t.id ? (
                               <ImageWithFallback
                                 src={pb.files.getURL(t, t.image)}
                                 fallback="https://img.usecurling.com/ppl/thumbnail"
                                 alt={t.patient_name}
-                                className="w-12 h-12 rounded-full object-cover"
+                                className="w-10 h-10 md:w-12 md:h-12 rounded-full object-cover shrink-0"
                               />
                             ) : null}
-                            <p className="font-semibold">{t.name || t.patient_name}</p>
+                            <p className="font-semibold text-sm md:text-base">
+                              {t.name || t.patient_name}
+                            </p>
                           </div>
                         </CardContent>
                       </Card>
