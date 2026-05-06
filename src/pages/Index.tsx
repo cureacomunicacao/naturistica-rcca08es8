@@ -79,17 +79,26 @@ export default function Index() {
   const [featuredTreatment, setFeaturedTreatment] = useState<any>(null)
   const [loadingFeaturedTreatment, setLoadingFeaturedTreatment] = useState(true)
 
+  const shuffleArray = <T,>(array: T[]): T[] => {
+    const shuffled = [...array]
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+    }
+    return shuffled
+  }
+
   const fetchTestimonials = () => {
     setLoadingTestimonials(true)
     Promise.allSettled([
       pb
         .collection('testimonials')
         .getFullList({ filter: 'active = true && doctor = "Felipe"' })
-        .then(setTestimonialsFelipeDb),
+        .then((data) => setTestimonialsFelipeDb(shuffleArray(data))),
       pb
         .collection('testimonials')
         .getFullList({ filter: 'active = true && doctor = "Beatriz"' })
-        .then(setTestimonialsBeatrizDb),
+        .then((data) => setTestimonialsBeatrizDb(shuffleArray(data))),
     ]).finally(() => setLoadingTestimonials(false))
   }
 
@@ -292,8 +301,8 @@ export default function Index() {
                     </div>
                     <Skeleton className="h-10 w-32 rounded-full" />
                   </div>
-                  <div className="relative h-[300px] rounded-[30%_70%_70%_30%/30%_30%_70%_70%] overflow-hidden flex items-center justify-center">
-                    <Skeleton className="absolute inset-0 w-full h-full rounded-[30%_70%_70%_30%/30%_30%_70%_70%]" />
+                  <div className="relative h-[300px] md:h-[400px] rounded-3xl overflow-hidden flex items-center justify-center bg-primary/5">
+                    <Skeleton className="absolute inset-0 w-full h-full rounded-3xl" />
                   </div>
                 </div>
               ) : (
@@ -326,7 +335,7 @@ export default function Index() {
                     </Button>
                   </div>
                   {featuredTreatment.image && (
-                    <div className="relative h-[300px] rounded-[30%_70%_70%_30%/30%_30%_70%_70%] overflow-hidden">
+                    <div className="relative h-[300px] md:h-[400px] rounded-3xl overflow-hidden bg-primary/5">
                       <ImageWithFallback
                         src={pb.files.getURL(featuredTreatment, featuredTreatment.image)}
                         fallback={`https://img.usecurling.com/p/600/400?q=${encodeURIComponent(featuredTreatment.title)}&color=green`}
