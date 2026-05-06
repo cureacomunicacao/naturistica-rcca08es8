@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-06T13:55:49.115Z",
+  "generatedAt": "2026-05-06T15:54:18.407Z",
   "collections": [
     {
       "name": "users",
@@ -131,6 +131,12 @@
         },
         {
           "name": "active",
+          "type": "bool",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "show_on_home",
           "type": "bool",
           "required": false,
           "system": false

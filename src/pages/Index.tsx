@@ -102,14 +102,18 @@ export default function Index() {
     ]).finally(() => setLoadingTestimonials(false))
   }
 
-  useEffect(() => {
+  const fetchTreatments = () => {
     pb.collection('treatments')
-      .getFullList({ filter: 'active = true', sort: 'order,created' })
+      .getFullList({ filter: 'active = true && show_on_home = true', sort: 'order,created' })
       .then(setTreatments)
       .catch((err) => {
         console.warn('Failed to load treatments:', err.message)
       })
       .finally(() => setLoadingTreatments(false))
+  }
+
+  useEffect(() => {
+    fetchTreatments()
 
     getPosts('status = "published"')
       .then((res) => setPosts(res.slice(0, 3)))
@@ -123,6 +127,10 @@ export default function Index() {
 
   useRealtime('testimonials', () => {
     fetchTestimonials()
+  })
+
+  useRealtime('treatments', () => {
+    fetchTreatments()
   })
 
   useEffect(() => {

@@ -6,22 +6,34 @@ import { Card, CardContent } from '@/components/ui/card'
 import { ArrowRight, Leaf, Quote } from 'lucide-react'
 import { SEO } from '@/components/SEO'
 import { useSettings } from '@/hooks/use-settings'
+import { useRealtime } from '@/hooks/use-realtime'
 
 export default function Tratamentos() {
   const [treatments, setTreatments] = useState<any[]>([])
   const [testimonials, setTestimonials] = useState<any[]>([])
   const { settings } = useSettings()
 
-  useEffect(() => {
+  const fetchTreatments = () => {
     pb.collection('treatments')
       .getFullList({ filter: 'active = true', sort: 'order,title' })
       .then(setTreatments)
       .catch(console.error)
+  }
+
+  const fetchTestimonials = () => {
     pb.collection('testimonials')
       .getFullList({ filter: 'active = true', sort: '-created' })
       .then(setTestimonials)
       .catch(console.error)
+  }
+
+  useEffect(() => {
+    fetchTreatments()
+    fetchTestimonials()
   }, [])
+
+  useRealtime('treatments', fetchTreatments)
+  useRealtime('testimonials', fetchTestimonials)
 
   const approachTitle = settings.treatments_approach_title?.value || 'Nossa Abordagem Clínica'
   const approachContent =

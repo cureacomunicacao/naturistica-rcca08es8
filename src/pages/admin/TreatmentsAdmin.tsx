@@ -50,6 +50,7 @@ export default function TreatmentsAdmin() {
     image_alt: '',
     order: 0,
     active: true,
+    show_on_home: false,
   })
   const [file, setFile] = useState<File | null>(null)
   const [iconFile, setIconFile] = useState<File | null>(null)
@@ -83,6 +84,7 @@ export default function TreatmentsAdmin() {
         image_alt: record.image_alt || '',
         order: record.order || 0,
         active: record.active !== false,
+        show_on_home: record.show_on_home === true,
       })
       setFile(null)
       setIconFile(null)
@@ -117,6 +119,7 @@ export default function TreatmentsAdmin() {
       image_alt: '',
       order: 0,
       active: true,
+      show_on_home: false,
     })
     setFile(null)
     setIconFile(null)
@@ -162,6 +165,7 @@ export default function TreatmentsAdmin() {
         image_alt: '',
         order: 0,
         active: true,
+        show_on_home: false,
       })
       setOpen(false)
       fetchTreatments()
@@ -255,6 +259,7 @@ export default function TreatmentsAdmin() {
               <TableHead>Slug</TableHead>
               <TableHead>Ordem</TableHead>
               <TableHead>Status</TableHead>
+              <TableHead>Na Home</TableHead>
               <TableHead className="w-[100px]">Ações</TableHead>
             </TableRow>
           </TableHeader>
@@ -269,6 +274,13 @@ export default function TreatmentsAdmin() {
                     className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${t.active !== false ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}
                   >
                     {t.active !== false ? 'Ativo' : 'Inativo'}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <span
+                    className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${t.show_on_home === true ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}`}
+                  >
+                    {t.show_on_home === true ? 'Sim' : 'Não'}
                   </span>
                 </TableCell>
                 <TableCell>
@@ -340,9 +352,21 @@ export default function TreatmentsAdmin() {
                     onCheckedChange={(checked) => setFormData({ ...formData, active: checked })}
                   />
                   <span className="text-sm text-muted-foreground">
-                    {formData.active ? 'Ativo (Visível)' : 'Inativo (Oculto)'}
+                    {formData.active ? 'Ativo' : 'Inativo'}
                   </span>
                 </div>
+              </div>
+            </div>
+            <div className="space-y-2 flex flex-col justify-center">
+              <Label>Exibir na Página Inicial</Label>
+              <div className="flex items-center space-x-2 h-10">
+                <Switch
+                  checked={formData.show_on_home}
+                  onCheckedChange={(checked) => setFormData({ ...formData, show_on_home: checked })}
+                />
+                <span className="text-sm text-muted-foreground">
+                  {formData.show_on_home ? 'Sim (Visível na Home)' : 'Não'}
+                </span>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">

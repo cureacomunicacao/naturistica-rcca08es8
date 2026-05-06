@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react'
 import { useSettings } from '@/hooks/use-settings'
 import pb from '@/lib/pocketbase/client'
 import { SEO } from '@/components/SEO'
+import { useRealtime } from '@/hooks/use-realtime'
 
 export default function Layout() {
   const location = useLocation()
@@ -32,16 +33,20 @@ export default function Layout() {
     { title: 'Dor crônica', slug: 'dor-cronica' },
   ])
 
-  useEffect(() => {
+  const fetchTreatments = () => {
     pb.collection('treatments')
       .getFullList({ filter: 'active = true', sort: 'order,title' })
       .then((records) => {
-        if (records.length > 0) {
-          setTreatmentsList(records.map((r) => ({ title: r.title, slug: r.slug })))
-        }
+        setTreatmentsList(records.map((r) => ({ title: r.title, slug: r.slug })))
       })
       .catch(console.error)
+  }
+
+  useEffect(() => {
+    fetchTreatments()
   }, [])
+
+  useRealtime('treatments', fetchTreatments)
 
   useEffect(() => {
     const handleScroll = () => {
