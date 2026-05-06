@@ -56,7 +56,7 @@ export default function TratamentoDetalhe() {
         </div>
         <div className="relative z-10 text-center space-y-4 px-4 w-full">
           <h1
-            className="text-4xl md:text-6xl font-bold text-white font-serif whitespace-nowrap overflow-hidden text-ellipsis max-w-full"
+            className="font-bold text-white font-serif whitespace-nowrap overflow-hidden text-ellipsis max-w-full text-[2.5rem]"
             style={{
               fontSize: settings.treatment_h1_size?.value
                 ? `${settings.treatment_h1_size.value}px`
