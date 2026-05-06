@@ -825,7 +825,7 @@ export default function Index() {
                 src={expImage}
                 fallback="https://img.usecurling.com/p/600/800?q=doctor&color=green"
                 alt={expImgAlt}
-                className="absolute inset-0 w-full h-full object-contain"
+                className="absolute inset-0 w-full h-full object-contain rounded-2xl"
               />
             </div>
           </ScrollReveal>
