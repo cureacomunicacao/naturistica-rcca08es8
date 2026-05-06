@@ -14,7 +14,7 @@ export default function Tratamentos() {
 
   useEffect(() => {
     pb.collection('treatments')
-      .getFullList({ sort: 'title' })
+      .getFullList({ filter: 'active = true', sort: 'order,title' })
       .then(setTreatments)
       .catch(console.error)
     pb.collection('testimonials')

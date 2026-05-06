@@ -30,6 +30,8 @@ export default function SiteSettingsAdmin() {
     const initial: any = {}
     const keys = [
       'global_email',
+      'contact_email',
+      'contact_address',
       'global_phone',
       'whatsapp_contact_number',
       'global_instagram',
@@ -288,8 +290,17 @@ export default function SiteSettingsAdmin() {
                 <div className="space-y-2">
                   <Label>Email de Contato</Label>
                   <Input
-                    value={formData['global_email']?.value || ''}
-                    onChange={(e) => handleChange('global_email', e.target.value)}
+                    value={formData['contact_email']?.value || ''}
+                    onChange={(e) => handleChange('contact_email', e.target.value)}
+                    placeholder="contato@naturistica.com.br"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Endereço Físico</Label>
+                  <Input
+                    value={formData['contact_address']?.value || ''}
+                    onChange={(e) => handleChange('contact_address', e.target.value)}
+                    placeholder="Sua Clínica, Rua X"
                   />
                 </div>
                 <div className="space-y-2">
@@ -349,7 +360,8 @@ export default function SiteSettingsAdmin() {
                   handleSave([
                     'global_brand_name',
                     'global_logo',
-                    'global_email',
+                    'contact_email',
+                    'contact_address',
                     'global_phone',
                     'whatsapp_contact_number',
                     'global_instagram',

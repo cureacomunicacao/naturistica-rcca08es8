@@ -104,7 +104,7 @@ export default function Index() {
 
   useEffect(() => {
     pb.collection('treatments')
-      .getFullList({ sort: 'created' })
+      .getFullList({ filter: 'active = true', sort: 'order,created' })
       .then(setTreatments)
       .catch((err) => {
         console.warn('Failed to load treatments:', err.message)

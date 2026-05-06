@@ -56,7 +56,7 @@ export default function Contato() {
 
   useEffect(() => {
     pb.collection('treatments')
-      .getFullList({ sort: 'title', requestKey: null })
+      .getFullList({ filter: 'active = true', sort: 'order,title', requestKey: null })
       .then(setTreatments)
       .catch(console.error)
     pb.collection('testimonials')
@@ -255,10 +255,24 @@ export default function Contato() {
                   <div>
                     <h3 className="font-medium">Email</h3>
                     <p className="text-muted-foreground">
-                      {settings['global_email']?.value || 'contato@naturistica.com.br'}
+                      {settings['contact_email']?.value ||
+                        settings['global_email']?.value ||
+                        'contato@naturistica.com.br'}
                     </p>
                   </div>
                 </div>
+
+                {settings['contact_address']?.value && (
+                  <div className="flex items-start gap-4">
+                    <div className="p-3 bg-primary/10 rounded-full text-primary">
+                      <MapPin className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="font-medium">Endereço</h3>
+                      <p className="text-muted-foreground">{settings['contact_address'].value}</p>
+                    </div>
+                  </div>
+                )}
 
                 <div className="flex items-start gap-4">
                   <div className="p-3 bg-primary/10 rounded-full text-primary">

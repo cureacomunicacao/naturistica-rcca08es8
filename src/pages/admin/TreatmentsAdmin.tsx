@@ -23,6 +23,7 @@ import { RichTextEditor } from '@/components/RichTextEditor'
 import { useToast } from '@/hooks/use-toast'
 import { Pencil, Trash2 } from 'lucide-react'
 import { useRealtime } from '@/hooks/use-realtime'
+import { Switch } from '@/components/ui/switch'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -47,6 +48,8 @@ export default function TreatmentsAdmin() {
     seo_title: '',
     seo_description: '',
     image_alt: '',
+    order: 0,
+    active: true,
   })
   const [file, setFile] = useState<File | null>(null)
   const [iconFile, setIconFile] = useState<File | null>(null)
@@ -55,7 +58,7 @@ export default function TreatmentsAdmin() {
   const [itemToDelete, setItemToDelete] = useState<any>(null)
 
   const fetchTreatments = async () => {
-    const records = await pb.collection('treatments').getFullList({ sort: 'title' })
+    const records = await pb.collection('treatments').getFullList({ sort: 'order,title' })
     setTreatments(records)
   }
 
@@ -78,6 +81,8 @@ export default function TreatmentsAdmin() {
         seo_title: record.seo_title || '',
         seo_description: record.seo_description || '',
         image_alt: record.image_alt || '',
+        order: record.order || 0,
+        active: record.active !== false,
       })
       setFile(null)
       setIconFile(null)
@@ -110,6 +115,8 @@ export default function TreatmentsAdmin() {
       seo_title: '',
       seo_description: '',
       image_alt: '',
+      order: 0,
+      active: true,
     })
     setFile(null)
     setIconFile(null)
@@ -153,6 +160,8 @@ export default function TreatmentsAdmin() {
         seo_title: '',
         seo_description: '',
         image_alt: '',
+        order: 0,
+        active: true,
       })
       setOpen(false)
       fetchTreatments()
@@ -176,6 +185,8 @@ export default function TreatmentsAdmin() {
           seo_title: '',
           seo_description: '',
           image_alt: '',
+          order: 0,
+          active: true,
         })
         setOpen(false)
         fetchTreatments()
@@ -242,6 +253,8 @@ export default function TreatmentsAdmin() {
             <TableRow>
               <TableHead>Título</TableHead>
               <TableHead>Slug</TableHead>
+              <TableHead>Ordem</TableHead>
+              <TableHead>Status</TableHead>
               <TableHead className="w-[100px]">Ações</TableHead>
             </TableRow>
           </TableHeader>
@@ -250,6 +263,14 @@ export default function TreatmentsAdmin() {
               <TableRow key={t.id}>
                 <TableCell className="font-medium">{t.title}</TableCell>
                 <TableCell>{t.slug}</TableCell>
+                <TableCell>{t.order || 0}</TableCell>
+                <TableCell>
+                  <span
+                    className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${t.active !== false ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}
+                  >
+                    {t.active !== false ? 'Ativo' : 'Inativo'}
+                  </span>
+                </TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <Button variant="ghost" size="icon" onClick={() => handleEdit(t)}>
@@ -300,6 +321,30 @@ export default function TreatmentsAdmin() {
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSave} className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>Ordem de Exibição</Label>
+                <Input
+                  type="number"
+                  value={formData.order}
+                  onChange={(e) =>
+                    setFormData({ ...formData, order: parseInt(e.target.value) || 0 })
+                  }
+                />
+              </div>
+              <div className="space-y-2 flex flex-col justify-center">
+                <Label>Status</Label>
+                <div className="flex items-center space-x-2 h-10">
+                  <Switch
+                    checked={formData.active}
+                    onCheckedChange={(checked) => setFormData({ ...formData, active: checked })}
+                  />
+                  <span className="text-sm text-muted-foreground">
+                    {formData.active ? 'Ativo (Visível)' : 'Inativo (Oculto)'}
+                  </span>
+                </div>
+              </div>
+            </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>Título</Label>

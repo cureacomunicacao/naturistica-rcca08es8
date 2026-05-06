@@ -34,7 +34,7 @@ export default function Layout() {
 
   useEffect(() => {
     pb.collection('treatments')
-      .getFullList({ sort: '-created' })
+      .getFullList({ filter: 'active = true', sort: 'order,title' })
       .then((records) => {
         if (records.length > 0) {
           setTreatmentsList(records.map((r) => ({ title: r.title, slug: r.slug })))
@@ -309,7 +309,12 @@ export default function Layout() {
               {settings.footer_contact_title?.value || 'Contato'}
             </h4>
             <div className="space-y-2 text-sm text-primary-foreground/80">
-              <p>{settings?.global_email?.value || 'contato@naturistica.com.br'}</p>
+              {settings?.contact_address?.value && <p>{settings.contact_address.value}</p>}
+              <p>
+                {settings?.contact_email?.value ||
+                  settings?.global_email?.value ||
+                  'contato@naturistica.com.br'}
+              </p>
               <p>{settings?.global_phone?.value || '+55 (43) 99169-2047'}</p>
               <div className="pt-4">
                 <Button

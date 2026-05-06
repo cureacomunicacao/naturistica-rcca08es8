@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-06T13:26:58.011Z",
+  "generatedAt": "2026-05-06T13:55:49.115Z",
   "collections": [
     {
       "name": "users",
@@ -122,9 +122,24 @@
           "type": "file",
           "required": false,
           "system": false
+        },
+        {
+          "name": "order",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "active",
+          "type": "bool",
+          "required": false,
+          "system": false
         }
       ],
-      "indexes": ["CREATE UNIQUE INDEX idx_treatments_slug ON treatments (slug)"]
+      "indexes": [
+        "CREATE UNIQUE INDEX idx_treatments_slug ON treatments (slug)",
+        "CREATE INDEX `idx_treatments_order` ON `treatments` (order)"
+      ]
     },
     {
       "name": "posts",
