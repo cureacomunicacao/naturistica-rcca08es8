@@ -49,6 +49,7 @@ export default function TreatmentsAdmin() {
     image_alt: '',
   })
   const [file, setFile] = useState<File | null>(null)
+  const [iconFile, setIconFile] = useState<File | null>(null)
   const [loading, setLoading] = useState(false)
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [itemToDelete, setItemToDelete] = useState<any>(null)
@@ -79,6 +80,7 @@ export default function TreatmentsAdmin() {
         image_alt: record.image_alt || '',
       })
       setFile(null)
+      setIconFile(null)
       setFieldErrors({})
       setOpen(true)
     } catch (error: any) {
@@ -110,8 +112,8 @@ export default function TreatmentsAdmin() {
       image_alt: '',
     })
     setFile(null)
-    setFieldErrors({})
-    setOpen(true)
+    setIconFile(null)
+    setFieldErrors({})    setOpen(true)
   }
 
   const handleSave = async (e: React.FormEvent) => {
@@ -122,6 +124,7 @@ export default function TreatmentsAdmin() {
       const data = new FormData()
       Object.entries(formData).forEach(([k, v]) => data.append(k, v))
       if (file) data.append('image', file)
+      if (iconFile) data.append('icon', iconFile)
 
       if (editingId) {
         if (typeof editingId !== 'string' || editingId.trim() === '') {
@@ -141,6 +144,7 @@ export default function TreatmentsAdmin() {
       }
       setEditingId(null)
       setFile(null)
+      setIconFile(null)
       setFormData({
         title: '',
         slug: '',
@@ -163,6 +167,7 @@ export default function TreatmentsAdmin() {
         })
         setEditingId(null)
         setFile(null)
+        setIconFile(null)
         setFormData({
           title: '',
           slug: '',
@@ -313,6 +318,33 @@ export default function TreatmentsAdmin() {
                 />
                 {fieldErrors.slug && <p className="text-sm text-red-500">{fieldErrors.slug}</p>}
               </div>
+            </div>
+            <div className="space-y-2">
+              <Label>Ícone do Tratamento</Label>
+              {currentTreatment && currentTreatment.icon && !iconFile && (
+                <div className="mb-4">
+                  <img
+                    src={pb.files.getURL(currentTreatment, currentTreatment.icon)}
+                    alt="Current icon preview"
+                    className="h-16 w-16 object-contain rounded-md border bg-muted"
+                  />
+                </div>
+              )}
+              {iconFile && (
+                <div className="mb-4">
+                  <img
+                    src={URL.createObjectURL(iconFile)}
+                    alt="New icon preview"
+                    className="h-16 w-16 object-contain rounded-md border bg-muted"
+                  />
+                </div>
+              )}
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setIconFile(e.target.files?.[0] || null)}
+              />
+              <p className="text-xs text-muted-foreground mt-1">Tamanho recomendado: SVG ou PNG (Ex: 128x128).</p>
             </div>
             <div className="space-y-2">
               <Label>Imagem de Destaque</Label>

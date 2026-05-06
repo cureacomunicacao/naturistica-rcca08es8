@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-06T02:33:37.688Z",
+  "generatedAt": "2026-05-06T11:10:41.433Z",
   "collections": [
     {
       "name": "users",
@@ -114,6 +114,12 @@
         {
           "name": "image_alt",
           "type": "text",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "icon",
+          "type": "file",
           "required": false,
           "system": false
         }

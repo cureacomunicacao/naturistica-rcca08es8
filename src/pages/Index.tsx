@@ -190,9 +190,9 @@ export default function Index() {
                 <Skeleton className="h-14 w-full sm:w-64 rounded-full" />
               </div>
             </div>
-            <div className="relative h-[500px] md:h-[600px] flex items-center justify-center">
-              <div className="absolute inset-0 bg-primary/10 rounded-[40%_60%_70%_30%/40%_50%_60%_50%] rotate-6 scale-105 transition-all duration-700" />
-              <Skeleton className="relative z-10 w-[90%] h-[90%] rounded-[30%_70%_70%_30%/30%_30%_70%_70%] shadow-xl" />
+            <div className="relative h-[500px] md:h-[600px] flex items-center justify-center w-full">
+              <div className="absolute inset-0 bg-primary/5 rounded-3xl -rotate-2 scale-105 transition-all duration-700" />
+              <Skeleton className="relative z-10 w-full h-full rounded-2xl shadow-xl" />
             </div>
           </div>
         ) : (
@@ -261,15 +261,15 @@ export default function Index() {
             </ScrollReveal>
             <ScrollReveal
               delay={200}
-              className="relative h-[500px] md:h-[600px] flex items-center justify-center"
+              className="relative h-[500px] md:h-[600px] flex items-center justify-center w-full"
             >
-              <div className="absolute inset-0 bg-primary/10 rounded-[40%_60%_70%_30%/40%_50%_60%_50%] rotate-6 scale-105 transition-all duration-700" />
+              <div className="absolute inset-0 bg-primary/5 rounded-3xl -rotate-2 scale-105 transition-all duration-700" />
               <ImageWithFallback
                 src={heroImage}
                 fallback="https://img.usecurling.com/p/800/1000?q=nature%20meditation&color=green"
                 alt={heroAlt}
                 title={settings.home_hero?.value || ''}
-                className="relative z-10 w-[90%] h-[90%] object-cover rounded-[30%_70%_70%_30%/30%_30%_70%_70%] shadow-xl transition-all duration-1000 hover:rounded-[50%_50%_30%_70%/50%_50%_70%_30%]"
+                className="relative z-10 w-full h-full object-cover rounded-2xl shadow-xl transition-all duration-500 hover:scale-[1.02]"
               />
             </ScrollReveal>
           </div>
@@ -376,7 +376,7 @@ export default function Index() {
               <div key={i} className="w-48 shrink-0">
                 <Card className="bg-white border-none shadow-sm rounded-[2rem] h-full min-h-[160px]">
                   <CardContent className="p-6 flex flex-col items-center gap-4">
-                    <Skeleton className="w-16 h-16 rounded-[40%_60%_70%_30%/40%_50%_60%_50%]" />
+                    <Skeleton className="w-16 h-16 rounded-2xl" />
                     <Skeleton className="h-6 w-24 rounded-md" />
                   </CardContent>
                 </Card>
@@ -393,8 +393,16 @@ export default function Index() {
                     <Link key={t.id} to={`/tratamentos/${t.slug}`} className="w-48 shrink-0">
                       <Card className="bg-white border-none shadow-sm text-center group/card cursor-pointer hover:shadow-md transition-all rounded-[2rem] h-full">
                         <CardContent className="p-6 flex flex-col items-center gap-4">
-                          <div className="p-4 rounded-[40%_60%_70%_30%/40%_50%_60%_50%] bg-primary/10 text-primary group-hover/card:bg-primary group-hover/card:text-primary-foreground transition-colors">
-                            <Icon className="w-8 h-8 stroke-[1.5]" />
+                          <div className="w-16 h-16 flex items-center justify-center rounded-2xl bg-primary/10 text-primary group-hover/card:bg-primary group-hover/card:text-primary-foreground transition-colors">
+                            {t.icon ? (
+                              <img
+                                src={pb.files.getURL(t, t.icon)}
+                                alt={t.title}
+                                className="w-8 h-8 object-contain transition-all"
+                              />
+                            ) : (
+                              <Icon className="w-8 h-8 stroke-[1.5]" />
+                            )}
                           </div>
                           <span className="font-medium text-lg text-balance">{t.title}</span>
                         </CardContent>
@@ -417,8 +425,16 @@ export default function Index() {
                     >
                       <Card className="bg-white border-none shadow-sm text-center group/card cursor-pointer hover:shadow-md transition-all rounded-[2rem] h-full">
                         <CardContent className="p-6 flex flex-col items-center gap-4">
-                          <div className="p-4 rounded-[40%_60%_70%_30%/40%_50%_60%_50%] bg-primary/10 text-primary group-hover/card:bg-primary group-hover/card:text-primary-foreground transition-colors">
-                            <Icon className="w-8 h-8 stroke-[1.5]" />
+                          <div className="w-16 h-16 flex items-center justify-center rounded-2xl bg-primary/10 text-primary group-hover/card:bg-primary group-hover/card:text-primary-foreground transition-colors">
+                            {t.icon ? (
+                              <img
+                                src={pb.files.getURL(t, t.icon)}
+                                alt={t.title}
+                                className="w-8 h-8 object-contain transition-all"
+                              />
+                            ) : (
+                              <Icon className="w-8 h-8 stroke-[1.5]" />
+                            )}
                           </div>
                           <span className="font-medium text-lg text-balance">{t.title}</span>
                         </CardContent>
