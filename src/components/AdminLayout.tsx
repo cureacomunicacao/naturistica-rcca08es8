@@ -21,6 +21,7 @@ const navItems = [
   { name: 'Blog', path: '/admin/blogs', icon: FileText },
   { name: 'Depoimentos', path: '/admin/testimonials', icon: MessageSquare },
   { name: 'Página Inicial', path: '/admin/settings/home', icon: Settings },
+  { name: 'Identidade Visual', path: '/admin/settings/visual', icon: Settings },
   { name: 'Configurações', path: '/admin/settings', icon: Settings },
   { name: 'Insights', path: '/admin/insights', icon: BarChart },
   { name: 'Marketing & SEO', path: '/admin/marketing', icon: Megaphone },

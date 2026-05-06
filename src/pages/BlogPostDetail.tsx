@@ -8,8 +8,11 @@ import { ArrowLeft, MessageCircle } from 'lucide-react'
 import { SEO } from '@/components/SEO'
 import { AnxietyQuiz } from '@/components/AnxietyQuiz'
 import { DepressionQuiz } from '@/components/DepressionQuiz'
+import { ScheduleDialog } from '@/components/ScheduleDialog'
+import { useSettings } from '@/hooks/use-settings'
 
 export default function BlogPostDetail() {
+  const { settings } = useSettings()
   const { slug } = useParams<{ slug: string }>()
   const [post, setPost] = useState<PostRecord | null>(null)
   const [loading, setLoading] = useState(true)
@@ -35,9 +38,6 @@ export default function BlogPostDetail() {
         </Button>
       </div>
     )
-
-  const whatsappUrl =
-    'https://wa.me/5543991692047?text=OI%C3%A1%2C%20vim%20do%20Site%20e%20quero%20agendar%20uma%20consulta.'
 
   return (
     <div className="bg-[#fdf6ee] min-h-screen pb-20">
@@ -87,8 +87,19 @@ export default function BlogPostDetail() {
       <div className="max-w-3xl mx-auto px-6 pt-16 md:pt-24 space-y-12">
         {/* Content */}
         <ScrollReveal delay={100}>
+          <style>
+            {`
+              .dynamic-blog-content {
+                font-family: ${settings.blog_font_family?.value || 'inherit'} !important;
+                font-size: ${settings.blog_body_size?.value || 'inherit'} !important;
+              }
+              .dynamic-blog-content h1 { font-size: ${settings.blog_h1_size?.value || '2.25rem'} !important; }
+              .dynamic-blog-content h2 { font-size: ${settings.blog_h2_size?.value || '1.875rem'} !important; }
+              .dynamic-blog-content h3 { font-size: ${settings.blog_h3_size?.value || '1.5rem'} !important; }
+            `}
+          </style>
           <div
-            className="prose prose-lg md:prose-xl prose-green max-w-none prose-headings:font-serif prose-headings:text-[#455e38] prose-p:text-gray-700 prose-a:text-[#455e38] hover:prose-a:text-[#455e38]/80 prose-strong:text-gray-900 prose-strong:font-semibold prose-ul:list-disc prose-ol:list-decimal prose-li:text-gray-700 leading-relaxed tracking-normal"
+            className="dynamic-blog-content prose prose-lg md:prose-xl prose-green max-w-none prose-headings:font-serif prose-headings:text-[#455e38] prose-p:text-gray-700 prose-a:text-[#455e38] hover:prose-a:text-[#455e38]/80 prose-strong:text-gray-900 prose-strong:font-semibold prose-ul:list-disc prose-ol:list-decimal prose-li:text-gray-700 leading-relaxed tracking-normal"
             dangerouslySetInnerHTML={{ __html: post.content || '' }}
           />
         </ScrollReveal>
@@ -134,16 +145,15 @@ export default function BlogPostDetail() {
                   ? 'Nossa equipe multidisciplinar está pronta para oferecer suporte imediato e um plano de tratamento eficaz.'
                   : 'Nossa equipe multidisciplinar está pronta para te atender com uma abordagem integrativa e humanizada.'}
               </p>
-              <Button
-                asChild
-                size="lg"
-                className="bg-[#455e38] hover:bg-[#455e38]/90 text-white rounded-full px-8 h-14 text-lg hover:scale-105 transition-transform"
-              >
-                <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+              <ScheduleDialog>
+                <Button
+                  size="lg"
+                  className="bg-[#455e38] hover:bg-[#455e38]/90 text-white rounded-full px-8 h-14 text-lg hover:scale-105 transition-transform cursor-pointer"
+                >
                   <MessageCircle className="w-5 h-5 mr-2" />
                   Agendar Consulta via WhatsApp
-                </a>
-              </Button>
+                </Button>
+              </ScheduleDialog>
             </div>
           </ScrollReveal>
         )}
