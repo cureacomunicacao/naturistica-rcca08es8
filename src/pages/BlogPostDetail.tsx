@@ -77,7 +77,15 @@ export default function BlogPostDetail() {
                 })}
               </span>
             </div>
-            <h1 className="text-3xl md:text-5xl font-bold font-serif text-gray-900 leading-tight">
+            <h1
+              className="text-3xl md:text-5xl font-bold font-serif text-gray-900 leading-tight whitespace-nowrap overflow-hidden text-ellipsis max-w-full"
+              style={{
+                fontSize: settings.blog_h1_size?.value
+                  ? `${settings.blog_h1_size.value}px`
+                  : undefined,
+                lineHeight: 1.2,
+              }}
+            >
               {post.title}
             </h1>
           </ScrollReveal>
@@ -93,11 +101,24 @@ export default function BlogPostDetail() {
                 font-family: ${settings.typography_blog_font_family?.value || 'inherit'} !important;
               }
               .dynamic-blog-content p, .dynamic-blog-content li {
-                font-size: ${settings.typography_blog_p_size?.value || 'inherit'} !important;
+                font-size: ${settings.blog_body_size?.value ? `${settings.blog_body_size.value}px` : 'inherit'} !important;
+                line-height: 1.6 !important;
               }
-              .dynamic-blog-content h1 { font-size: ${settings.typography_blog_h1_size?.value || '2.5rem'} !important; }
-              .dynamic-blog-content h2 { font-size: ${settings.typography_blog_h2_size?.value || '2rem'} !important; }
-              .dynamic-blog-content h3 { font-size: ${settings.typography_blog_h3_size?.value || '1.75rem'} !important; }
+              .dynamic-blog-content h1 { 
+                font-size: ${settings.blog_h1_size?.value ? `${settings.blog_h1_size.value}px` : '2.5rem'} !important;
+                line-height: 1.2 !important;
+                white-space: nowrap !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+              }
+              .dynamic-blog-content h2 { 
+                font-size: ${settings.blog_h2_size?.value ? `${settings.blog_h2_size.value}px` : '2rem'} !important;
+                line-height: 1.3 !important;
+              }
+              .dynamic-blog-content h3 { 
+                font-size: ${settings.blog_h3_size?.value ? `${settings.blog_h3_size.value}px` : '1.75rem'} !important;
+                line-height: 1.4 !important;
+              }
             `}
           </style>
           <div
