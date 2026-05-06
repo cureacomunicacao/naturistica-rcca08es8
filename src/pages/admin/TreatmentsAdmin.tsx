@@ -113,7 +113,8 @@ export default function TreatmentsAdmin() {
     })
     setFile(null)
     setIconFile(null)
-    setFieldErrors({})    setOpen(true)
+    setFieldErrors({})
+    setOpen(true)
   }
 
   const handleSave = async (e: React.FormEvent) => {
@@ -344,7 +345,9 @@ export default function TreatmentsAdmin() {
                 accept="image/*"
                 onChange={(e) => setIconFile(e.target.files?.[0] || null)}
               />
-              <p className="text-xs text-muted-foreground mt-1">Tamanho recomendado: SVG ou PNG (Ex: 128x128).</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                Tamanho recomendado: SVG ou PNG (Ex: 128x128).
+              </p>
             </div>
             <div className="space-y-2">
               <Label>Imagem de Destaque</Label>
