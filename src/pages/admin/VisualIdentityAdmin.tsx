@@ -38,7 +38,8 @@ export default function VisualIdentityAdmin() {
         `${prefix}_h2_size`,
         `${prefix}_h3_size`,
         `${prefix}_body_size`,
-      ]      for (const key of keys) {
+      ]
+      for (const key of keys) {
         await updateSetting(key, values[key] || '')
       }
       toast.success('Configurações de tipografia salvas com sucesso!')
@@ -83,9 +84,7 @@ export default function VisualIdentityAdmin() {
                 <Input
                   type="number"
                   value={values.blog_h1_size || ''}
-                  onChange={(e) =>
-                    setValues({ ...values, blog_h1_size: e.target.value })
-                  }
+                  onChange={(e) => setValues({ ...values, blog_h1_size: e.target.value })}
                   placeholder="48"
                 />
               </div>
@@ -94,9 +93,7 @@ export default function VisualIdentityAdmin() {
                 <Input
                   type="number"
                   value={values.blog_h2_size || ''}
-                  onChange={(e) =>
-                    setValues({ ...values, blog_h2_size: e.target.value })
-                  }
+                  onChange={(e) => setValues({ ...values, blog_h2_size: e.target.value })}
                   placeholder="32"
                 />
               </div>
@@ -105,9 +102,7 @@ export default function VisualIdentityAdmin() {
                 <Input
                   type="number"
                   value={values.blog_h3_size || ''}
-                  onChange={(e) =>
-                    setValues({ ...values, blog_h3_size: e.target.value })
-                  }
+                  onChange={(e) => setValues({ ...values, blog_h3_size: e.target.value })}
                   placeholder="24"
                 />
               </div>
@@ -151,9 +146,7 @@ export default function VisualIdentityAdmin() {
                 <Input
                   type="number"
                   value={values.treatment_h1_size || ''}
-                  onChange={(e) =>
-                    setValues({ ...values, treatment_h1_size: e.target.value })
-                  }
+                  onChange={(e) => setValues({ ...values, treatment_h1_size: e.target.value })}
                   placeholder="48"
                 />
               </div>
@@ -162,9 +155,7 @@ export default function VisualIdentityAdmin() {
                 <Input
                   type="number"
                   value={values.treatment_h2_size || ''}
-                  onChange={(e) =>
-                    setValues({ ...values, treatment_h2_size: e.target.value })
-                  }
+                  onChange={(e) => setValues({ ...values, treatment_h2_size: e.target.value })}
                   placeholder="32"
                 />
               </div>
@@ -173,9 +164,7 @@ export default function VisualIdentityAdmin() {
                 <Input
                   type="number"
                   value={values.treatment_h3_size || ''}
-                  onChange={(e) =>
-                    setValues({ ...values, treatment_h3_size: e.target.value })
-                  }
+                  onChange={(e) => setValues({ ...values, treatment_h3_size: e.target.value })}
                   placeholder="24"
                 />
               </div>
@@ -184,9 +173,7 @@ export default function VisualIdentityAdmin() {
                 <Input
                   type="number"
                   value={values.treatment_body_size || ''}
-                  onChange={(e) =>
-                    setValues({ ...values, treatment_body_size: e.target.value })
-                  }
+                  onChange={(e) => setValues({ ...values, treatment_body_size: e.target.value })}
                   placeholder="18"
                 />
               </div>
