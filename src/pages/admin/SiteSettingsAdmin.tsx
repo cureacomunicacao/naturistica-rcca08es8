@@ -135,6 +135,8 @@ export default function SiteSettingsAdmin() {
       'contact_benefit2_desc',
       'contact_benefit3_title',
       'contact_benefit3_desc',
+      'whatsapp_felipe',
+      'whatsapp_beatriz',
     ]
     keys.forEach((k) => {
       initial[k] = {
@@ -319,6 +321,22 @@ export default function SiteSettingsAdmin() {
                   />
                 </div>
                 <div className="space-y-2">
+                  <Label>Link WhatsApp - Dr. Felipe</Label>
+                  <Input
+                    value={formData['whatsapp_felipe']?.value || ''}
+                    onChange={(e) => handleChange('whatsapp_felipe', e.target.value)}
+                    placeholder="https://wa.me/..."
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Link WhatsApp - Dra. Beatriz</Label>
+                  <Input
+                    value={formData['whatsapp_beatriz']?.value || ''}
+                    onChange={(e) => handleChange('whatsapp_beatriz', e.target.value)}
+                    placeholder="https://wa.me/..."
+                  />
+                </div>
+                <div className="space-y-2">
                   <Label>Link do Instagram</Label>
                   <Input
                     value={formData['global_instagram']?.value || ''}
@@ -364,6 +382,8 @@ export default function SiteSettingsAdmin() {
                     'contact_address',
                     'global_phone',
                     'whatsapp_contact_number',
+                    'whatsapp_felipe',
+                    'whatsapp_beatriz',
                     'global_instagram',
                     'global_cta_text',
                     'global_cta_link',

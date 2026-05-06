@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { MessageCircle, ArrowLeft } from 'lucide-react'
 import { SEO } from '@/components/SEO'
 import { Link } from 'react-router-dom'
+import { ScheduleDialog } from '@/components/ScheduleDialog'
 
 export default function TratamentoDetalhe() {
   const { slug } = useParams()
@@ -73,20 +74,15 @@ export default function TratamentoDetalhe() {
               Agende uma avaliação detalhada e descubra como podemos ajudar no seu tratamento de{' '}
               {treatment.title.toLowerCase()}.
             </p>
-            <Button
-              size="lg"
-              className="rounded-full h-14 px-8 bg-[#25D366] hover:bg-[#128C7E] text-white gap-2 text-base"
-              asChild
-            >
-              <a
-                href="https://wa.me/5543991692047?text=OI%C3%A1%2C%20vim%20do%20Site%20e%20quero%20agendar%20uma%20consulta."
-                target="_blank"
-                rel="noreferrer"
+            <ScheduleDialog>
+              <Button
+                size="lg"
+                className="rounded-full h-14 px-8 bg-[#25D366] hover:bg-[#128C7E] text-white gap-2 text-base cursor-pointer"
               >
                 <MessageCircle className="w-5 h-5" />
                 Agendar consulta via WhatsApp
-              </a>
-            </Button>
+              </Button>
+            </ScheduleDialog>
           </div>
         </ScrollReveal>
       </div>

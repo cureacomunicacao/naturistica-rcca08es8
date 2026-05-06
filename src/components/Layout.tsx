@@ -8,6 +8,7 @@ import { useSettings } from '@/hooks/use-settings'
 import pb from '@/lib/pocketbase/client'
 import { SEO } from '@/components/SEO'
 import { useRealtime } from '@/hooks/use-realtime'
+import { ScheduleDialog } from '@/components/ScheduleDialog'
 
 export default function Layout() {
   const location = useLocation()
@@ -173,18 +174,11 @@ export default function Layout() {
                   </Link>
                 ),
               )}
-              <Button asChild className="rounded-full px-6 text-white hover:bg-primary/90">
-                <a
-                  href={
-                    settings.global_cta_link?.value ||
-                    'https://wa.me/5543991692047?text=OI%C3%A1%2C%20vim%20do%20Site%20e%20quero%20agendar%20uma%20consulta.'
-                  }
-                  target="_blank"
-                  rel="noreferrer"
-                >
+              <ScheduleDialog>
+                <Button className="rounded-full px-6 text-white hover:bg-primary/90 cursor-pointer">
                   {settings.global_cta_text?.value || 'Agendar consulta online'}
-                </a>
-              </Button>
+                </Button>
+              </ScheduleDialog>
             </nav>
 
             {/* Mobile Nav */}
@@ -227,18 +221,11 @@ export default function Layout() {
                   ))}
                 </nav>
                 <div className="mt-auto pb-8">
-                  <Button asChild className="w-full rounded-full" size="lg">
-                    <a
-                      href={
-                        settings.global_cta_link?.value ||
-                        'https://wa.me/5543991692047?text=OI%C3%A1%2C%20vim%20do%20Site%20e%20quero%20agendar%20uma%20consulta.'
-                      }
-                      target="_blank"
-                      rel="noreferrer"
-                    >
+                  <ScheduleDialog>
+                    <Button className="w-full rounded-full cursor-pointer" size="lg">
                       {settings.global_cta_text?.value || 'Agendar consulta online'}
-                    </a>
-                  </Button>
+                    </Button>
+                  </ScheduleDialog>
                 </div>
               </SheetContent>
             </Sheet>
@@ -295,16 +282,27 @@ export default function Layout() {
                 {settings.footer_treatments_title?.value || 'Tratamentos'}
               </h4>
               <ul className="space-y-2 text-sm text-primary-foreground/80">
-                {treatmentsList.slice(0, 5).map((t) => (
-                  <li key={t.slug}>
-                    <Link
-                      to={`/tratamentos/${t.slug}`}
-                      className="hover:text-white transition-colors"
-                    >
-                      {t.title}
-                    </Link>
-                  </li>
-                ))}
+                {['ansiedade', 'reducao-de-danos', 'insonia', 'burnout', 'estresse-cronico']
+                  .map(
+                    (slug) =>
+                      treatmentsList.find((t) => t.slug === slug) || {
+                        slug,
+                        title: slug
+                          .split('-')
+                          .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                          .join(' '),
+                      },
+                  )
+                  .map((t) => (
+                    <li key={t.slug}>
+                      <Link
+                        to={`/tratamentos/${t.slug}`}
+                        className="hover:text-white transition-colors"
+                      >
+                        {t.title}
+                      </Link>
+                    </li>
+                  ))}
               </ul>
             </div>
           </div>

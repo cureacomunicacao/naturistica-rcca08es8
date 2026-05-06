@@ -30,6 +30,7 @@ import { getPosts, type PostRecord, getPostImageUrl } from '@/services/posts'
 import { EditableText } from '@/components/EditableText'
 import { useRealtime } from '@/hooks/use-realtime'
 import { Skeleton } from '@/components/ui/skeleton'
+import { ScheduleDialog } from '@/components/ScheduleDialog'
 
 const iconMap: Record<string, any> = {
   ansiedade: Wind,
@@ -241,16 +242,10 @@ export default function Index() {
                 multiline={true}
               />
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <Button
-                  asChild
-                  size="lg"
-                  className="rounded-full text-base h-14 px-8 group shadow-lg shadow-primary/20"
-                >
-                  <a
-                    href={
-                      settings.home_hero_btn1_link?.value ||
-                      'https://wa.me/5543991692047?text=OI%C3%A1%2C%20vim%20do%20Site%20e%20quero%20agendar%20uma%20consulta.'
-                    }
+                <ScheduleDialog>
+                  <Button
+                    size="lg"
+                    className="rounded-full text-base h-14 px-8 group shadow-lg shadow-primary/20 cursor-pointer"
                   >
                     <EditableText
                       settingKey="home_hero_btn1_text"
@@ -258,8 +253,8 @@ export default function Index() {
                       as="span"
                     />
                     <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </a>
-                </Button>
+                  </Button>
+                </ScheduleDialog>
                 <Button
                   asChild
                   size="lg"
@@ -809,24 +804,18 @@ export default function Index() {
                   ))}
                 </ul>
               </EditableText>
-              <Button
-                asChild
-                size="lg"
-                className="rounded-full w-full sm:w-auto h-14 px-8 mt-4 shadow-md"
-              >
-                <a
-                  href={
-                    settings.expectations_button_link?.value ||
-                    'https://wa.me/5543991692047?text=OI%C3%A1%2C%20vim%20do%20Site%20e%20quero%20agendar%20uma%20consulta.'
-                  }
+              <ScheduleDialog>
+                <Button
+                  size="lg"
+                  className="rounded-full w-full sm:w-auto h-14 px-8 mt-4 shadow-md cursor-pointer"
                 >
                   <EditableText
                     settingKey="expectations_button_text"
                     defaultText={expBtnText}
                     as="span"
                   />
-                </a>
-              </Button>
+                </Button>
+              </ScheduleDialog>
             </div>
             <div className="relative h-[400px] rounded-[2rem] overflow-hidden hidden md:block">
               <ImageWithFallback
