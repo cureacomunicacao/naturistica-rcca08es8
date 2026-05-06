@@ -774,7 +774,7 @@ export default function Index() {
       )}
 
       {/* Consultation Info */}
-      <section className="container pb-12">
+      <section className="container pb-16 md:pb-24">
         <div className="bg-primary/5 rounded-[3rem] p-8 md:p-16 border-none max-w-5xl mx-auto shadow-sm">
           <ScrollReveal className="grid md:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
@@ -820,12 +820,12 @@ export default function Index() {
                 </a>
               </Button>
             </div>
-            <div className="relative h-[400px] rounded-3xl overflow-hidden hidden md:block">
+            <div className="relative h-[400px] rounded-[2rem] overflow-hidden hidden md:block">
               <ImageWithFallback
                 src={expImage}
                 fallback="https://img.usecurling.com/p/600/800?q=doctor&color=green"
                 alt={expImgAlt}
-                className="absolute inset-0 w-full h-full object-contain rounded-3xl"
+                className="absolute inset-0 w-full h-full object-contain rounded-[2rem]"
               />
             </div>
           </ScrollReveal>
