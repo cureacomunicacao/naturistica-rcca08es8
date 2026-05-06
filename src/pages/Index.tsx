@@ -820,12 +820,12 @@ export default function Index() {
                 </a>
               </Button>
             </div>
-            <div className="relative h-[400px] rounded-[40%_60%_70%_30%/40%_50%_60%_50%] overflow-hidden hidden md:block shadow-lg">
+            <div className="relative h-[400px] rounded-2xl overflow-hidden hidden md:block">
               <ImageWithFallback
                 src={expImage}
                 fallback="https://img.usecurling.com/p/600/800?q=doctor&color=green"
                 alt={expImgAlt}
-                className="absolute inset-0 w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-contain"
               />
             </div>
           </ScrollReveal>
