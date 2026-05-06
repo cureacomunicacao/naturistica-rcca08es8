@@ -90,12 +90,14 @@ export default function BlogPostDetail() {
           <style>
             {`
               .dynamic-blog-content {
-                font-family: ${settings.blog_font_family?.value || 'inherit'} !important;
-                font-size: ${settings.blog_body_size?.value || 'inherit'} !important;
+                font-family: ${settings.typography_blog_font_family?.value || 'inherit'} !important;
               }
-              .dynamic-blog-content h1 { font-size: ${settings.blog_h1_size?.value || '2.25rem'} !important; }
-              .dynamic-blog-content h2 { font-size: ${settings.blog_h2_size?.value || '1.875rem'} !important; }
-              .dynamic-blog-content h3 { font-size: ${settings.blog_h3_size?.value || '1.5rem'} !important; }
+              .dynamic-blog-content p, .dynamic-blog-content li {
+                font-size: ${settings.typography_blog_p_size?.value || 'inherit'} !important;
+              }
+              .dynamic-blog-content h1 { font-size: ${settings.typography_blog_h1_size?.value || '2.5rem'} !important; }
+              .dynamic-blog-content h2 { font-size: ${settings.typography_blog_h2_size?.value || '2rem'} !important; }
+              .dynamic-blog-content h3 { font-size: ${settings.typography_blog_h3_size?.value || '1.75rem'} !important; }
             `}
           </style>
           <div

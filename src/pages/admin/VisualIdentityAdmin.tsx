@@ -15,16 +15,16 @@ export default function VisualIdentityAdmin() {
   useEffect(() => {
     if (!loading) {
       setValues({
-        blog_font_family: settings.blog_font_family?.value || '',
-        blog_h1_size: settings.blog_h1_size?.value || '',
-        blog_h2_size: settings.blog_h2_size?.value || '',
-        blog_h3_size: settings.blog_h3_size?.value || '',
-        blog_body_size: settings.blog_body_size?.value || '',
-        treatment_font_family: settings.treatment_font_family?.value || '',
-        treatment_h1_size: settings.treatment_h1_size?.value || '',
-        treatment_h2_size: settings.treatment_h2_size?.value || '',
-        treatment_h3_size: settings.treatment_h3_size?.value || '',
-        treatment_body_size: settings.treatment_body_size?.value || '',
+        typography_blog_font_family: settings.typography_blog_font_family?.value || '',
+        typography_blog_h1_size: settings.typography_blog_h1_size?.value || '',
+        typography_blog_h2_size: settings.typography_blog_h2_size?.value || '',
+        typography_blog_h3_size: settings.typography_blog_h3_size?.value || '',
+        typography_blog_p_size: settings.typography_blog_p_size?.value || '',
+        typography_treatment_font_family: settings.typography_treatment_font_family?.value || '',
+        typography_treatment_h1_size: settings.typography_treatment_h1_size?.value || '',
+        typography_treatment_h2_size: settings.typography_treatment_h2_size?.value || '',
+        typography_treatment_h3_size: settings.typography_treatment_h3_size?.value || '',
+        typography_treatment_p_size: settings.typography_treatment_p_size?.value || '',
       })
     }
   }, [settings, loading])
@@ -33,11 +33,11 @@ export default function VisualIdentityAdmin() {
     setSaving(true)
     try {
       const keys = [
-        `${prefix}_font_family`,
-        `${prefix}_h1_size`,
-        `${prefix}_h2_size`,
-        `${prefix}_h3_size`,
-        `${prefix}_body_size`,
+        `typography_${prefix}_font_family`,
+        `typography_${prefix}_h1_size`,
+        `typography_${prefix}_h2_size`,
+        `typography_${prefix}_h3_size`,
+        `typography_${prefix}_p_size`,
       ]
       for (const key of keys) {
         await updateSetting(key, values[key] || '')
@@ -71,8 +71,10 @@ export default function VisualIdentityAdmin() {
             <div className="space-y-2">
               <Label>Família da Fonte (ex: 'Inter', sans-serif)</Label>
               <Input
-                value={values.blog_font_family || ''}
-                onChange={(e) => setValues({ ...values, blog_font_family: e.target.value })}
+                value={values.typography_blog_font_family || ''}
+                onChange={(e) =>
+                  setValues({ ...values, typography_blog_font_family: e.target.value })
+                }
                 placeholder="system-ui, sans-serif"
               />
             </div>
@@ -80,32 +82,38 @@ export default function VisualIdentityAdmin() {
               <div className="space-y-2">
                 <Label>Tamanho H1</Label>
                 <Input
-                  value={values.blog_h1_size || ''}
-                  onChange={(e) => setValues({ ...values, blog_h1_size: e.target.value })}
-                  placeholder="2.25rem"
+                  value={values.typography_blog_h1_size || ''}
+                  onChange={(e) =>
+                    setValues({ ...values, typography_blog_h1_size: e.target.value })
+                  }
+                  placeholder="2.5rem"
                 />
               </div>
               <div className="space-y-2">
                 <Label>Tamanho H2</Label>
                 <Input
-                  value={values.blog_h2_size || ''}
-                  onChange={(e) => setValues({ ...values, blog_h2_size: e.target.value })}
-                  placeholder="1.875rem"
+                  value={values.typography_blog_h2_size || ''}
+                  onChange={(e) =>
+                    setValues({ ...values, typography_blog_h2_size: e.target.value })
+                  }
+                  placeholder="2rem"
                 />
               </div>
               <div className="space-y-2">
                 <Label>Tamanho H3</Label>
                 <Input
-                  value={values.blog_h3_size || ''}
-                  onChange={(e) => setValues({ ...values, blog_h3_size: e.target.value })}
-                  placeholder="1.5rem"
+                  value={values.typography_blog_h3_size || ''}
+                  onChange={(e) =>
+                    setValues({ ...values, typography_blog_h3_size: e.target.value })
+                  }
+                  placeholder="1.75rem"
                 />
               </div>
               <div className="space-y-2">
-                <Label>Tamanho Corpo (Body)</Label>
+                <Label>Tamanho Corpo (P)</Label>
                 <Input
-                  value={values.blog_body_size || ''}
-                  onChange={(e) => setValues({ ...values, blog_body_size: e.target.value })}
+                  value={values.typography_blog_p_size || ''}
+                  onChange={(e) => setValues({ ...values, typography_blog_p_size: e.target.value })}
                   placeholder="1.125rem"
                 />
               </div>
@@ -127,8 +135,10 @@ export default function VisualIdentityAdmin() {
             <div className="space-y-2">
               <Label>Família da Fonte (ex: 'Inter', sans-serif)</Label>
               <Input
-                value={values.treatment_font_family || ''}
-                onChange={(e) => setValues({ ...values, treatment_font_family: e.target.value })}
+                value={values.typography_treatment_font_family || ''}
+                onChange={(e) =>
+                  setValues({ ...values, typography_treatment_font_family: e.target.value })
+                }
                 placeholder="system-ui, sans-serif"
               />
             </div>
@@ -136,32 +146,40 @@ export default function VisualIdentityAdmin() {
               <div className="space-y-2">
                 <Label>Tamanho H1</Label>
                 <Input
-                  value={values.treatment_h1_size || ''}
-                  onChange={(e) => setValues({ ...values, treatment_h1_size: e.target.value })}
-                  placeholder="2.25rem"
+                  value={values.typography_treatment_h1_size || ''}
+                  onChange={(e) =>
+                    setValues({ ...values, typography_treatment_h1_size: e.target.value })
+                  }
+                  placeholder="2.5rem"
                 />
               </div>
               <div className="space-y-2">
                 <Label>Tamanho H2</Label>
                 <Input
-                  value={values.treatment_h2_size || ''}
-                  onChange={(e) => setValues({ ...values, treatment_h2_size: e.target.value })}
-                  placeholder="1.875rem"
+                  value={values.typography_treatment_h2_size || ''}
+                  onChange={(e) =>
+                    setValues({ ...values, typography_treatment_h2_size: e.target.value })
+                  }
+                  placeholder="2rem"
                 />
               </div>
               <div className="space-y-2">
                 <Label>Tamanho H3</Label>
                 <Input
-                  value={values.treatment_h3_size || ''}
-                  onChange={(e) => setValues({ ...values, treatment_h3_size: e.target.value })}
-                  placeholder="1.5rem"
+                  value={values.typography_treatment_h3_size || ''}
+                  onChange={(e) =>
+                    setValues({ ...values, typography_treatment_h3_size: e.target.value })
+                  }
+                  placeholder="1.75rem"
                 />
               </div>
               <div className="space-y-2">
-                <Label>Tamanho Corpo (Body)</Label>
+                <Label>Tamanho Corpo (P)</Label>
                 <Input
-                  value={values.treatment_body_size || ''}
-                  onChange={(e) => setValues({ ...values, treatment_body_size: e.target.value })}
+                  value={values.typography_treatment_p_size || ''}
+                  onChange={(e) =>
+                    setValues({ ...values, typography_treatment_p_size: e.target.value })
+                  }
                   placeholder="1.125rem"
                 />
               </div>

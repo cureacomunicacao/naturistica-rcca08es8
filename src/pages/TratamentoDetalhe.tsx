@@ -66,12 +66,14 @@ export default function TratamentoDetalhe() {
           <style>
             {`
               .dynamic-treatment-content {
-                font-family: ${settings.treatment_font_family?.value || 'inherit'} !important;
-                font-size: ${settings.treatment_body_size?.value || 'inherit'} !important;
+                font-family: ${settings.typography_treatment_font_family?.value || 'inherit'} !important;
               }
-              .dynamic-treatment-content h1 { font-size: ${settings.treatment_h1_size?.value || '2.25rem'} !important; }
-              .dynamic-treatment-content h2 { font-size: ${settings.treatment_h2_size?.value || '1.875rem'} !important; }
-              .dynamic-treatment-content h3 { font-size: ${settings.treatment_h3_size?.value || '1.5rem'} !important; }
+              .dynamic-treatment-content p, .dynamic-treatment-content li {
+                font-size: ${settings.typography_treatment_p_size?.value || 'inherit'} !important;
+              }
+              .dynamic-treatment-content h1 { font-size: ${settings.typography_treatment_h1_size?.value || '2.5rem'} !important; }
+              .dynamic-treatment-content h2 { font-size: ${settings.typography_treatment_h2_size?.value || '2rem'} !important; }
+              .dynamic-treatment-content h3 { font-size: ${settings.typography_treatment_h3_size?.value || '1.75rem'} !important; }
             `}
           </style>
           <div
