@@ -68,7 +68,7 @@ function ImageWithFallback({ src, fallback, alt, className, title }: any) {
 }
 
 export default function Index() {
-  const { settings } = useSettings()
+  const { settings, loading: settingsLoading } = useSettings()
   const [treatments, setTreatments] = useState<any[]>([])
   const [loadingTreatments, setLoadingTreatments] = useState(true)
   const [posts, setPosts] = useState<PostRecord[]>([])
@@ -77,6 +77,7 @@ export default function Index() {
   const [testimonialsBeatrizDb, setTestimonialsBeatrizDb] = useState<any[]>([])
   const [loadingTestimonials, setLoadingTestimonials] = useState(true)
   const [featuredTreatment, setFeaturedTreatment] = useState<any>(null)
+  const [loadingFeaturedTreatment, setLoadingFeaturedTreatment] = useState(true)
 
   const fetchTestimonials = () => {
     setLoadingTestimonials(true)
@@ -116,18 +117,27 @@ export default function Index() {
   })
 
   useEffect(() => {
+    if (settingsLoading) {
+      setLoadingFeaturedTreatment(true)
+      return
+    }
+
     const featuredId = settings.home_featured_treatment?.value
     if (featuredId) {
+      setLoadingFeaturedTreatment(true)
       pb.collection('treatments')
         .getOne(featuredId)
         .then(setFeaturedTreatment)
         .catch((err) => {
           console.warn(`Featured treatment ID ${featuredId} not found. Skipping.`, err.message)
+          setFeaturedTreatment(null)
         })
+        .finally(() => setLoadingFeaturedTreatment(false))
     } else {
       setFeaturedTreatment(null)
+      setLoadingFeaturedTreatment(false)
     }
-  }, [settings.home_featured_treatment])
+  }, [settings.home_featured_treatment, settingsLoading])
 
   const heroImage = settings.home_hero?.image
     ? pb.files.getURL(settings.home_hero, settings.home_hero.image)
@@ -163,129 +173,170 @@ export default function Index() {
           <div className="absolute top-[20%] -right-[10%] w-[40%] h-[50%] bg-secondary/40 rounded-[60%_40%_30%_70%/60%_30%_70%_40%] blur-3xl mix-blend-multiply" />
         </div>
 
-        <div className="grid md:grid-cols-2 gap-12 items-center relative z-10">
-          <ScrollReveal className="space-y-8">
-            <div className="space-y-4">
+        {settingsLoading ? (
+          <div className="grid md:grid-cols-2 gap-12 items-center relative z-10">
+            <div className="space-y-8">
+              <div className="space-y-4">
+                <Skeleton className="h-16 md:h-24 w-3/4 rounded-xl" />
+                <Skeleton className="h-8 md:h-10 w-2/3 rounded-lg" />
+              </div>
+              <div className="space-y-2">
+                <Skeleton className="h-6 w-full max-w-lg rounded-md" />
+                <Skeleton className="h-6 w-5/6 max-w-lg rounded-md" />
+                <Skeleton className="h-6 w-4/6 max-w-lg rounded-md" />
+              </div>
+              <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                <Skeleton className="h-14 w-full sm:w-64 rounded-full" />
+                <Skeleton className="h-14 w-full sm:w-64 rounded-full" />
+              </div>
+            </div>
+            <div className="relative h-[500px] md:h-[600px] flex items-center justify-center">
+              <div className="absolute inset-0 bg-primary/10 rounded-[40%_60%_70%_30%/40%_50%_60%_50%] rotate-6 scale-105 transition-all duration-700" />
+              <Skeleton className="relative z-10 w-[90%] h-[90%] rounded-[30%_70%_70%_30%/30%_30%_70%_70%] shadow-xl" />
+            </div>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 gap-12 items-center relative z-10">
+            <ScrollReveal className="space-y-8">
+              <div className="space-y-4">
+                <EditableText
+                  settingKey="home_hero_title"
+                  defaultText={
+                    "Saúde & <br /><span class='text-primary/80 italic font-serif'>Consciência</span>"
+                  }
+                  as="h1"
+                  className="text-5xl md:text-7xl font-bold leading-tight text-balance"
+                  isHtml={true}
+                  multiline={true}
+                />
+                <EditableText
+                  settingKey="home_hero_subtitle"
+                  defaultText="quando a ciência encontra a ancestralidade."
+                  as="p"
+                  className="text-xl md:text-2xl text-muted-foreground font-serif text-balance"
+                />
+              </div>
               <EditableText
-                settingKey="home_hero_title"
-                defaultText={
-                  "Saúde & <br /><span class='text-primary/80 italic font-serif'>Consciência</span>"
-                }
-                as="h1"
-                className="text-5xl md:text-7xl font-bold leading-tight text-balance"
-                isHtml={true}
+                settingKey="home_hero_desc"
+                defaultText="Somos uma clínica médica dedicada a resgatar o equilíbrio natural do seu corpo e mente através de práticas integrativas, cannabis medicinal e psicoterapia."
+                as="p"
+                className="text-lg leading-relaxed text-muted-foreground max-w-lg"
                 multiline={true}
               />
-              <EditableText
-                settingKey="home_hero_subtitle"
-                defaultText="quando a ciência encontra a ancestralidade."
-                as="p"
-                className="text-xl md:text-2xl text-muted-foreground font-serif text-balance"
-              />
-            </div>
-            <EditableText
-              settingKey="home_hero_desc"
-              defaultText="Somos uma clínica médica dedicada a resgatar o equilíbrio natural do seu corpo e mente através de práticas integrativas, cannabis medicinal e psicoterapia."
-              as="p"
-              className="text-lg leading-relaxed text-muted-foreground max-w-lg"
-              multiline={true}
-            />
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button
-                asChild
-                size="lg"
-                className="rounded-full text-base h-14 px-8 group shadow-lg shadow-primary/20"
-              >
-                <a
-                  href={
-                    settings.home_hero_btn1_link?.value ||
-                    'https://wa.me/5543991692047?text=OI%C3%A1%2C%20vim%20do%20Site%20e%20quero%20agendar%20uma%20consulta.'
-                  }
+              <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                <Button
+                  asChild
+                  size="lg"
+                  className="rounded-full text-base h-14 px-8 group shadow-lg shadow-primary/20"
                 >
-                  <EditableText
-                    settingKey="home_hero_btn1_text"
-                    defaultText="Agendar consulta online"
-                    as="span"
-                  />
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </a>
-              </Button>
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="rounded-full text-base h-14 px-8 border-primary/20 hover:bg-primary/5"
-              >
-                <Link to={settings.home_hero_btn2_link?.value || '/sobre'}>
-                  <EditableText
-                    settingKey="home_hero_btn2_text"
-                    defaultText="Conheça nossa história"
-                    as="span"
-                  />
-                </Link>
-              </Button>
-            </div>
-          </ScrollReveal>
-          <ScrollReveal
-            delay={200}
-            className="relative h-[500px] md:h-[600px] flex items-center justify-center"
-          >
-            <div className="absolute inset-0 bg-primary/10 rounded-[40%_60%_70%_30%/40%_50%_60%_50%] rotate-6 scale-105 transition-all duration-700" />
-            <ImageWithFallback
-              src={heroImage}
-              fallback="https://img.usecurling.com/p/800/1000?q=nature%20meditation&color=green"
-              alt={heroAlt}
-              title={settings.home_hero?.value || ''}
-              className="relative z-10 w-[90%] h-[90%] object-cover rounded-[30%_70%_70%_30%/30%_30%_70%_70%] shadow-xl transition-all duration-1000 hover:rounded-[50%_50%_30%_70%/50%_50%_70%_30%]"
-            />
-          </ScrollReveal>
-        </div>
+                  <a
+                    href={
+                      settings.home_hero_btn1_link?.value ||
+                      'https://wa.me/5543991692047?text=OI%C3%A1%2C%20vim%20do%20Site%20e%20quero%20agendar%20uma%20consulta.'
+                    }
+                  >
+                    <EditableText
+                      settingKey="home_hero_btn1_text"
+                      defaultText="Agendar consulta online"
+                      as="span"
+                    />
+                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </a>
+                </Button>
+                <Button
+                  asChild
+                  size="lg"
+                  variant="outline"
+                  className="rounded-full text-base h-14 px-8 border-primary/20 hover:bg-primary/5"
+                >
+                  <Link to={settings.home_hero_btn2_link?.value || '/sobre'}>
+                    <EditableText
+                      settingKey="home_hero_btn2_text"
+                      defaultText="Conheça nossa história"
+                      as="span"
+                    />
+                  </Link>
+                </Button>
+              </div>
+            </ScrollReveal>
+            <ScrollReveal
+              delay={200}
+              className="relative h-[500px] md:h-[600px] flex items-center justify-center"
+            >
+              <div className="absolute inset-0 bg-primary/10 rounded-[40%_60%_70%_30%/40%_50%_60%_50%] rotate-6 scale-105 transition-all duration-700" />
+              <ImageWithFallback
+                src={heroImage}
+                fallback="https://img.usecurling.com/p/800/1000?q=nature%20meditation&color=green"
+                alt={heroAlt}
+                title={settings.home_hero?.value || ''}
+                className="relative z-10 w-[90%] h-[90%] object-cover rounded-[30%_70%_70%_30%/30%_30%_70%_70%] shadow-xl transition-all duration-1000 hover:rounded-[50%_50%_30%_70%/50%_50%_70%_30%]"
+              />
+            </ScrollReveal>
+          </div>
+        )}
       </section>
 
       {/* Featured Treatment Section */}
-      {featuredTreatment && (
+      {(loadingFeaturedTreatment || featuredTreatment) && (
         <section className="container py-12 relative z-10">
           <ScrollReveal>
             <Card className="bg-primary/5 border-none shadow-sm overflow-hidden rounded-[2rem]">
-              <div className="grid md:grid-cols-2 gap-8 items-center p-8 md:p-12">
-                <div className="space-y-6">
-                  <Badge
-                    variant="outline"
-                    className="bg-white text-primary border-none shadow-sm px-4 py-1 text-sm rounded-full"
-                  >
-                    <EditableText
-                      settingKey="featured_treatment_badge"
-                      defaultText="Tratamento em Destaque"
-                      as="span"
-                    />
-                  </Badge>
-                  <h2 className="text-3xl font-bold">{featuredTreatment.title}</h2>
-                  {featuredTreatment.seo_description && (
-                    <p className="text-muted-foreground text-lg">
-                      {featuredTreatment.seo_description}
-                    </p>
-                  )}
-                  <Button asChild className="rounded-full shadow-md">
-                    <Link to={`/tratamentos/${featuredTreatment.slug}`}>
+              {loadingFeaturedTreatment ? (
+                <div className="grid md:grid-cols-2 gap-8 items-center p-8 md:p-12">
+                  <div className="space-y-6">
+                    <Skeleton className="h-8 w-40 rounded-full" />
+                    <Skeleton className="h-10 w-3/4 rounded-lg" />
+                    <div className="space-y-2">
+                      <Skeleton className="h-6 w-full rounded-md" />
+                      <Skeleton className="h-6 w-5/6 rounded-md" />
+                    </div>
+                    <Skeleton className="h-10 w-32 rounded-full" />
+                  </div>
+                  <div className="relative h-[300px] rounded-[30%_70%_70%_30%/30%_30%_70%_70%] overflow-hidden flex items-center justify-center">
+                    <Skeleton className="absolute inset-0 w-full h-full rounded-[30%_70%_70%_30%/30%_30%_70%_70%]" />
+                  </div>
+                </div>
+              ) : (
+                <div className="grid md:grid-cols-2 gap-8 items-center p-8 md:p-12">
+                  <div className="space-y-6">
+                    <Badge
+                      variant="outline"
+                      className="bg-white text-primary border-none shadow-sm px-4 py-1 text-sm rounded-full"
+                    >
                       <EditableText
-                        settingKey="featured_treatment_btn"
-                        defaultText="Saiba mais"
+                        settingKey="featured_treatment_badge"
+                        defaultText="Tratamento em Destaque"
                         as="span"
                       />
-                    </Link>
-                  </Button>
-                </div>
-                {featuredTreatment.image && (
-                  <div className="relative h-[300px] rounded-[30%_70%_70%_30%/30%_30%_70%_70%] overflow-hidden">
-                    <ImageWithFallback
-                      src={pb.files.getURL(featuredTreatment, featuredTreatment.image)}
-                      fallback={`https://img.usecurling.com/p/600/400?q=${encodeURIComponent(featuredTreatment.title)}&color=green`}
-                      alt={featuredTreatment.title}
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
+                    </Badge>
+                    <h2 className="text-3xl font-bold">{featuredTreatment.title}</h2>
+                    {featuredTreatment.seo_description && (
+                      <p className="text-muted-foreground text-lg">
+                        {featuredTreatment.seo_description}
+                      </p>
+                    )}
+                    <Button asChild className="rounded-full shadow-md">
+                      <Link to={`/tratamentos/${featuredTreatment.slug}`}>
+                        <EditableText
+                          settingKey="featured_treatment_btn"
+                          defaultText="Saiba mais"
+                          as="span"
+                        />
+                      </Link>
+                    </Button>
                   </div>
-                )}
-              </div>
+                  {featuredTreatment.image && (
+                    <div className="relative h-[300px] rounded-[30%_70%_70%_30%/30%_30%_70%_70%] overflow-hidden">
+                      <ImageWithFallback
+                        src={pb.files.getURL(featuredTreatment, featuredTreatment.image)}
+                        fallback={`https://img.usecurling.com/p/600/400?q=${encodeURIComponent(featuredTreatment.title)}&color=green`}
+                        alt={featuredTreatment.title}
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
+                </div>
+              )}
             </Card>
           </ScrollReveal>
         </section>
