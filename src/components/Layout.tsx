@@ -312,7 +312,7 @@ export default function Layout() {
               {settings.footer_contact_title?.value || 'Contato'}
             </h4>
             <div className="space-y-2 text-sm text-primary-foreground/80">
-              {settings?.contact_address?.value && <p>{settings.contact_address.value}</p>}
+              {null}
               <p>
                 {settings?.contact_email?.value ||
                   settings?.global_email?.value ||
