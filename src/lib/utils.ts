@@ -11,4 +11,15 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+/**
+ * Formats a phone number into a WhatsApp wa.me link.
+ * If it's already a URL, returns it as is.
+ */
+export function formatWhatsAppLink(phone: string): string {
+  if (!phone) return ''
+  if (phone.startsWith('http')) return phone
+  const cleaned = phone.replace(/\D/g, '')
+  return `https://wa.me/${cleaned}`
+}
+
 // Add any other utility functions here

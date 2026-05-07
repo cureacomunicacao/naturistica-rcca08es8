@@ -15,12 +15,9 @@ export default function Tratamentos() {
 
   const fetchTreatments = () => {
     pb.collection('treatments')
-      .getFullList({ filter: 'active = true', sort: 'order,title' })
+      .getFullList({ filter: 'active = true', sort: 'order,created' })
       .then((data) => {
-        const prioritySlugs = ['enxaqueca', 'tdah', 'trauma', 'ansiedade', 'reducao-de-danos']
-        const priority = prioritySlugs.map((s) => data.find((t) => t.slug === s)).filter(Boolean)
-        const rest = data.filter((t) => !prioritySlugs.includes(t.slug))
-        setTreatments([...priority, ...rest])
+        setTreatments(data)
       })
       .catch(console.error)
   }

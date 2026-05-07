@@ -82,6 +82,7 @@ export default function SiteSettingsAdmin() {
       'nav_treatments',
       'nav_contact',
       'nav_blog',
+      'main_menu_order',
       // About
       'about_meta_title',
       'about_meta_description',
@@ -494,12 +495,33 @@ export default function SiteSettingsAdmin() {
                     onChange={(e) => handleChange('nav_blog', e.target.value)}
                   />
                 </div>
+                <div className="space-y-2 col-span-3">
+                  <Label>
+                    Ordem do Menu Principal (IDs separados por vírgula: home, sobre, tratamentos,
+                    contato, blog)
+                  </Label>
+                  <Input
+                    value={formData['main_menu_order']?.value || ''}
+                    onChange={(e) => handleChange('main_menu_order', e.target.value)}
+                    placeholder="Ex: home,sobre,tratamentos,contato,blog"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Defina a ordem em que os links aparecerão no menu principal.
+                  </p>
+                </div>
               </div>
               <Button
                 className="mt-4"
                 disabled={loading}
                 onClick={() =>
-                  handleSave(['nav_home', 'nav_about', 'nav_treatments', 'nav_contact', 'nav_blog'])
+                  handleSave([
+                    'nav_home',
+                    'nav_about',
+                    'nav_treatments',
+                    'nav_contact',
+                    'nav_blog',
+                    'main_menu_order',
+                  ])
                 }
               >
                 {loading ? 'Salvando...' : 'Salvar Links'}

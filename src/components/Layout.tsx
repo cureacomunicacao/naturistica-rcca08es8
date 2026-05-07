@@ -14,13 +14,29 @@ export default function Layout() {
   const location = useLocation()
   const { settings } = useSettings()
 
-  const navLinks = [
-    { name: settings.nav_home?.value || 'Início', path: '/' },
-    { name: settings.nav_about?.value || 'Sobre', path: '/sobre' },
-    { name: settings.nav_treatments?.value || 'Tratamentos', path: '/tratamentos' },
-    { name: settings.nav_contact?.value || 'Contato', path: '/contato' },
-    { name: settings.nav_blog?.value || 'Blog', path: '/blog' },
+  const defaultNavLinks = [
+    { id: 'home', name: settings.nav_home?.value || 'Início', path: '/' },
+    { id: 'sobre', name: settings.nav_about?.value || 'Sobre', path: '/sobre' },
+    {
+      id: 'tratamentos',
+      name: settings.nav_treatments?.value || 'Tratamentos',
+      path: '/tratamentos',
+    },
+    { id: 'contato', name: settings.nav_contact?.value || 'Contato', path: '/contato' },
+    { id: 'blog', name: settings.nav_blog?.value || 'Blog', path: '/blog' },
   ]
+
+  const navOrderString = settings.main_menu_order?.value || 'home,sobre,tratamentos,contato,blog'
+  const navOrder = navOrderString.split(',').map((s: string) => s.trim().toLowerCase())
+
+  const navLinks = navOrder
+    .map((id: string) => defaultNavLinks.find((link) => link.id === id))
+    .filter(Boolean) as typeof defaultNavLinks
+
+  if (navLinks.length === 0) {
+    navLinks.push(...defaultNavLinks)
+  }
+
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [treatmentsList, setTreatmentsList] = useState<{ title: string; slug: string }[]>([
@@ -36,7 +52,7 @@ export default function Layout() {
 
   const fetchTreatments = () => {
     pb.collection('treatments')
-      .getFullList({ filter: 'active = true', sort: 'order,title' })
+      .getFullList({ filter: 'active = true', sort: 'order,created' })
       .then((records) => {
         setTreatmentsList(records.map((r) => ({ title: r.title, slug: r.slug })))
       })
