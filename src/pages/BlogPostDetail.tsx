@@ -78,7 +78,7 @@ export default function BlogPostDetail() {
               </span>
             </div>
             <h1
-              className="text-3xl md:text-5xl font-bold font-serif text-gray-900 leading-tight whitespace-nowrap overflow-hidden text-ellipsis max-w-full"
+              className="text-3xl md:text-5xl font-bold font-serif text-gray-900 leading-tight max-w-full text-balance"
               style={{
                 fontSize: settings.blog_h1_size?.value
                   ? `${settings.blog_h1_size.value}px`
@@ -107,9 +107,7 @@ export default function BlogPostDetail() {
               .dynamic-blog-content h1 { 
                 font-size: ${settings.blog_h1_size?.value ? `${settings.blog_h1_size.value}px` : '2.5rem'} !important;
                 line-height: 1.2 !important;
-                white-space: nowrap !important;
-                overflow: hidden !important;
-                text-overflow: ellipsis !important;
+                text-wrap: balance !important;
               }
               .dynamic-blog-content h2 { 
                 font-size: ${settings.blog_h2_size?.value ? `${settings.blog_h2_size.value}px` : '2rem'} !important;
