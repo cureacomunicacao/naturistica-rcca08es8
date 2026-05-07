@@ -6,7 +6,6 @@ import {
   DialogDescription,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
 import { useSettings } from '@/hooks/use-settings'
 import { ReactNode } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -27,26 +26,24 @@ export function ScheduleDialog({ children }: ScheduleDialogProps) {
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Agendar Consulta</DialogTitle>
-          <DialogDescription>
-            Com qual especialista você gostaria de agendar sua consulta?
+      <DialogContent className="sm:max-w-2xl">
+        <DialogHeader className="mb-2">
+          <DialogTitle className="text-center text-2xl font-semibold tracking-tight">
+            Agendar Consulta
+          </DialogTitle>
+          <DialogDescription className="text-center text-base">
+            Selecione o especialista para seu atendimento
           </DialogDescription>
         </DialogHeader>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 py-4">
-          <Button
-            asChild
-            variant="outline"
-            className="h-auto py-4 px-4 hover:border-primary hover:bg-primary/5 w-full"
+        <div className="grid grid-cols-1 gap-6 pb-4 sm:grid-cols-2 sm:gap-8">
+          <a
+            href={settings.whatsapp_felipe?.value || 'https://wa.me/5543991692047'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative flex flex-col items-center justify-center gap-6 rounded-2xl border border-border/50 bg-card p-8 text-card-foreground shadow-sm transition-all duration-500 hover:-translate-y-1.5 hover:border-primary/30 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            <a
-              href={settings.whatsapp_felipe?.value || 'https://wa.me/5543991692047'}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex flex-row items-center justify-center gap-3"
-            >
-              <Avatar className="h-10 w-10 border shrink-0">
+            <div className="relative flex h-32 w-32 items-center justify-center overflow-hidden rounded-full bg-muted/30 ring-1 ring-border/50 transition-all duration-500 group-hover:scale-105 group-hover:ring-primary/20">
+              <Avatar className="h-full w-full">
                 <AvatarImage
                   src={
                     felipeSetting?.image
@@ -54,26 +51,26 @@ export function ScheduleDialog({ children }: ScheduleDialogProps) {
                       : undefined
                   }
                   alt="Dr. Felipe Zamboni"
+                  className="object-cover"
                 />
-                <AvatarFallback>FZ</AvatarFallback>
+                <AvatarFallback className="text-3xl font-light text-muted-foreground">
+                  FZ
+                </AvatarFallback>
               </Avatar>
-              <span className="font-semibold text-base sm:text-lg whitespace-nowrap">
-                Dr. Felipe Zamboni
-              </span>
-            </a>
-          </Button>
-          <Button
-            asChild
-            variant="outline"
-            className="h-auto py-4 px-4 hover:border-primary hover:bg-primary/5 w-full"
+            </div>
+            <span className="whitespace-nowrap text-lg font-medium tracking-tight text-foreground transition-colors group-hover:text-primary">
+              Dr. Felipe Zamboni
+            </span>
+          </a>
+
+          <a
+            href={settings.whatsapp_beatriz?.value || 'https://wa.me/5543991692047'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative flex flex-col items-center justify-center gap-6 rounded-2xl border border-border/50 bg-card p-8 text-card-foreground shadow-sm transition-all duration-500 hover:-translate-y-1.5 hover:border-primary/30 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            <a
-              href={settings.whatsapp_beatriz?.value || 'https://wa.me/5543991692047'}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex flex-row items-center justify-center gap-3"
-            >
-              <Avatar className="h-10 w-10 border shrink-0">
+            <div className="relative flex h-32 w-32 items-center justify-center overflow-hidden rounded-full bg-muted/30 ring-1 ring-border/50 transition-all duration-500 group-hover:scale-105 group-hover:ring-primary/20">
+              <Avatar className="h-full w-full">
                 <AvatarImage
                   src={
                     beatrizSetting?.image
@@ -81,14 +78,17 @@ export function ScheduleDialog({ children }: ScheduleDialogProps) {
                       : undefined
                   }
                   alt="Dra. Beatriz Mulari"
+                  className="object-cover"
                 />
-                <AvatarFallback>BM</AvatarFallback>
+                <AvatarFallback className="text-3xl font-light text-muted-foreground">
+                  BM
+                </AvatarFallback>
               </Avatar>
-              <span className="font-semibold text-base sm:text-lg whitespace-nowrap">
-                Dra. Beatriz Mulari
-              </span>
-            </a>
-          </Button>
+            </div>
+            <span className="whitespace-nowrap text-lg font-medium tracking-tight text-foreground transition-colors group-hover:text-primary">
+              Dra. Beatriz Mulari
+            </span>
+          </a>
         </div>
       </DialogContent>
     </Dialog>
