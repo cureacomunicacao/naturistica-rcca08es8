@@ -262,17 +262,7 @@ export default function Contato() {
                   </div>
                 </div>
 
-                {settings['contact_address']?.value && (
-                  <div className="flex items-start gap-4">
-                    <div className="p-3 bg-primary/10 rounded-full text-primary">
-                      <MapPin className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium">Endereço</h3>
-                      <p className="text-muted-foreground">{settings['contact_address'].value}</p>
-                    </div>
-                  </div>
-                )}
+                {settings['contact_address']?.value && null}
 
                 <div className="flex items-start gap-4">
                   <div className="p-3 bg-primary/10 rounded-full text-primary">
