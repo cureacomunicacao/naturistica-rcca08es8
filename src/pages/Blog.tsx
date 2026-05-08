@@ -60,7 +60,11 @@ export default function Blog() {
         <div className="flex flex-wrap justify-center gap-2">
           <Badge
             variant={activeCategory === null ? 'default' : 'outline'}
-            className="cursor-pointer hover:bg-primary/90 hover:text-white rounded-full px-4 py-1.5 text-xs font-semibold transition-colors"
+            className={`cursor-pointer rounded-full px-4 py-1.5 text-xs font-semibold transition-colors ${
+              activeCategory === null
+                ? 'shadow-sm'
+                : 'bg-white text-foreground/80 hover:bg-primary/10 hover:text-primary hover:border-primary/40'
+            }`}
             onClick={() => setActiveCategory(null)}
           >
             TODOS
@@ -69,7 +73,11 @@ export default function Blog() {
             <Badge
               key={cat.id}
               variant={activeCategory === cat.id ? 'default' : 'outline'}
-              className="cursor-pointer hover:bg-primary/90 hover:text-white rounded-full px-4 py-1.5 text-xs font-semibold transition-colors bg-white"
+              className={`cursor-pointer rounded-full px-4 py-1.5 text-xs font-semibold transition-colors ${
+                activeCategory === cat.id
+                  ? 'shadow-sm'
+                  : 'bg-white text-foreground/80 hover:bg-primary/10 hover:text-primary hover:border-primary/40'
+              }`}
               onClick={() => setActiveCategory(cat.id)}
             >
               {cat.name}
