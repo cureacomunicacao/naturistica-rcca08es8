@@ -88,8 +88,8 @@ export function PostImageGallery({ postId }: { postId: string }) {
   }
 
   const copyShortcode = (order: number) => {
-    navigator.clipboard.writeText(`[image-${order}]`)
-    toast({ title: 'Shortcode copiado!', description: `Use no texto: [image-${order}]` })
+    navigator.clipboard.writeText(`[img-${order}]`)
+    toast({ title: 'Shortcode copiado!', description: `Use no texto: [img-${order}]` })
   }
 
   return (
@@ -122,7 +122,7 @@ export function PostImageGallery({ postId }: { postId: string }) {
                 className="h-7 text-xs"
               />
               <div className="flex items-center justify-between">
-                <span className="font-mono font-medium text-xs">[image-{img.sort_order}]</span>
+                <span className="font-mono font-medium text-xs">[img-{img.sort_order}]</span>
                 <div className="flex gap-1">
                   <Button
                     variant="ghost"

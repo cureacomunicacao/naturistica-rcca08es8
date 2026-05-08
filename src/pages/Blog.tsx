@@ -25,26 +25,11 @@ export default function Blog() {
   }, [])
 
   const categories = useMemo(() => {
-    const activeIds = new Set<string>()
-    const activeNames = new Set<string>()
-    posts.forEach((p) => {
-      if (p.category_ref) activeIds.add(p.category_ref)
-      if (p.category) activeNames.add(p.category)
-    })
-
-    const legacyOnly = Array.from(activeNames).filter(
-      (n) => !dbCategories.some((c) => c.name === n),
-    )
-    const dbCats = dbCategories
-      .filter((c) => activeIds.has(c.id) || activeNames.has(c.name))
-      .map((c) => c.name)
-
-    return [...new Set([...dbCats, ...legacyOnly])].sort((a, b) => a.localeCompare(b))
-  }, [posts, dbCategories])
+    return dbCategories.sort((a, b) => a.name.localeCompare(b.name))
+  }, [dbCategories])
 
   const filteredPosts = posts.filter((post) => {
-    const catName = post.expand?.category_ref?.name || post.category
-    const matchesCategory = activeCategory ? catName === activeCategory : true
+    const matchesCategory = activeCategory ? post.category_ref === activeCategory : true
     const matchesSearch =
       post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (post.content || '').toLowerCase().includes(searchQuery.toLowerCase())
@@ -82,12 +67,12 @@ export default function Blog() {
           </Badge>
           {categories.map((cat) => (
             <Badge
-              key={cat}
-              variant={activeCategory === cat ? 'default' : 'outline'}
+              key={cat.id}
+              variant={activeCategory === cat.id ? 'default' : 'outline'}
               className="cursor-pointer hover:bg-primary/90 hover:text-white rounded-full px-4 py-1.5 text-xs font-semibold transition-colors bg-white"
-              onClick={() => setActiveCategory(cat)}
+              onClick={() => setActiveCategory(cat.id)}
             >
-              {cat}
+              {cat.name}
             </Badge>
           ))}
         </div>

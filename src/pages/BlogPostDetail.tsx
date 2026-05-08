@@ -41,11 +41,23 @@ export default function BlogPostDetail() {
     if (!post?.content) return ''
     let html = post.content
     postImages.forEach((img) => {
-      const marker = `[image-${img.sort_order}]`
       const imgHtml = `<figure class="my-8"><img src="${getPostGalleryImageUrl(img)}" alt="${img.alt_text || ''}" class="w-full h-auto object-cover object-top rounded-xl shadow-md" /></figure>`
+
+      const marker1 = `[img-${img.sort_order}]`
+      html = html.replace(new RegExp(`<p>\\s*\\[img-${img.sort_order}\\]\\s*</p>`, 'g'), imgHtml)
+      html = html.split(marker1).join(imgHtml)
+
+      const marker2 = `[image-${img.sort_order}]`
       html = html.replace(new RegExp(`<p>\\s*\\[image-${img.sort_order}\\]\\s*</p>`, 'g'), imgHtml)
-      html = html.split(marker).join(imgHtml)
+      html = html.split(marker2).join(imgHtml)
     })
+
+    // Remove missing or leftover tags safely without breaking layout
+    html = html.replace(/<p>\s*\[img-\d+\]\s*<\/p>/g, '')
+    html = html.replace(/\[img-\d+\]/g, '')
+    html = html.replace(/<p>\s*\[image-\d+\]\s*<\/p>/g, '')
+    html = html.replace(/\[image-\d+\]/g, '')
+
     return html
   }, [post?.content, postImages])
 

@@ -237,8 +237,7 @@ export default function BlogPostForm() {
               <CardHeader>
                 <CardTitle>Imagens no Conteúdo</CardTitle>
                 <CardDescription>
-                  Faça upload de imagens e use tags como [image-1] no editor de texto para
-                  inseri-las.
+                  Faça upload de imagens e use tags como [img-1] no editor de texto para inseri-las.
                 </CardDescription>
               </CardHeader>
               <CardContent>
