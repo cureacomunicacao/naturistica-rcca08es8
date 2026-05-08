@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { ScrollReveal } from '@/components/ScrollReveal'
 import { Card, CardContent } from '@/components/ui/card'
@@ -6,26 +6,6 @@ import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Search } from 'lucide-react'
 import { getPosts, getPostImageUrl, type PostRecord } from '@/services/posts'
-
-const categories = [
-  'ANSIEDADE',
-  'ANSIEDADE GRAVE',
-  'DEPRESSÃO',
-  'SAÚDE MENTAL',
-  'CANNABIS MEDICINAL',
-  'INSÔNIA',
-  'BURNOUT',
-  'DOR CRÔNICA',
-  'TRAUMA',
-  'TDAH',
-  'ENXAQUECA',
-  'HISTÓRIA DA PLANTA',
-  'ENTEÓGENOS',
-  'AYURVEDA',
-  'PSICOTERAPIA',
-  'ABUSO DE SUBSTÂNCIAS',
-  'ESTRESSE',
-]
 
 export default function Blog() {
   const [posts, setPosts] = useState<PostRecord[]>([])
@@ -35,6 +15,16 @@ export default function Blog() {
   useEffect(() => {
     getPosts('status="published"').then(setPosts).catch(console.error)
   }, [])
+
+  const categories = useMemo(() => {
+    const cats = new Set<string>()
+    posts.forEach((post) => {
+      if (post.category && post.category.trim() !== '') {
+        cats.add(post.category.trim())
+      }
+    })
+    return Array.from(cats).sort((a, b) => a.localeCompare(b))
+  }, [posts])
 
   const filteredPosts = posts.filter((post) => {
     const matchesCategory = activeCategory ? post.category === activeCategory : true
@@ -68,7 +58,7 @@ export default function Blog() {
         <div className="flex flex-wrap justify-center gap-2">
           <Badge
             variant={activeCategory === null ? 'default' : 'outline'}
-            className="cursor-pointer hover:bg-primary/90 hover:text-white rounded-full px-4 py-1.5 transition-colors"
+            className="cursor-pointer hover:bg-primary/90 hover:text-white rounded-full px-4 py-1.5 text-xs font-semibold transition-colors"
             onClick={() => setActiveCategory(null)}
           >
             TODOS
@@ -77,7 +67,7 @@ export default function Blog() {
             <Badge
               key={cat}
               variant={activeCategory === cat ? 'default' : 'outline'}
-              className="cursor-pointer hover:bg-primary/90 hover:text-white rounded-full px-4 py-1.5 transition-colors bg-white"
+              className="cursor-pointer hover:bg-primary/90 hover:text-white rounded-full px-4 py-1.5 text-xs font-semibold transition-colors bg-white"
               onClick={() => setActiveCategory(cat)}
             >
               {cat}
