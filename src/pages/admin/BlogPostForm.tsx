@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -13,27 +13,19 @@ import {
 } from '@/components/ui/select'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { RichTextEditor } from '@/components/RichTextEditor'
+import { PostImageGallery } from '@/components/admin/PostImageGallery'
 import { useToast } from '@/hooks/use-toast'
-import { getPost, createPost, updatePost, getPostImageUrl, type PostRecord } from '@/services/posts'
+import {
+  getPost,
+  createPost,
+  updatePost,
+  getPostImageUrl,
+  getBlogCategories,
+  type PostRecord,
+  type BlogCategoryRecord,
+} from '@/services/posts'
 import { getErrorMessage, extractFieldErrors } from '@/lib/pocketbase/errors'
 import { ArrowLeft, Save } from 'lucide-react'
-import { Link } from 'react-router-dom'
-
-const CATEGORIES = [
-  'ANSIEDADE',
-  'INSÔNIA',
-  'BURNOUT',
-  'DOR CRÔNICA',
-  'TRAUMA',
-  'TDAH',
-  'ENXAQUECA',
-  'HISTÓRIA DA PLANTA',
-  'ENTEÓGENOS',
-  'AYURVEDA',
-  'PSICOTERAPIA',
-  'ABUSO DE SUBSTÂNCIAS',
-  'ESTRESSE',
-]
 
 const slugify = (text: string) => {
   return text
@@ -55,6 +47,7 @@ export default function BlogPostForm() {
   const [loading, setLoading] = useState(false)
   const [initialLoading, setInitialLoading] = useState(!!id)
   const [post, setPost] = useState<PostRecord | null>(null)
+  const [categories, setCategories] = useState<BlogCategoryRecord[]>([])
   const [imageFile, setImageFile] = useState<File | null>(null)
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
 
@@ -62,11 +55,15 @@ export default function BlogPostForm() {
     title: '',
     slug: '',
     content: '',
-    category: '',
+    category_ref: '',
     status: 'draft',
     seo_title: '',
     seo_description: '',
   })
+
+  useEffect(() => {
+    getBlogCategories().then(setCategories).catch(console.error)
+  }, [])
 
   useEffect(() => {
     if (id) {
@@ -77,7 +74,7 @@ export default function BlogPostForm() {
             title: data.title,
             slug: data.slug,
             content: data.content || '',
-            category: data.category || '',
+            category_ref: data.category_ref || '',
             status: data.status || 'draft',
             seo_title: data.seo_title || '',
             seo_description: data.seo_description || '',
@@ -97,7 +94,7 @@ export default function BlogPostForm() {
         })
         .finally(() => setInitialLoading(false))
     }
-  }, [id, toast])
+  }, [id, toast, navigate])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -108,27 +105,25 @@ export default function BlogPostForm() {
   }
 
   const handleSelectChange = (name: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [name]: value }))
+    setFormData((prev) => ({ ...prev, [name]: value === 'none' ? '' : value }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    // Explicitly check for valid content but allow large capacities (> 2000 chars)
     if (!formData.content || formData.content.trim() === '') {
       toast({
         title: 'Aviso',
-        description: 'O conteúdo do post não pode estar vazio.',
+        description: 'O conteúdo não pode estar vazio.',
         variant: 'destructive',
       })
       return
     }
 
-    // Max length check - 5MB roughly translated to 5M characters for safety
     if (formData.content.length > 5000000) {
       toast({
         title: 'Aviso',
-        description: 'O conteúdo excedeu o limite máximo suportado de 5MB.',
+        description: 'O conteúdo excedeu o limite de 5MB.',
         variant: 'destructive',
       })
       return
@@ -154,17 +149,6 @@ export default function BlogPostForm() {
       }
       navigate('/admin/blogs')
     } catch (error: any) {
-      const is404 = error?.status === 404 || error?.response?.code === 404
-      if (is404) {
-        toast({
-          title: 'Erro',
-          description: 'O registro não existe mais.',
-          variant: 'destructive',
-        })
-        navigate('/admin/blogs')
-        return
-      }
-
       const errors = extractFieldErrors(error)
       if (Object.keys(errors).length > 0) {
         setFieldErrors(errors)
@@ -174,14 +158,7 @@ export default function BlogPostForm() {
           variant: 'destructive',
         })
       } else {
-        const message = getErrorMessage(error)
-        toast({
-          title: 'Erro ao salvar o post',
-          description:
-            message ||
-            'Houve um erro ao tentar salvar. Verifique sua conexão ou se o tamanho do conteúdo excedeu o limite.',
-          variant: 'destructive',
-        })
+        toast({ title: 'Erro', description: getErrorMessage(error), variant: 'destructive' })
       }
     } finally {
       setLoading(false)
@@ -244,14 +221,30 @@ export default function BlogPostForm() {
 
             <Card>
               <CardHeader>
-                <CardTitle>SEO & Google Positioning</CardTitle>
+                <CardTitle>Imagens no Conteúdo</CardTitle>
                 <CardDescription>
-                  Otimize como seu post aparece nos resultados de busca.
+                  Faça upload de imagens e use tags como [image-1] no editor de texto para
+                  inseri-las.
                 </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {!id ? (
+                  <p className="text-sm text-muted-foreground">
+                    Salve o post primeiro para poder adicionar imagens ao conteúdo.
+                  </p>
+                ) : (
+                  <PostImageGallery postId={id} />
+                )}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>SEO & Google Positioning</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="seo_title">Título SEO (Recomendado: 60-70 caracteres)</Label>
+                  <Label htmlFor="seo_title">Título SEO</Label>
                   <Input
                     id="seo_title"
                     name="seo_title"
@@ -259,17 +252,9 @@ export default function BlogPostForm() {
                     onChange={handleChange}
                     maxLength={70}
                   />
-                  <span className="text-xs text-muted-foreground">
-                    {formData.seo_title.length}/70
-                  </span>
-                  {fieldErrors.seo_title && (
-                    <p className="text-sm text-red-500">{fieldErrors.seo_title}</p>
-                  )}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="seo_description">
-                    Meta Description (Recomendado: 150-160 caracteres)
-                  </Label>
+                  <Label htmlFor="seo_description">Meta Description</Label>
                   <Textarea
                     id="seo_description"
                     name="seo_description"
@@ -277,12 +262,6 @@ export default function BlogPostForm() {
                     onChange={handleChange}
                     maxLength={160}
                   />
-                  <span className="text-xs text-muted-foreground">
-                    {formData.seo_description.length}/160
-                  </span>
-                  {fieldErrors.seo_description && (
-                    <p className="text-sm text-red-500">{fieldErrors.seo_description}</p>
-                  )}
                 </div>
               </CardContent>
             </Card>
@@ -311,18 +290,19 @@ export default function BlogPostForm() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="category">Categoria</Label>
+                  <Label htmlFor="category_ref">Categoria</Label>
                   <Select
-                    value={formData.category}
-                    onValueChange={(v) => handleSelectChange('category', v)}
+                    value={formData.category_ref || 'none'}
+                    onValueChange={(v) => handleSelectChange('category_ref', v)}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Selecione uma categoria" />
                     </SelectTrigger>
                     <SelectContent>
-                      {CATEGORIES.map((cat) => (
-                        <SelectItem key={cat} value={cat}>
-                          {cat}
+                      <SelectItem value="none">Sem categoria</SelectItem>
+                      {categories.map((cat) => (
+                        <SelectItem key={cat.id} value={cat.id}>
+                          {cat.name}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -344,9 +324,6 @@ export default function BlogPostForm() {
                     accept="image/*"
                     onChange={(e) => setImageFile(e.target.files?.[0] || null)}
                   />
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Tamanho recomendado: 1200x800px.
-                  </p>
                 </div>
               </CardContent>
             </Card>

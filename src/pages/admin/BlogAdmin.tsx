@@ -86,7 +86,9 @@ export default function BlogAdmin() {
                 <TableRow key={post.id}>
                   <TableCell className="font-medium">{post.title}</TableCell>
                   <TableCell>
-                    <Badge variant="outline">{post.category || 'Sem Categoria'}</Badge>
+                    <Badge variant="outline">
+                      {post.expand?.category_ref?.name || post.category || 'Sem Categoria'}
+                    </Badge>
                   </TableCell>
                   <TableCell>
                     <Badge variant={post.status === 'published' ? 'default' : 'secondary'}>

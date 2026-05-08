@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { getPostBySlug, getPostImageUrl, type PostRecord } from '@/services/posts'
+import {
+  getPostBySlug,
+  getPostImageUrl,
+  getPostImages,
+  getPostGalleryImageUrl,
+  type PostRecord,
+  type PostImageRecord,
+} from '@/services/posts'
 import { ScrollReveal } from '@/components/ScrollReveal'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -16,15 +23,31 @@ export default function BlogPostDetail() {
   const { slug } = useParams<{ slug: string }>()
   const [post, setPost] = useState<PostRecord | null>(null)
   const [loading, setLoading] = useState(true)
+  const [postImages, setPostImages] = useState<PostImageRecord[]>([])
 
   useEffect(() => {
     if (slug) {
       getPostBySlug(slug)
-        .then(setPost)
+        .then((data) => {
+          setPost(data)
+          getPostImages(data.id).then(setPostImages).catch(console.error)
+        })
         .catch(() => setPost(null))
         .finally(() => setLoading(false))
     }
   }, [slug])
+
+  const parsedContent = useMemo(() => {
+    if (!post?.content) return ''
+    let html = post.content
+    postImages.forEach((img) => {
+      const marker = `[image-${img.sort_order}]`
+      const imgHtml = `<figure class="my-8"><img src="${getPostGalleryImageUrl(img)}" alt="${img.alt_text || ''}" class="w-full h-auto object-cover object-top rounded-xl shadow-md" /></figure>`
+      html = html.replace(new RegExp(`<p>\\s*\\[image-${img.sort_order}\\]\\s*</p>`, 'g'), imgHtml)
+      html = html.split(marker).join(imgHtml)
+    })
+    return html
+  }, [post?.content, postImages])
 
   if (loading)
     return <div className="min-h-screen pt-24 pb-12 flex justify-center">Carregando...</div>
@@ -64,9 +87,9 @@ export default function BlogPostDetail() {
               Voltar ao Blog
             </Link>
             <div className="flex items-center gap-3 mb-4">
-              {post.category && (
+              {(post.expand?.category_ref?.name || post.category) && (
                 <Badge className="bg-[#455e38] hover:bg-[#455e38]/90 text-white border-none shadow-sm px-3 py-1">
-                  {post.category}
+                  {post.expand?.category_ref?.name || post.category}
                 </Badge>
               )}
               <span className="text-gray-600 text-sm font-medium">
@@ -121,7 +144,7 @@ export default function BlogPostDetail() {
           </style>
           <div
             className="dynamic-blog-content prose prose-lg md:prose-xl prose-green max-w-none prose-headings:font-serif prose-headings:text-[#455e38] prose-p:text-gray-700 prose-a:text-[#455e38] hover:prose-a:text-[#455e38]/80 prose-strong:text-gray-900 prose-strong:font-semibold prose-ul:list-disc prose-ol:list-decimal prose-li:text-gray-700 leading-relaxed tracking-normal"
-            dangerouslySetInnerHTML={{ __html: post.content || '' }}
+            dangerouslySetInnerHTML={{ __html: parsedContent }}
           />
         </ScrollReveal>
 

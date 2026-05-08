@@ -5,29 +5,46 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Search } from 'lucide-react'
-import { getPosts, getPostImageUrl, type PostRecord } from '@/services/posts'
+import {
+  getPosts,
+  getBlogCategories,
+  getPostImageUrl,
+  type PostRecord,
+  type BlogCategoryRecord,
+} from '@/services/posts'
 
 export default function Blog() {
   const [posts, setPosts] = useState<PostRecord[]>([])
+  const [dbCategories, setDbCategories] = useState<BlogCategoryRecord[]>([])
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
     getPosts('status="published"').then(setPosts).catch(console.error)
+    getBlogCategories().then(setDbCategories).catch(console.error)
   }, [])
 
   const categories = useMemo(() => {
-    const cats = new Set<string>()
-    posts.forEach((post) => {
-      if (post.category && post.category.trim() !== '') {
-        cats.add(post.category.trim())
-      }
+    const activeIds = new Set<string>()
+    const activeNames = new Set<string>()
+    posts.forEach((p) => {
+      if (p.category_ref) activeIds.add(p.category_ref)
+      if (p.category) activeNames.add(p.category)
     })
-    return Array.from(cats).sort((a, b) => a.localeCompare(b))
-  }, [posts])
+
+    const legacyOnly = Array.from(activeNames).filter(
+      (n) => !dbCategories.some((c) => c.name === n),
+    )
+    const dbCats = dbCategories
+      .filter((c) => activeIds.has(c.id) || activeNames.has(c.name))
+      .map((c) => c.name)
+
+    return [...new Set([...dbCats, ...legacyOnly])].sort((a, b) => a.localeCompare(b))
+  }, [posts, dbCategories])
 
   const filteredPosts = posts.filter((post) => {
-    const matchesCategory = activeCategory ? post.category === activeCategory : true
+    const catName = post.expand?.category_ref?.name || post.category
+    const matchesCategory = activeCategory ? catName === activeCategory : true
     const matchesSearch =
       post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (post.content || '').toLowerCase().includes(searchQuery.toLowerCase())
@@ -88,10 +105,10 @@ export default function Blog() {
                       alt={post.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
-                    {post.category && (
+                    {(post.expand?.category_ref?.name || post.category) && (
                       <div className="absolute top-4 left-4">
                         <Badge className="bg-white/90 text-primary hover:bg-white border-none font-semibold">
-                          {post.category}
+                          {post.expand?.category_ref?.name || post.category}
                         </Badge>
                       </div>
                     )}

@@ -20,6 +20,7 @@ import Dashboard from './pages/admin/Dashboard'
 import TreatmentsAdmin from './pages/admin/TreatmentsAdmin'
 import LeadsAdmin from './pages/admin/LeadsAdmin'
 import BlogAdmin from './pages/admin/BlogAdmin'
+import BlogCategoriesAdmin from './pages/admin/BlogCategoriesAdmin'
 import BlogPostForm from './pages/admin/BlogPostForm'
 import SiteSettingsAdmin from './pages/admin/SiteSettingsAdmin'
 import MediaSettingsAdmin from './pages/admin/MediaSettingsAdmin'
@@ -61,6 +62,7 @@ const App = () => (
                 <Route path="treatments" element={<TreatmentsAdmin />} />
                 <Route path="leads" element={<LeadsAdmin />} />
                 <Route path="blogs" element={<BlogAdmin />} />
+                <Route path="blogs/categories" element={<BlogCategoriesAdmin />} />
                 <Route path="blogs/new" element={<BlogPostForm />} />
                 <Route path="blogs/:id" element={<BlogPostForm />} />
                 <Route path="settings" element={<SiteSettingsAdmin />} />

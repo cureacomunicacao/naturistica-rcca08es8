@@ -19,6 +19,7 @@ const navItems = [
   { name: 'Tratamentos', path: '/admin/treatments', icon: Stethoscope },
   { name: 'Leads', path: '/admin/leads', icon: Users },
   { name: 'Blog', path: '/admin/blogs', icon: FileText },
+  { name: 'Categorias do Blog', path: '/admin/blogs/categories', icon: FileText },
   { name: 'Depoimentos', path: '/admin/testimonials', icon: MessageSquare },
   { name: 'Página Inicial', path: '/admin/settings/home', icon: Settings },
   { name: 'Identidade Visual', path: '/admin/settings/visual', icon: Settings },
