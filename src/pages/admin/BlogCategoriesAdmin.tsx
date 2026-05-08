@@ -74,8 +74,22 @@ export default function BlogCategoriesAdmin() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Excluir categoria? Certifique-se de que não há posts utilizando-a.')) return
     try {
+      const { checkCategoryHasPosts, clearPostsCategory } = await import('@/services/posts')
+      const hasPosts = await checkCategoryHasPosts(id)
+
+      if (hasPosts) {
+        if (
+          !confirm(
+            'Existem posts vinculados a esta categoria. Eles ficarão sem categoria. Deseja continuar?',
+          )
+        )
+          return
+        await clearPostsCategory(id)
+      } else {
+        if (!confirm('Excluir categoria?')) return
+      }
+
       await deleteBlogCategory(id)
       toast({ title: 'Excluída com sucesso' })
       loadCategories()

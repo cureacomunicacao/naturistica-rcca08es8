@@ -59,6 +59,8 @@ export default function BlogPostForm() {
     status: 'draft',
     seo_title: '',
     seo_description: '',
+    image_alt: '',
+    published_at: new Date().toISOString().slice(0, 16),
   })
 
   useEffect(() => {
@@ -78,6 +80,10 @@ export default function BlogPostForm() {
             status: data.status || 'draft',
             seo_title: data.seo_title || '',
             seo_description: data.seo_description || '',
+            image_alt: data.image_alt || '',
+            published_at: data.published_at
+              ? new Date(data.published_at).toISOString().slice(0, 16)
+              : new Date().toISOString().slice(0, 16),
           })
         })
         .catch((err) => {
@@ -134,7 +140,15 @@ export default function BlogPostForm() {
     try {
       const data = new FormData()
       Object.entries(formData).forEach(([key, value]) => {
-        data.append(key, value)
+        if (key === 'published_at') {
+          if (value) {
+            data.append(key, new Date(value as string).toISOString())
+          } else {
+            data.append(key, new Date().toISOString())
+          }
+        } else {
+          data.append(key, value as string)
+        }
       })
       if (imageFile) {
         data.append('image', imageFile)
@@ -310,6 +324,17 @@ export default function BlogPostForm() {
                 </div>
 
                 <div className="space-y-2">
+                  <Label htmlFor="published_at">Data de Publicação</Label>
+                  <Input
+                    id="published_at"
+                    name="published_at"
+                    type="datetime-local"
+                    value={formData.published_at}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="space-y-2">
                   <Label htmlFor="image">Imagem de Capa</Label>
                   {post?.image && !imageFile && (
                     <img
@@ -323,6 +348,17 @@ export default function BlogPostForm() {
                     type="file"
                     accept="image/*"
                     onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="image_alt">Texto Alternativo da Capa (Alt-Text)</Label>
+                  <Input
+                    id="image_alt"
+                    name="image_alt"
+                    value={formData.image_alt}
+                    onChange={handleChange}
+                    placeholder="Descrição da imagem para acessibilidade"
                   />
                 </div>
               </CardContent>

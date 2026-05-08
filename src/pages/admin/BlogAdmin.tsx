@@ -91,11 +91,23 @@ export default function BlogAdmin() {
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    <Badge variant={post.status === 'published' ? 'default' : 'secondary'}>
-                      {post.status === 'published' ? 'Publicado' : 'Rascunho'}
-                    </Badge>
+                    {post.status === 'draft' ? (
+                      <Badge variant="secondary">Rascunho</Badge>
+                    ) : new Date(post.published_at || post.created) > new Date() ? (
+                      <Badge className="bg-blue-500 hover:bg-blue-600 text-white">Agendado</Badge>
+                    ) : (
+                      <Badge variant="default">Publicado</Badge>
+                    )}
                   </TableCell>
-                  <TableCell>{new Date(post.created).toLocaleDateString('pt-BR')}</TableCell>
+                  <TableCell>
+                    {new Date(post.published_at || post.created).toLocaleDateString('pt-BR')}
+                    <span className="text-xs text-muted-foreground ml-1">
+                      {new Date(post.published_at || post.created).toLocaleTimeString('pt-BR', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </span>
+                  </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
                       <Button variant="ghost" size="icon" asChild>

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-08T01:48:20.200Z",
+  "generatedAt": "2026-05-08T02:08:57.403Z",
   "collections": [
     {
       "name": "users",
@@ -151,8 +151,8 @@
       "name": "posts",
       "type": "base",
       "apiRules": {
-        "list": "",
-        "view": "",
+        "list": "@request.auth.is_admin = true || (status = 'published' && published_at <= @now)",
+        "view": "@request.auth.is_admin = true || (status = 'published' && published_at <= @now)",
         "create": "@request.auth.is_admin = true",
         "update": "@request.auth.is_admin = true",
         "delete": "@request.auth.is_admin = true"
@@ -227,9 +227,24 @@
           "required": false,
           "system": false,
           "collectionRef": "blog_categories"
+        },
+        {
+          "name": "published_at",
+          "type": "date",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "image_alt",
+          "type": "text",
+          "required": false,
+          "system": false
         }
       ],
-      "indexes": ["CREATE UNIQUE INDEX idx_posts_slug ON posts (slug)"]
+      "indexes": [
+        "CREATE UNIQUE INDEX idx_posts_slug ON posts (slug)",
+        "CREATE INDEX `idx_posts_published_at` ON `posts` (published_at)"
+      ]
     },
     {
       "name": "leads",

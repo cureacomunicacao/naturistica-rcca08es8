@@ -20,7 +20,7 @@ export default function Blog() {
   const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
-    getPosts('status="published"').then(setPosts).catch(console.error)
+    getPosts(`status="published" && published_at <= @now`).then(setPosts).catch(console.error)
     getBlogCategories().then(setDbCategories).catch(console.error)
   }, [])
 

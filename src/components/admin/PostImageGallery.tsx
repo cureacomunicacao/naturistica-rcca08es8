@@ -5,6 +5,7 @@ import { Trash2, Copy } from 'lucide-react'
 import {
   getPostImages,
   createPostImage,
+  updatePostImage,
   deletePostImage,
   getPostGalleryImageUrl,
   type PostImageRecord,
@@ -14,6 +15,7 @@ import { Card } from '@/components/ui/card'
 
 export function PostImageGallery({ postId }: { postId: string }) {
   const [images, setImages] = useState<PostImageRecord[]>([])
+  const [altTexts, setAltTexts] = useState<Record<string, string>>({})
   const [loading, setLoading] = useState(false)
   const { toast } = useToast()
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -22,8 +24,28 @@ export function PostImageGallery({ postId }: { postId: string }) {
     try {
       const data = await getPostImages(postId)
       setImages(data)
+      const alts: Record<string, string> = {}
+      data.forEach((img) => (alts[img.id] = img.alt_text || ''))
+      setAltTexts(alts)
     } catch {
       toast({ title: 'Erro ao carregar imagens da galeria', variant: 'destructive' })
+    }
+  }
+
+  const handleAltChange = (id: string, val: string) => {
+    setAltTexts((p) => ({ ...p, [id]: val }))
+  }
+
+  const handleAltBlur = async (id: string) => {
+    const img = images.find((i) => i.id === id)
+    if (img && img.alt_text !== altTexts[id]) {
+      try {
+        await updatePostImage(id, { alt_text: altTexts[id] })
+        setImages(images.map((i) => (i.id === id ? { ...i, alt_text: altTexts[id] } : i)))
+        toast({ title: 'Texto alternativo salvo' })
+      } catch {
+        toast({ title: 'Erro ao salvar texto alternativo', variant: 'destructive' })
+      }
     }
   }
 
@@ -85,32 +107,41 @@ export function PostImageGallery({ postId }: { postId: string }) {
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
         {images.map((img) => (
-          <Card key={img.id} className="overflow-hidden relative group border">
+          <Card key={img.id} className="overflow-hidden relative group border flex flex-col">
             <img
               src={getPostGalleryImageUrl(img)}
               alt=""
               className="w-full h-32 object-cover object-top"
             />
-            <div className="p-2 text-sm flex items-center justify-between bg-muted/50 border-t">
-              <span className="font-mono font-medium">[image-{img.sort_order}]</span>
-              <div className="flex gap-1">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-6 w-6"
-                  onClick={() => copyShortcode(img.sort_order)}
-                  title="Copiar Shortcode"
-                >
-                  <Copy className="h-3 w-3" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-6 w-6 text-red-500 hover:text-red-700"
-                  onClick={() => handleDelete(img.id)}
-                >
-                  <Trash2 className="h-3 w-3" />
-                </Button>
+            <div className="p-2 space-y-2 bg-muted/50 border-t flex-1 flex flex-col justify-end">
+              <Input
+                placeholder="Texto alternativo (Alt)"
+                value={altTexts[img.id] ?? ''}
+                onChange={(e) => handleAltChange(img.id, e.target.value)}
+                onBlur={() => handleAltBlur(img.id)}
+                className="h-7 text-xs"
+              />
+              <div className="flex items-center justify-between">
+                <span className="font-mono font-medium text-xs">[image-{img.sort_order}]</span>
+                <div className="flex gap-1">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6"
+                    onClick={() => copyShortcode(img.sort_order)}
+                    title="Copiar Shortcode"
+                  >
+                    <Copy className="h-3 w-3" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 text-red-500 hover:text-red-700"
+                    onClick={() => handleDelete(img.id)}
+                  >
+                    <Trash2 className="h-3 w-3" />
+                  </Button>
+                </div>
               </div>
             </div>
           </Card>

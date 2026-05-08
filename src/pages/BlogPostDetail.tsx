@@ -73,7 +73,7 @@ export default function BlogPostDetail() {
       <div className="relative h-[40vh] md:h-[50vh] min-h-[300px] w-full bg-black">
         <img
           src={getPostImageUrl(post)}
-          alt={post.title}
+          alt={post.image_alt || post.title}
           className="w-full h-full object-cover opacity-60"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#fdf6ee] to-transparent" />
