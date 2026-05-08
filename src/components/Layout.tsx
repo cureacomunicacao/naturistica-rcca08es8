@@ -14,32 +14,17 @@ export default function Layout() {
   const location = useLocation()
   const { settings } = useSettings()
 
-  const defaultNavLinks = [
-    { id: 'home', name: settings.nav_home?.value || 'Início', path: '/' },
-    { id: 'sobre', name: settings.nav_about?.value || 'Sobre', path: '/sobre' },
-    {
-      id: 'tratamentos',
-      name: settings.nav_treatments?.value || 'Tratamentos',
-      path: '/tratamentos',
-    },
-    { id: 'contato', name: settings.nav_contact?.value || 'Contato', path: '/contato' },
-    { id: 'blog', name: settings.nav_blog?.value || 'Blog', path: '/blog' },
-  ]
-
-  const navOrderString = settings.main_menu_order?.value || 'home,sobre,tratamentos,contato,blog'
-  const navOrder = navOrderString.split(',').map((s: string) => s.trim().toLowerCase())
-
-  const navLinks = navOrder
-    .map((id: string) => defaultNavLinks.find((link) => link.id === id))
-    .filter(Boolean) as typeof defaultNavLinks
-
-  if (navLinks.length === 0) {
-    navLinks.push(...defaultNavLinks)
-  }
-
+  const [navLinks, setNavLinks] = useState<any[]>([])
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [treatmentsList, setTreatmentsList] = useState<{ title: string; slug: string }[]>([])
+
+  const fetchNavigation = () => {
+    pb.collection('navigation_links')
+      .getFullList({ filter: 'active = true', sort: 'order,created' })
+      .then(setNavLinks)
+      .catch(console.error)
+  }
 
   const fetchTreatments = () => {
     pb.collection('treatments')
@@ -51,9 +36,11 @@ export default function Layout() {
   }
 
   useEffect(() => {
+    fetchNavigation()
     fetchTreatments()
   }, [])
 
+  useRealtime('navigation_links', fetchNavigation)
   useRealtime('treatments', fetchTreatments)
 
   useEffect(() => {
@@ -131,10 +118,10 @@ export default function Layout() {
             {/* Desktop Nav */}
             <nav className="hidden md:flex items-center gap-8">
               {navLinks.map((link) =>
-                link.name === 'Tratamentos' ? (
-                  <div key={link.path} className="relative group py-2">
+                link.href === '/tratamentos' ? (
+                  <div key={link.id || link.href} className="relative group py-2">
                     <Link
-                      to={link.path}
+                      to={link.href}
                       className={cn(
                         'text-sm font-medium transition-colors hover:text-primary relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-bottom-right after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100',
                         location.pathname.startsWith('/tratamentos')
@@ -142,7 +129,7 @@ export default function Layout() {
                           : 'text-muted-foreground',
                       )}
                     >
-                      {link.name}
+                      {link.label}
                     </Link>
                     <div className="absolute top-full left-1/2 -translate-x-1/2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-50 pt-4">
                       <div className="bg-white rounded-xl shadow-xl border p-4 w-[500px] grid grid-cols-2 gap-2 before:absolute before:-top-2 before:left-1/2 before:-translate-x-1/2 before:border-8 before:border-transparent before:border-b-white">
@@ -168,16 +155,16 @@ export default function Layout() {
                   </div>
                 ) : (
                   <Link
-                    key={link.path}
-                    to={link.path}
+                    key={link.id || link.href}
+                    to={link.href}
                     className={cn(
                       'text-sm font-medium transition-colors hover:text-primary relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-full after:origin-bottom-right after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:after:origin-bottom-left hover:after:scale-x-100',
-                      location.pathname === link.path
+                      location.pathname === link.href
                         ? 'text-primary after:scale-x-100'
                         : 'text-muted-foreground',
                     )}
                   >
-                    {link.name}
+                    {link.label}
                   </Link>
                 ),
               )}
@@ -199,19 +186,19 @@ export default function Layout() {
                 <SheetTitle className="sr-only">Menu de Navegação</SheetTitle>
                 <nav className="flex flex-col gap-6 text-lg font-serif mt-8">
                   {navLinks.map((link) => (
-                    <div key={link.path} className="flex flex-col gap-2">
+                    <div key={link.id || link.href} className="flex flex-col gap-2">
                       <Link
-                        to={link.path}
+                        to={link.href}
                         className={cn(
                           'transition-colors hover:text-primary font-medium',
-                          location.pathname === link.path
+                          location.pathname === link.href
                             ? 'text-primary'
                             : 'text-muted-foreground',
                         )}
                       >
-                        {link.name}
+                        {link.label}
                       </Link>
-                      {link.name === 'Tratamentos' && (
+                      {link.href === '/tratamentos' && (
                         <div className="pl-4 flex flex-col gap-3 mt-2 border-l-2 border-primary/20">
                           {treatmentsList.map((t) => (
                             <Link
@@ -276,9 +263,9 @@ export default function Layout() {
               </h4>
               <ul className="space-y-2 text-sm text-primary-foreground/80">
                 {navLinks.map((link) => (
-                  <li key={link.path}>
-                    <Link to={link.path} className="hover:text-white transition-colors">
-                      {link.name}
+                  <li key={link.id || link.href}>
+                    <Link to={link.href} className="hover:text-white transition-colors">
+                      {link.label}
                     </Link>
                   </li>
                 ))}

@@ -108,11 +108,11 @@ export default function Tratamentos() {
                 dangerouslySetInnerHTML={{ __html: approachContent }}
               />
             </div>
-            <div className="relative h-[300px] md:h-full bg-muted">
+            <div className="relative h-[300px] md:h-full bg-muted flex items-center justify-center">
               <img
                 src={approachImage}
                 alt="Nossa Abordagem"
-                className="absolute inset-0 w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-contain p-4"
               />
             </div>
           </div>

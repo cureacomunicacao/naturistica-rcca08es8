@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-08T00:49:29.396Z",
+  "generatedAt": "2026-05-08T01:13:16.587Z",
   "collections": [
     {
       "name": "users",
@@ -488,6 +488,58 @@
         "CREATE INDEX idx_analytics_event_type ON analytics_events (event_type)",
         "CREATE INDEX idx_analytics_created ON analytics_events (created DESC)"
       ]
+    },
+    {
+      "name": "navigation_links",
+      "type": "base",
+      "apiRules": {
+        "list": "",
+        "view": "",
+        "create": "@request.auth.is_admin = true",
+        "update": "@request.auth.is_admin = true",
+        "delete": "@request.auth.is_admin = true"
+      },
+      "fields": [
+        {
+          "name": "label",
+          "type": "text",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "href",
+          "type": "text",
+          "required": true,
+          "system": false
+        },
+        {
+          "name": "order",
+          "type": "number",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "active",
+          "type": "bool",
+          "required": false,
+          "system": false
+        },
+        {
+          "name": "created",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate"]
+        },
+        {
+          "name": "updated",
+          "type": "autodate",
+          "required": false,
+          "system": false,
+          "autodateTriggers": ["onCreate", "onUpdate"]
+        }
+      ],
+      "indexes": []
     }
   ]
 }

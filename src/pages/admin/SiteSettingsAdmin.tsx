@@ -14,7 +14,16 @@ import {
   AccordionContent,
 } from '@/components/ui/accordion'
 import { toast } from 'sonner'
-import { Settings, Globe, Home, Info, Stethoscope, FileText, MessageSquare } from 'lucide-react'
+import {
+  Settings,
+  Globe,
+  Home,
+  Info,
+  Stethoscope,
+  FileText,
+  MessageSquare,
+  Menu,
+} from 'lucide-react'
 import pb from '@/lib/pocketbase/client'
 import { useSettings } from '@/hooks/use-settings'
 
@@ -273,6 +282,9 @@ export default function SiteSettingsAdmin() {
           <TabsTrigger value="blog" className="gap-2">
             <FileText className="w-4 h-4" /> Blog
           </TabsTrigger>
+          <TabsTrigger value="navigation" className="gap-2">
+            <Menu className="w-4 h-4" /> Navegação
+          </TabsTrigger>
         </TabsList>
 
         {/* --- GLOBAL --- */}
@@ -455,76 +467,6 @@ export default function SiteSettingsAdmin() {
                 }
               >
                 {loading ? 'Salvando...' : 'Salvar Rodapé'}
-              </Button>
-
-              <Separator className="my-6" />
-              <h3 className="text-lg font-semibold">Nomes dos Links de Navegação</h3>
-              <div className="grid md:grid-cols-3 gap-6">
-                <div className="space-y-2">
-                  <Label>Início</Label>
-                  <Input
-                    value={formData['nav_home']?.value || ''}
-                    onChange={(e) => handleChange('nav_home', e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Sobre</Label>
-                  <Input
-                    value={formData['nav_about']?.value || ''}
-                    onChange={(e) => handleChange('nav_about', e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Tratamentos</Label>
-                  <Input
-                    value={formData['nav_treatments']?.value || ''}
-                    onChange={(e) => handleChange('nav_treatments', e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Contato</Label>
-                  <Input
-                    value={formData['nav_contact']?.value || ''}
-                    onChange={(e) => handleChange('nav_contact', e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Blog</Label>
-                  <Input
-                    value={formData['nav_blog']?.value || ''}
-                    onChange={(e) => handleChange('nav_blog', e.target.value)}
-                  />
-                </div>
-                <div className="space-y-2 col-span-3">
-                  <Label>
-                    Ordem do Menu Principal (IDs separados por vírgula: home, sobre, tratamentos,
-                    contato, blog)
-                  </Label>
-                  <Input
-                    value={formData['main_menu_order']?.value || ''}
-                    onChange={(e) => handleChange('main_menu_order', e.target.value)}
-                    placeholder="Ex: home,sobre,tratamentos,contato,blog"
-                  />
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Defina a ordem em que os links aparecerão no menu principal.
-                  </p>
-                </div>
-              </div>
-              <Button
-                className="mt-4"
-                disabled={loading}
-                onClick={() =>
-                  handleSave([
-                    'nav_home',
-                    'nav_about',
-                    'nav_treatments',
-                    'nav_contact',
-                    'nav_blog',
-                    'main_menu_order',
-                  ])
-                }
-              >
-                {loading ? 'Salvando...' : 'Salvar Links'}
               </Button>
             </CardContent>
           </Card>
@@ -1571,7 +1513,136 @@ export default function SiteSettingsAdmin() {
             </CardContent>
           </Card>
         </TabsContent>
+
+        {/* --- NAVIGATION --- */}
+        <TabsContent value="navigation">
+          <NavigationManager />
+        </TabsContent>
       </Tabs>
     </div>
+  )
+}
+
+function NavigationManager() {
+  const [links, setLinks] = useState<any[]>([])
+  const [loading, setLoading] = useState(false)
+
+  const fetchLinks = () => {
+    pb.collection('navigation_links')
+      .getFullList({ sort: 'order,created' })
+      .then(setLinks)
+      .catch(console.error)
+  }
+
+  useEffect(() => {
+    fetchLinks()
+  }, [])
+
+  const handleSave = async () => {
+    setLoading(true)
+    try {
+      for (const link of links) {
+        if (link.id) {
+          await pb.collection('navigation_links').update(link.id, link)
+        } else {
+          await pb.collection('navigation_links').create(link)
+        }
+      }
+      toast.success('Links de navegação salvos com sucesso!')
+      fetchLinks()
+    } catch (err: any) {
+      toast.error(err?.message || 'Erro ao salvar os links.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const addNewLink = () => {
+    setLinks([...links, { label: '', href: '', order: links.length + 1, active: true }])
+  }
+
+  const removeLink = async (index: number) => {
+    const link = links[index]
+    if (link.id) {
+      try {
+        await pb.collection('navigation_links').delete(link.id)
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    const newLinks = [...links]
+    newLinks.splice(index, 1)
+    setLinks(newLinks)
+  }
+
+  const updateLink = (index: number, field: string, value: any) => {
+    const newLinks = [...links]
+    newLinks[index] = { ...newLinks[index], [field]: value }
+    setLinks(newLinks)
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Links de Navegação Principal</CardTitle>
+        <CardDescription>
+          Adicione, remova e ordene os links que aparecem no cabeçalho do site. A aba "Tratamentos"
+          precisa apontar para "/tratamentos" para abrir o submenu.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div className="space-y-4">
+          {links.map((link, idx) => (
+            <div
+              key={link.id || idx}
+              className="flex flex-col md:flex-row items-center gap-4 bg-muted/30 p-4 rounded-xl border"
+            >
+              <div className="flex-1 space-y-1 w-full">
+                <Label>Rótulo</Label>
+                <Input
+                  value={link.label}
+                  onChange={(e) => updateLink(idx, 'label', e.target.value)}
+                />
+              </div>
+              <div className="flex-1 space-y-1 w-full">
+                <Label>Link (URL)</Label>
+                <Input
+                  value={link.href}
+                  onChange={(e) => updateLink(idx, 'href', e.target.value)}
+                />
+              </div>
+              <div className="w-full md:w-24 space-y-1">
+                <Label>Ordem</Label>
+                <Input
+                  type="number"
+                  value={link.order}
+                  onChange={(e) => updateLink(idx, 'order', Number(e.target.value))}
+                />
+              </div>
+              <div className="flex items-center gap-2 mt-4 md:mt-6">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => updateLink(idx, 'active', !link.active)}
+                >
+                  {link.active ? 'Ativo' : 'Oculto'}
+                </Button>
+                <Button variant="destructive" size="sm" onClick={() => removeLink(idx)}>
+                  Remover
+                </Button>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="flex gap-4">
+          <Button variant="secondary" onClick={addNewLink}>
+            Adicionar Novo Link
+          </Button>
+          <Button onClick={handleSave} disabled={loading}>
+            {loading ? 'Salvando...' : 'Salvar Alterações'}
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
   )
 }
