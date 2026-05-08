@@ -39,16 +39,7 @@ export default function Layout() {
 
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [treatmentsList, setTreatmentsList] = useState<{ title: string; slug: string }[]>([
-    { title: 'Ansiedade', slug: 'ansiedade' },
-    { title: 'Insônia', slug: 'insonia' },
-    { title: 'Burnout', slug: 'burnout' },
-    { title: 'TDAH', slug: 'tdah' },
-    { title: 'Trauma', slug: 'trauma' },
-    { title: 'Enxaqueca', slug: 'enxaqueca' },
-    { title: 'Fibromialgia', slug: 'fibromialgia' },
-    { title: 'Dor crônica', slug: 'dor-cronica' },
-  ])
+  const [treatmentsList, setTreatmentsList] = useState<{ title: string; slug: string }[]>([])
 
   const fetchTreatments = () => {
     pb.collection('treatments')
@@ -298,27 +289,16 @@ export default function Layout() {
                 {settings.footer_treatments_title?.value || 'Tratamentos'}
               </h4>
               <ul className="space-y-2 text-sm text-primary-foreground/80">
-                {['ansiedade', 'reducao-de-danos', 'insonia', 'burnout', 'estresse-cronico']
-                  .map(
-                    (slug) =>
-                      treatmentsList.find((t) => t.slug === slug) || {
-                        slug,
-                        title: slug
-                          .split('-')
-                          .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-                          .join(' '),
-                      },
-                  )
-                  .map((t) => (
-                    <li key={t.slug}>
-                      <Link
-                        to={`/tratamentos/${t.slug}`}
-                        className="hover:text-white transition-colors"
-                      >
-                        {t.title}
-                      </Link>
-                    </li>
-                  ))}
+                {treatmentsList.slice(0, 5).map((t) => (
+                  <li key={t.slug}>
+                    <Link
+                      to={`/tratamentos/${t.slug}`}
+                      className="hover:text-white transition-colors"
+                    >
+                      {t.title}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>

@@ -10,7 +10,6 @@ import { useSettings } from '@/hooks/use-settings'
 import { ReactNode } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import pb from '@/lib/pocketbase/client'
-import { formatWhatsAppLink } from '@/lib/utils'
 
 interface ScheduleDialogProps {
   children: ReactNode
@@ -38,7 +37,7 @@ export function ScheduleDialog({ children }: ScheduleDialogProps) {
         </DialogHeader>
         <div className="grid grid-cols-1 gap-6 pb-4 sm:grid-cols-2 sm:gap-8">
           <a
-            href={formatWhatsAppLink(settings.whatsapp_felipe?.value || '554391575911')}
+            href={`https://wa.me/${(settings.whatsapp_felipe?.value || '554391575911').replace(/\D/g, '')}`}
             target="_blank"
             rel="noopener noreferrer"
             className="group relative flex flex-col items-center justify-center gap-6 rounded-2xl border border-border/50 bg-card p-8 text-card-foreground shadow-sm transition-all duration-500 hover:-translate-y-1.5 hover:border-primary/30 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -65,7 +64,7 @@ export function ScheduleDialog({ children }: ScheduleDialogProps) {
           </a>
 
           <a
-            href={formatWhatsAppLink(settings.whatsapp_beatriz?.value || '5543991692047')}
+            href={`https://wa.me/${(settings.whatsapp_beatriz?.value || '5543991692047').replace(/\D/g, '')}`}
             target="_blank"
             rel="noopener noreferrer"
             className="group relative flex flex-col items-center justify-center gap-6 rounded-2xl border border-border/50 bg-card p-8 text-card-foreground shadow-sm transition-all duration-500 hover:-translate-y-1.5 hover:border-primary/30 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
