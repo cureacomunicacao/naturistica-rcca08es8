@@ -126,7 +126,7 @@ export default function Tratamentos() {
             {settings.treatments_grid_title?.value || 'Áreas de Atuação'}
           </h2>
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-10">
           {treatments.map((t, i) => (
             <ScrollReveal key={t.id} delay={i * 50} className="h-full">
               <Link to={`/tratamentos/${t.slug}`} className="block h-full group">
@@ -142,15 +142,15 @@ export default function Tratamentos() {
                       <Leaf className="w-16 h-16 text-primary/20 group-hover:scale-110 transition-transform duration-700" />
                     )}
                   </div>
-                  <CardContent className="p-8 flex flex-col flex-1 items-start">
+                  <CardContent className="p-6 md:p-8 flex flex-col flex-1 items-start">
                     <h3 className="text-2xl md:text-3xl font-bold font-serif mb-4 text-foreground group-hover:text-primary transition-colors leading-tight">
                       {t.title}
                     </h3>
                     <div
-                      className="text-muted-foreground font-sans line-clamp-3 mb-8 text-base prose prose-p:leading-relaxed w-full"
+                      className="text-muted-foreground font-sans line-clamp-3 mb-6 text-base prose prose-p:leading-relaxed w-full flex-grow"
                       dangerouslySetInnerHTML={{ __html: t.content }}
                     />
-                    <div className="mt-auto flex items-center text-primary font-serif font-bold text-[15px] uppercase tracking-widest group-hover:text-primary/80 transition-colors">
+                    <div className="mt-auto w-full pt-4 border-t border-border/30 flex items-center text-primary font-serif font-bold text-[15px] uppercase tracking-widest group-hover:text-primary/80 transition-colors">
                       Saber mais
                       <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-2 transition-transform duration-300" />
                     </div>

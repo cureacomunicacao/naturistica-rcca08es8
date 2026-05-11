@@ -10,7 +10,7 @@ import { Pencil } from 'lucide-react'
 export function EditableText({
   settingKey,
   defaultText,
-  as: Component = 'span',
+  as: Component = 'div',
   className,
   multiline = false,
   isHtml = false,
