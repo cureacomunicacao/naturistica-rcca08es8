@@ -131,9 +131,9 @@ export function EditableText({
       ) : (
         currentText
       )}
-      <div className="absolute -top-3 -right-3 bg-primary text-primary-foreground p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-md z-10 pointer-events-none">
+      <span className="absolute -top-3 -right-3 bg-primary text-primary-foreground p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity shadow-md z-10 pointer-events-none flex items-center justify-center">
         <Pencil className="w-3.5 h-3.5" />
-      </div>
+      </span>
     </Component>
   )
 }
