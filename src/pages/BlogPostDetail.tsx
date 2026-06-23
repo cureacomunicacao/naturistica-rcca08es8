@@ -133,7 +133,15 @@ export default function BlogPostDetail() {
           <style>
             {`
               .dynamic-blog-content {
-                font-family: ${settings.typography_blog_font_family?.value || 'inherit'} !important;
+                font-family: ${settings.typography_blog_font_family?.value || 'var(--font-body)'} !important;
+              }
+              .dynamic-blog-content h1,
+              .dynamic-blog-content h2,
+              .dynamic-blog-content h3,
+              .dynamic-blog-content h4,
+              .dynamic-blog-content h5,
+              .dynamic-blog-content h6 {
+                font-family: var(--font-heading) !important;
               }
               .dynamic-blog-content p, .dynamic-blog-content li {
                 font-size: ${settings.blog_body_size?.value ? `${settings.blog_body_size.value}px` : 'inherit'} !important;

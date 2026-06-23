@@ -74,7 +74,15 @@ export default function TratamentoDetalhe() {
           <style>
             {`
               .dynamic-treatment-content {
-                font-family: ${settings.typography_treatment_font_family?.value || 'inherit'} !important;
+                font-family: ${settings.typography_treatment_font_family?.value || 'var(--font-body)'} !important;
+              }
+              .dynamic-treatment-content h1,
+              .dynamic-treatment-content h2,
+              .dynamic-treatment-content h3,
+              .dynamic-treatment-content h4,
+              .dynamic-treatment-content h5,
+              .dynamic-treatment-content h6 {
+                font-family: var(--font-heading) !important;
               }
               .dynamic-treatment-content p, .dynamic-treatment-content li {
                 font-size: ${settings.treatment_body_size?.value ? `${settings.treatment_body_size.value}px` : 'inherit'} !important;
@@ -113,10 +121,10 @@ export default function TratamentoDetalhe() {
             <ScheduleDialog>
               <Button
                 size="lg"
-                className="rounded-full min-h-[56px] py-3 h-auto break-words text-center px-8 bg-[#25D366] hover:bg-[#128C7E] text-white gap-2 text-base cursor-pointer"
+                className="rounded-full h-auto py-3 px-8 text-center whitespace-normal break-words bg-[#25D366] hover:bg-[#128C7E] text-white gap-2 text-base cursor-pointer inline-flex items-center justify-center"
               >
-                <MessageCircle className="w-5 h-5" />
-                Agendar consulta via WhatsApp
+                <MessageCircle className="w-5 h-5 flex-shrink-0" />
+                <span>Agendar consulta via WhatsApp</span>
               </Button>
             </ScheduleDialog>
           </div>
