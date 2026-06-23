@@ -179,7 +179,7 @@ export default function BlogPostDetail() {
                 asChild
                 size="lg"
                 variant="outline"
-                className="border-[#455e38] text-[#455e38] hover:bg-[#455e38]/10 rounded-full h-14 px-8 text-lg w-full sm:w-auto font-medium"
+                className="border-[#455e38] text-[#455e38] hover:bg-[#455e38]/10 rounded-full min-h-[56px] py-3 h-auto break-words text-center px-8 text-lg w-full sm:w-auto font-medium"
               >
                 <Link to="/tratamentos">Conhecer Tratamentos da Naturística</Link>
               </Button>
@@ -204,7 +204,7 @@ export default function BlogPostDetail() {
               <ScheduleDialog>
                 <Button
                   size="lg"
-                  className="bg-[#455e38] hover:bg-[#455e38]/90 text-white rounded-full px-8 h-14 text-lg hover:scale-105 transition-transform cursor-pointer"
+                  className="bg-[#455e38] hover:bg-[#455e38]/90 text-white rounded-full px-8 min-h-[56px] py-3 h-auto break-words text-center text-lg hover:scale-105 transition-transform cursor-pointer"
                 >
                   <MessageCircle className="w-5 h-5 mr-2" />
                   Agendar Consulta via WhatsApp

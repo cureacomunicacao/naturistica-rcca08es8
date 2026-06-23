@@ -78,6 +78,20 @@ export default function Layout() {
   return (
     <div className="flex min-h-screen flex-col selection:bg-primary selection:text-primary-foreground">
       <SEO title={seo.title} description={seo.desc} />
+      <style>
+        {`
+          :root {
+            --font-heading: '${settings.font_heading?.value || 'Playfair Display'}', serif;
+            --font-body: '${settings.font_body?.value || 'Inter'}', sans-serif;
+          }
+          h1, h2, h3, h4, h5, h6, .font-serif, .prose h1, .prose h2, .prose h3, .prose h4 {
+            font-family: var(--font-heading) !important;
+          }
+          body, p, .font-sans, button, a, input, textarea, select, .prose p, .prose li {
+            font-family: var(--font-body) !important;
+          }
+        `}
+      </style>
       <header
         className={cn(
           'fixed top-0 w-full z-50 transition-all duration-500',
@@ -182,7 +196,10 @@ export default function Layout() {
                   <Menu className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] sm:w-[400px] flex flex-col pt-12">
+              <SheetContent
+                side="right"
+                className="w-[300px] sm:w-[400px] flex flex-col pt-12 overflow-y-auto"
+              >
                 <SheetTitle className="sr-only">Menu de Navegação</SheetTitle>
                 <nav className="flex flex-col gap-6 text-lg font-serif mt-8">
                   {navLinks.map((link) => (

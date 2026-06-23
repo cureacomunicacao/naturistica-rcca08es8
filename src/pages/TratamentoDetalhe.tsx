@@ -113,7 +113,7 @@ export default function TratamentoDetalhe() {
             <ScheduleDialog>
               <Button
                 size="lg"
-                className="rounded-full h-14 px-8 bg-[#25D366] hover:bg-[#128C7E] text-white gap-2 text-base cursor-pointer"
+                className="rounded-full min-h-[56px] py-3 h-auto break-words text-center px-8 bg-[#25D366] hover:bg-[#128C7E] text-white gap-2 text-base cursor-pointer"
               >
                 <MessageCircle className="w-5 h-5" />
                 Agendar consulta via WhatsApp
