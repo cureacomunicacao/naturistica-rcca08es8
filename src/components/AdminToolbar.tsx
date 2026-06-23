@@ -24,18 +24,21 @@ export function AdminToolbar() {
 
   const [felipeLink, setFelipeLink] = useState('')
   const [beatrizLink, setBeatrizLink] = useState('')
+  const [whatsappLink, setWhatsappLink] = useState('')
 
   useEffect(() => {
-    setFelipeLink(settings.doctor_felipe_link?.value || '')
-    setBeatrizLink(settings.doctor_beatriz_link?.value || '')
+    setFelipeLink(settings.dr_felipe_link?.value || '')
+    setBeatrizLink(settings.dra_beatriz_link?.value || '')
+    setWhatsappLink(settings.whatsapp_link?.value || '')
   }, [settings])
 
   if (!isAdmin) return null
 
   const handleSaveLinks = async () => {
     try {
-      await updateSetting('doctor_felipe_link', felipeLink)
-      await updateSetting('doctor_beatriz_link', beatrizLink)
+      await updateSetting('dr_felipe_link', felipeLink)
+      await updateSetting('dra_beatriz_link', beatrizLink)
+      await updateSetting('whatsapp_link', whatsappLink)
       toast({ title: 'Links atualizados com sucesso' })
     } catch (e: any) {
       toast({ title: 'Erro ao atualizar links', description: e.message, variant: 'destructive' })
@@ -71,9 +74,17 @@ export function AdminToolbar() {
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Configurações Globais (Médicos)</DialogTitle>
+            <DialogTitle>Configurações Globais</DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label>Link do WhatsApp (Geral)</Label>
+              <Input
+                value={whatsappLink}
+                onChange={(e) => setWhatsappLink(e.target.value)}
+                placeholder="https://wa.me/..."
+              />
+            </div>
             <div className="grid gap-2">
               <Label>Link de Agendamento - Dr. Felipe</Label>
               <Input

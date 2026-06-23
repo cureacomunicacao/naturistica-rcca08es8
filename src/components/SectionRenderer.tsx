@@ -63,11 +63,20 @@ export function SectionRenderer({ section }: { section: PageSectionRecord }) {
   )
   const renderBtn = (className?: string) => {
     if (!section.button_text && !isEditingMode) return null
+
+    const isWhatsApp =
+      section.button_text?.toLowerCase().includes('whatsapp') ||
+      section.button_link?.toLowerCase().includes('wa.me')
+
     if (isEditingMode) {
       return (
         <Button
           size="lg"
-          className={cn('mt-4 rounded-full shadow-lg h-auto whitespace-normal', className)}
+          className={cn(
+            'mt-4 rounded-full shadow-lg h-auto whitespace-normal',
+            className,
+            isWhatsApp && 'bg-green-600 hover:bg-green-700 text-white',
+          )}
         >
           <EditableInlineText
             value={section.button_text}
@@ -78,6 +87,40 @@ export function SectionRenderer({ section }: { section: PageSectionRecord }) {
         </Button>
       )
     }
+
+    if (isWhatsApp) {
+      const parts = (section.button_text || '').split(/(whatsapp)/i)
+      return (
+        <Button
+          asChild
+          size="lg"
+          className={cn(
+            'mt-4 rounded-full shadow-lg text-center h-auto py-3 px-6 leading-tight bg-green-600 hover:bg-green-700 text-white border-none',
+            className,
+          )}
+        >
+          <a href={section.button_link || '#'} target="_blank" rel="noopener noreferrer">
+            <span className="inline-flex flex-col sm:inline-block items-center justify-center">
+              {parts.map((part, i) => {
+                if (part.toLowerCase() === 'whatsapp') {
+                  return (
+                    <span key={i} className="font-bold sm:ml-1">
+                      {part}
+                    </span>
+                  )
+                }
+                return (
+                  <span key={i} className="opacity-90">
+                    {part.trim()}
+                  </span>
+                )
+              })}
+            </span>
+          </a>
+        </Button>
+      )
+    }
+
     return (
       <Button
         asChild
