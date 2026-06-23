@@ -214,10 +214,12 @@ export default function BlogPostDetail() {
               <ScheduleDialog>
                 <Button
                   size="lg"
-                  className="bg-[#455e38] hover:bg-[#455e38]/90 text-white rounded-full px-8 py-3 flex items-center justify-center gap-2 break-words text-center text-lg hover:scale-105 transition-transform cursor-pointer w-full sm:w-auto mx-auto"
+                  className="bg-[#455e38] hover:bg-[#455e38]/90 text-white rounded-full px-8 py-4 sm:py-3 h-auto sm:h-11 flex items-center justify-center gap-2 break-words text-center text-lg hover:scale-105 transition-transform cursor-pointer w-full sm:w-auto mx-auto whitespace-normal sm:whitespace-nowrap"
                 >
                   <MessageCircle className="w-5 h-5 flex-shrink-0" />
-                  <span>Agendar Consulta via WhatsApp</span>
+                  <span>
+                    Agendar Consulta via <br className="sm:hidden" /> WhatsApp
+                  </span>
                 </Button>
               </ScheduleDialog>
             </div>
