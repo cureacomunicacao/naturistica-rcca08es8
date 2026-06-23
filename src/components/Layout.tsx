@@ -198,7 +198,7 @@ export default function Layout() {
               </SheetTrigger>
               <SheetContent
                 side="right"
-                className="w-[300px] sm:w-[400px] flex flex-col pt-12 overflow-y-auto"
+                className="w-[300px] sm:w-[400px] flex flex-col pt-12 h-full overflow-y-auto"
               >
                 <SheetTitle className="sr-only">Menu de Navegação</SheetTitle>
                 <nav className="flex flex-col gap-6 text-lg font-serif mt-8">

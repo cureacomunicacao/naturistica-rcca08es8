@@ -56,7 +56,7 @@ export default function TratamentoDetalhe() {
         </div>
         <div className="relative z-10 text-center space-y-4 px-4 w-full">
           <h1
-            className="font-bold text-white font-serif whitespace-nowrap overflow-hidden text-ellipsis max-w-full text-[2.5rem]"
+            className="font-bold text-white font-serif max-w-full text-[2.5rem] text-balance"
             style={{
               fontSize: settings.treatment_h1_size?.value
                 ? `${settings.treatment_h1_size.value}px`
@@ -91,17 +91,17 @@ export default function TratamentoDetalhe() {
               .dynamic-treatment-content h1 { 
                 font-size: ${settings.treatment_h1_size?.value ? `${settings.treatment_h1_size.value}px` : '2.5rem'} !important;
                 line-height: 1.2 !important;
-                white-space: nowrap !important;
-                overflow: hidden !important;
-                text-overflow: ellipsis !important;
+                text-wrap: balance !important;
               }
               .dynamic-treatment-content h2 { 
                 font-size: ${settings.treatment_h2_size?.value ? `${settings.treatment_h2_size.value}px` : '2rem'} !important;
                 line-height: 1.3 !important;
+                text-wrap: balance !important;
               }
               .dynamic-treatment-content h3 { 
                 font-size: ${settings.treatment_h3_size?.value ? `${settings.treatment_h3_size.value}px` : '1.75rem'} !important;
                 line-height: 1.4 !important;
+                text-wrap: balance !important;
               }
             `}
           </style>
@@ -121,7 +121,7 @@ export default function TratamentoDetalhe() {
             <ScheduleDialog>
               <Button
                 size="lg"
-                className="rounded-full h-auto py-3 px-8 text-center whitespace-normal break-words bg-[#25D366] hover:bg-[#128C7E] text-white gap-2 text-base cursor-pointer inline-flex items-center justify-center"
+                className="rounded-full py-3 px-8 bg-[#25D366] hover:bg-[#128C7E] text-white flex items-center justify-center gap-2 break-words text-center text-base cursor-pointer w-full sm:w-auto mx-auto"
               >
                 <MessageCircle className="w-5 h-5 flex-shrink-0" />
                 <span>Agendar consulta via WhatsApp</span>

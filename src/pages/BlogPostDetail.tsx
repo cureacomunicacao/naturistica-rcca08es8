@@ -155,10 +155,12 @@ export default function BlogPostDetail() {
               .dynamic-blog-content h2 { 
                 font-size: ${settings.blog_h2_size?.value ? `${settings.blog_h2_size.value}px` : '2rem'} !important;
                 line-height: 1.3 !important;
+                text-wrap: balance !important;
               }
               .dynamic-blog-content h3 { 
                 font-size: ${settings.blog_h3_size?.value ? `${settings.blog_h3_size.value}px` : '1.75rem'} !important;
                 line-height: 1.4 !important;
+                text-wrap: balance !important;
               }
             `}
           </style>
@@ -187,7 +189,7 @@ export default function BlogPostDetail() {
                 asChild
                 size="lg"
                 variant="outline"
-                className="border-[#455e38] text-[#455e38] hover:bg-[#455e38]/10 rounded-full min-h-[56px] py-3 h-auto break-words text-center px-8 text-lg w-full sm:w-auto font-medium"
+                className="border-[#455e38] text-[#455e38] hover:bg-[#455e38]/10 rounded-full py-3 px-8 flex items-center justify-center gap-2 break-words text-center text-lg w-full sm:w-auto font-medium"
               >
                 <Link to="/tratamentos">Conhecer Tratamentos da Naturística</Link>
               </Button>
@@ -212,10 +214,10 @@ export default function BlogPostDetail() {
               <ScheduleDialog>
                 <Button
                   size="lg"
-                  className="bg-[#455e38] hover:bg-[#455e38]/90 text-white rounded-full px-8 min-h-[56px] py-3 h-auto break-words text-center text-lg hover:scale-105 transition-transform cursor-pointer"
+                  className="bg-[#455e38] hover:bg-[#455e38]/90 text-white rounded-full px-8 py-3 flex items-center justify-center gap-2 break-words text-center text-lg hover:scale-105 transition-transform cursor-pointer w-full sm:w-auto mx-auto"
                 >
-                  <MessageCircle className="w-5 h-5 mr-2" />
-                  Agendar Consulta via WhatsApp
+                  <MessageCircle className="w-5 h-5 flex-shrink-0" />
+                  <span>Agendar Consulta via WhatsApp</span>
                 </Button>
               </ScheduleDialog>
             </div>
