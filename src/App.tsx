@@ -36,55 +36,58 @@ import MarketingAdmin from './pages/admin/MarketingAdmin'
 import { SettingsProvider } from './hooks/use-settings'
 import { AnalyticsTracker, ScriptInjector } from './components/TrackingScripts'
 import { ErrorBoundary } from './components/ErrorBoundary'
+import { AdminModeProvider } from './hooks/use-admin-mode'
 
 const App = () => (
   <BrowserRouter future={{ v7_startTransition: false, v7_relativeSplatPath: false }}>
     <AuthProvider>
       <SettingsProvider>
-        <AnalyticsTracker />
-        <ScriptInjector />
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <ErrorBoundary>
-            <Routes>
-              <Route element={<Layout />}>
-                <Route path="/" element={<Index />} />
-                <Route path="/sobre" element={<Sobre />} />
-                <Route path="/tratamentos" element={<Tratamentos />} />
-                <Route path="/tratamentos/:slug" element={<TratamentoDetalhe />} />
-                <Route path="/blog" element={<Blog />} />
-                <Route path="/blog/:slug" element={<BlogPostDetail />} />
-                <Route path="/contato" element={<Contato />} />
-                <Route path="/obrigado" element={<Obrigado />} />
-              </Route>
+        <AdminModeProvider>
+          <AnalyticsTracker />
+          <ScriptInjector />
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <ErrorBoundary>
+              <Routes>
+                <Route element={<Layout />}>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/sobre" element={<Sobre />} />
+                  <Route path="/tratamentos" element={<Tratamentos />} />
+                  <Route path="/tratamentos/:slug" element={<TratamentoDetalhe />} />
+                  <Route path="/blog" element={<Blog />} />
+                  <Route path="/blog/:slug" element={<BlogPostDetail />} />
+                  <Route path="/contato" element={<Contato />} />
+                  <Route path="/obrigado" element={<Obrigado />} />
+                </Route>
 
-              <Route path="/login" element={<Login />} />
-              <Route path="/admin" element={<AdminLayout />}>
-                <Route index element={<Dashboard />} />
-                <Route path="treatments" element={<TreatmentsAdmin />} />
-                <Route path="leads" element={<LeadsAdmin />} />
-                <Route path="blogs" element={<BlogAdmin />} />
-                <Route path="blogs/categories" element={<BlogCategoriesAdmin />} />
-                <Route path="blogs/new" element={<BlogPostForm />} />
-                <Route path="blogs/:id" element={<BlogPostForm />} />
-                <Route path="settings" element={<SiteSettingsAdmin />} />
-                <Route path="settings/home" element={<HomeSettingsAdmin />} />
-                <Route path="sections" element={<PageSectionsAdmin />} />
-                <Route path="sections/new" element={<PageSectionForm />} />
-                <Route path="sections/:id" element={<PageSectionForm />} />
-                <Route path="settings/visual" element={<VisualIdentityAdmin />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/admin" element={<AdminLayout />}>
+                  <Route index element={<Dashboard />} />
+                  <Route path="treatments" element={<TreatmentsAdmin />} />
+                  <Route path="leads" element={<LeadsAdmin />} />
+                  <Route path="blogs" element={<BlogAdmin />} />
+                  <Route path="blogs/categories" element={<BlogCategoriesAdmin />} />
+                  <Route path="blogs/new" element={<BlogPostForm />} />
+                  <Route path="blogs/:id" element={<BlogPostForm />} />
+                  <Route path="settings" element={<SiteSettingsAdmin />} />
+                  <Route path="settings/home" element={<HomeSettingsAdmin />} />
+                  <Route path="sections" element={<PageSectionsAdmin />} />
+                  <Route path="sections/new" element={<PageSectionForm />} />
+                  <Route path="sections/:id" element={<PageSectionForm />} />
+                  <Route path="settings/visual" element={<VisualIdentityAdmin />} />
 
-                <Route path="settings/media" element={<MediaSettingsAdmin />} />
-                <Route path="insights" element={<ContentInsightsAdmin />} />
-                <Route path="testimonials" element={<TestimonialsAdmin />} />
-                <Route path="marketing" element={<MarketingAdmin />} />
-              </Route>
+                  <Route path="settings/media" element={<MediaSettingsAdmin />} />
+                  <Route path="insights" element={<ContentInsightsAdmin />} />
+                  <Route path="testimonials" element={<TestimonialsAdmin />} />
+                  <Route path="marketing" element={<MarketingAdmin />} />
+                </Route>
 
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </ErrorBoundary>
-        </TooltipProvider>
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </ErrorBoundary>
+          </TooltipProvider>
+        </AdminModeProvider>
       </SettingsProvider>
     </AuthProvider>
   </BrowserRouter>

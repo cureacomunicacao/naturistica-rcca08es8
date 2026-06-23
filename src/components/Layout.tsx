@@ -9,6 +9,8 @@ import pb from '@/lib/pocketbase/client'
 import { SEO } from '@/components/SEO'
 import { useRealtime } from '@/hooks/use-realtime'
 import { ScheduleDialog } from '@/components/ScheduleDialog'
+import { AdminToolbar } from '@/components/AdminToolbar'
+import { SmartWhatsAppText } from '@/components/SmartWhatsAppText'
 
 export default function Layout() {
   const location = useLocation()
@@ -92,6 +94,7 @@ export default function Layout() {
           }
         `}
       </style>
+      <AdminToolbar />
       <header
         className={cn(
           'fixed top-0 w-full z-50 transition-all duration-500',
@@ -183,8 +186,10 @@ export default function Layout() {
                 ),
               )}
               <ScheduleDialog>
-                <Button className="rounded-full px-6 text-white hover:bg-primary/90 cursor-pointer">
-                  {settings.global_cta_text?.value || 'Agendar consulta online'}
+                <Button className="rounded-full px-6 text-white hover:bg-primary/90 cursor-pointer h-auto whitespace-normal">
+                  <SmartWhatsAppText
+                    text={settings.global_cta_text?.value || 'Agendar consulta online'}
+                  />
                 </Button>
               </ScheduleDialog>
             </nav>
@@ -233,8 +238,13 @@ export default function Layout() {
                 </nav>
                 <div className="mt-auto pb-8">
                   <ScheduleDialog>
-                    <Button className="w-full rounded-full cursor-pointer" size="lg">
-                      {settings.global_cta_text?.value || 'Agendar consulta online'}
+                    <Button
+                      className="w-full rounded-full cursor-pointer h-auto py-3 whitespace-normal"
+                      size="lg"
+                    >
+                      <SmartWhatsAppText
+                        text={settings.global_cta_text?.value || 'Agendar consulta online'}
+                      />
                     </Button>
                   </ScheduleDialog>
                 </div>
