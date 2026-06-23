@@ -28,6 +28,9 @@ import ContentInsightsAdmin from './pages/admin/ContentInsightsAdmin'
 import HomeSettingsAdmin from './pages/admin/HomeSettingsAdmin'
 import VisualIdentityAdmin from './pages/admin/VisualIdentityAdmin'
 
+import PageSectionsAdmin from './pages/admin/PageSectionsAdmin'
+import PageSectionForm from './pages/admin/PageSectionForm'
+
 import TestimonialsAdmin from './pages/admin/TestimonialsAdmin'
 import MarketingAdmin from './pages/admin/MarketingAdmin'
 import { SettingsProvider } from './hooks/use-settings'
@@ -67,6 +70,9 @@ const App = () => (
                 <Route path="blogs/:id" element={<BlogPostForm />} />
                 <Route path="settings" element={<SiteSettingsAdmin />} />
                 <Route path="settings/home" element={<HomeSettingsAdmin />} />
+                <Route path="sections" element={<PageSectionsAdmin />} />
+                <Route path="sections/new" element={<PageSectionForm />} />
+                <Route path="sections/:id" element={<PageSectionForm />} />
                 <Route path="settings/visual" element={<VisualIdentityAdmin />} />
 
                 <Route path="settings/media" element={<MediaSettingsAdmin />} />

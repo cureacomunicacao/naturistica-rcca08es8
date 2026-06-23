@@ -31,6 +31,8 @@ import { EditableText } from '@/components/EditableText'
 import { useRealtime } from '@/hooks/use-realtime'
 import { Skeleton } from '@/components/ui/skeleton'
 import { ScheduleDialog } from '@/components/ScheduleDialog'
+import { getPageSections, type PageSectionRecord } from '@/services/page_sections'
+import { PageSections } from '@/components/PageSections'
 
 const iconMap: Record<string, any> = {
   ansiedade: Wind,
@@ -79,6 +81,7 @@ export default function Index() {
   const [loadingTestimonials, setLoadingTestimonials] = useState(true)
   const [featuredTreatment, setFeaturedTreatment] = useState<any>(null)
   const [loadingFeaturedTreatment, setLoadingFeaturedTreatment] = useState(true)
+  const [pageSections, setPageSections] = useState<PageSectionRecord[]>([])
 
   const shuffleArray = <T,>(array: T[]): T[] => {
     const shuffled = [...array]
@@ -124,7 +127,12 @@ export default function Index() {
       .finally(() => setLoadingPosts(false))
 
     fetchTestimonials()
+    getPageSections('home').then(setPageSections).catch(console.error)
   }, [])
+
+  useRealtime('page_sections', () => {
+    getPageSections('home').then(setPageSections).catch(console.error)
+  })
 
   useRealtime('testimonials', () => {
     fetchTestimonials()
@@ -775,6 +783,8 @@ export default function Index() {
           </ScrollReveal>
         </section>
       )}
+
+      {pageSections.length > 0 && <PageSections sections={pageSections} />}
 
       {/* Consultation Info */}
       <section className="container pb-16 md:pb-24">
