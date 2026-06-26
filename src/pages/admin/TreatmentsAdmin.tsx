@@ -133,7 +133,7 @@ export default function TreatmentsAdmin() {
     setFieldErrors({})
     try {
       const data = new FormData()
-      Object.entries(formData).forEach(([k, v]) => data.append(k, v))
+      Object.entries(formData).forEach(([k, v]) => data.append(k, String(v)))
       if (file) data.append('image', file)
       if (iconFile) data.append('icon', iconFile)
 

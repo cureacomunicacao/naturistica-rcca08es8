@@ -147,7 +147,7 @@ export default function BlogPostForm() {
             data.append(key, new Date().toISOString())
           }
         } else {
-          data.append(key, value as string)
+          data.append(key, String(value))
         }
       })
       if (imageFile) {
