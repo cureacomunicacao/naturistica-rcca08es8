@@ -81,4 +81,29 @@
   .glass-header {
     @apply bg-white/80 backdrop-blur-md supports-[backdrop-filter]:bg-white/60;
   }
+
+  /* Button Layout Fix: Removes fixed heights, dynamic padding, centered text */
+  .prose button,
+  button[class*='bg-[#25D366]'],
+  .btn-responsive {
+    height: auto !important;
+    min-height: 0 !important;
+    padding-top: 0.75rem !important;
+    padding-bottom: 0.75rem !important;
+    white-space: normal !important;
+    text-align: center !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    word-break: break-word !important;
+  }
+
+  button[class*='bg-[#25D366]'] > svg {
+    flex-shrink: 0 !important;
+  }
+
+  /* Mobile menu scroll */
+  div[role='dialog'] {
+    @apply overflow-y-auto;
+  }
 }
