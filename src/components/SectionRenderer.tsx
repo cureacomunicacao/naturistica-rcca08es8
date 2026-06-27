@@ -167,36 +167,8 @@ export function SectionRenderer({ section }: { section: PageSectionRecord }) {
 
   if (section.type === 'side_image_right' || section.type === 'side_image_left') {
     const isRight = section.type === 'side_image_right'
-    return (
-      <section style={sectionStyle}>
-        <div className="container">
-          <ScrollReveal>
-            <div
-              className={cn(
-                'grid md:grid-cols-2 gap-12 items-center',
-                !isRight && 'md:grid-flow-col-dense',
-              )}
-            >
-              <div className={cn('space-y-6', !isRight && 'md:col-start-2')}>
-                {renderTitle('text-3xl')}
-                {renderDesc('max-w-none')}
-                {renderBtn()}
-              </div>
-              <div className={cn('order-first md:order-none', !isRight && 'md:col-start-1')}>
-                <div className="w-full rounded-2xl shadow-lg overflow-hidden aspect-[4/3] bg-black/5">
-                  <EditableImage
-                    src={imageUrl}
-                    onUpload={handleUploadImage}
-                    className="w-full h-full"
-                    alt={section.title || ''}
-                  />
-                </div>
-              </div>
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
-    )
+    return
+    null
   }
 
   if (section.type === 'list') {
